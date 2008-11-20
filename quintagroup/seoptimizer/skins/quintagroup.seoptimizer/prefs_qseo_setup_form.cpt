@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      lang="en-US"
+      metal:use-macro="here/prefs_main_template/macros/master"
+      i18n:domain="qPloneGoogleSitemaps">
+<body>
+    <div metal:fill-slot="prefs_configlet_main"
+        tal:define="errors python:request.get('errors', {})">
+
+                <h1>Search Engine Optimizer configuration</h1>
+                <a href=""
+                class="link-parent"
+                tal:attributes="href string: $portal_url/plone_control_panel"
+                i18n:translate="label_up_to_plone_setup">
+                Up to Plone Setup
+                </a>
+                <div class="documentDescription">
+                   You can select what content types are
+                   qSEOptimizer-enabled, and control if Dublin Core metatags
+                   are exposed in the header of content pages.
+                </div>
+
+                <form name="edit_form"
+                    action="."
+                    method="post"
+                    enctype="multipart/form-data"
+                    tal:attributes="action string:${here_url}/${template/getId}" >
+
+                    <div class="field">
+                        <input type="checkbox"
+                               id="exposeDCMetaTags"
+                               name="exposeDCMetaTags"
+                               tal:define="exposeDCMetaTags portal/portal_properties/site_properties/exposeDCMetaTags"
+                               tal:attributes="checked exposeDCMetaTags"/>
+                        <label for="exposeDCMetaTags">Expose <abbr title="Dublin Core">DC</abbr> meta tags</label>
+                        <div class="formHelp" i18n:translate="description_seo_dc_metatags">
+                           Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
+                           header. They include DC.description, DC.type,
+                           DC.format, DC.creator and others.
+                        </div>
+                    </div>
+
+                    <div class="field"
+                         tal:define="default_custom_metatags portal/portal_properties/seo_properties/default_custom_metatags|python:[]">
+                        <label for="default_custom_metatags" i18n:translate="label_default_custom_metatags">
+                            Default custom metatags.
+                        </label>
+                        <div class="formHelp" i18n:translate="help_default_custom_metatags">
+                            Fill in custom metatag names (one per line) which will appear on qseo_properties
+                            edit tab.
+                        </div>
+                        <div class="widget">
+                            <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
+                                      tal:content="python:'\n'.join(default_custom_metatags)"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field"
+                         tal:define="additionalKeywords portal/portal_properties/seo_properties/additional_keywords">
+                        <label for="additionalKeywords" i18n:translate="label_additional_keywords">
+                            Additional keywords that should be added to the content types.
+                        </label>
+                        <div class="formHelp" i18n:translate="help_additional_keywords">
+                            Use this field when you want that your content types receive
+                            additional keywords from the ones you manually specify. Enter
+                            one keyword per line.
+                        </div>
+                        <div class="widget">
+                            <textarea cols="60" id="additionalKeywords" name="additionalKeywords" rows="15"
+                                      tal:content="python:'\n'.join(additionalKeywords)"></textarea>
+                        </div>
+                    </div>
+
+                    <fieldset class="portalTypes"
+                              tal:define="portal_types    portal/portal_types;
+                                          allTypes        portal_types/listContentTypes;
+                                          typeLists       python:modules['Products.qSEOptimizer.util'].createMultiColumnList(context, allTypes, numCols=3, sort_on='title_or_id')">
+                        <legend i18n:translate="label_content_type_title">Content Types</legend>
+
+                        <div class="formHelp" i18n:translate="description_seo_content_types">
+                            Select content types that will have SEO properties
+                            enabled.
+                        </div>
+                        <div style="float:left; margin-right: 2em;" tal:repeat="sublist typeLists">
+                            <ul class="configlets">
+                                <li tal:repeat="ptypeInfo sublist">
+                                    <tal:type define="type python:portal_types.getTypeInfo(ptypeInfo);
+                                                      name type/getId;">
+
+                                        <input  type="checkbox"
+                                                name="portalTypes:list"
+                                                tal:attributes="id name;
+                                                                value name;
+                                                                checked python:test(filter(lambda x:x.id == 'seo_properties', type.listActions()), True, None)"/>
+                                        <label tal:attributes="for python:type.getId()"
+                                               tal:content="type/Title"/>
+                                    </tal:type>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+
+                    <div class="formControls"
+                         tal:define="process_creation request/process_creation|nothing;"
+                         i18n:domain="plone">
+                         <input class="context"
+                             tabindex=""
+                             type="submit"
+                             name="form.button.Save"
+                             value="Save"
+                             i18n:attributes="value"
+                             tal:attributes="tabindex tabindex/next;" />
+                    </div>
+                    <input type="hidden" name="form.submitted" value="1" />
+                </form>
+    </div>
+ </body>
+</html>

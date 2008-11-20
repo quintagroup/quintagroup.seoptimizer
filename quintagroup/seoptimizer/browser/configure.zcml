@@ -1,0 +1,43 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <!-- The customized title -->
+    <browser:viewlet
+        name="plone.htmlhead.title"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.TitleCommentViewlet"
+        permission="zope2.View"
+        />
+       
+    <browser:viewlet
+        name="quintagroup.seoptimizer.http_equiv"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        template="templates/http_equiv.pt"
+        class=".viewlets.HTTPEquiv"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
+        name="quintagroup.seoptimizer.base"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.BaseUrlViewlet"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
+        name="quintagroup.seoptimizer.generator"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        template="templates/generator.pt"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
+        name="quintagroup.seoptimizer.metategs"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.MetaTagsViewlet"
+        template="templates/metatags.pt"
+        permission="zope2.View"
+        />
+
+</configure>

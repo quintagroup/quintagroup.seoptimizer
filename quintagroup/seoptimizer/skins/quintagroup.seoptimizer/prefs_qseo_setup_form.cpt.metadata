@@ -1,0 +1,14 @@
+#
+# $$
+#
+[default]
+title= Setup actions
+
+[security]
+View=0:Authenticated
+
+[validators]
+
+[actions]
+action.success=traverse_to:string:prefs_qseo_setup
+action.failure=traverse_to:string:prefs_qseo_setup_form

@@ -1,0 +1,3 @@
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"
+      tal:define="charset view/charset"
+      tal:attributes="content string:text/html;;charset=${charset}" />

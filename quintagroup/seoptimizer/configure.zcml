@@ -1,0 +1,32 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    >
+
+  <genericsetup:registerProfile
+      name="default"
+      title="quintagroup.seoptimizer"
+      directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+    <browser:page
+        for="Products.Archetypes.interfaces.IBaseObject"
+        attribute="validateKeywords"
+        class=".browser.keywords.ValidateSEOKeywordsView"
+        name="checkSEOKeywords"
+        permission="cmf.ModifyPortalContent"
+        />
+
+  <adapter
+    for="Products.Archetypes.public.BaseObject"
+    provides=".interfaces.IKeywords"
+    factory=".adapters.AdditionalKeywords"
+    />
+
+  <cmf:registerDirectory name="quintagroup.seoptimizer" />
+
+</configure>

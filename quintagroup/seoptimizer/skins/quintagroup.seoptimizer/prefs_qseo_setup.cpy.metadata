@@ -1,0 +1,14 @@
+#
+# $$
+#
+[default]
+title= Save Propertiest
+
+[security]
+View=0:Authenticated
+
+[validators]
+
+[actions]
+action.success=traverse_to:string:prefs_qseo_setup_form
+action.failure=traverse_to:string:prefs_qseo_setup_form
