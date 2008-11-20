@@ -33,7 +33,7 @@
         />
 
     <browser:viewlet
-        name="quintagroup.seoptimizer.metategs"
+        name="quintagroup.seoptimizer.metatags"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.MetaTagsViewlet"
         template="templates/metatags.pt"
