@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<object name="portal_properties" meta_type="Plone Properties Tool">
+ <object name="seo_properties" meta_type="Plone Property Sheet">
+  <property name="title">SEO Properties</property>
+  <property name="stop_words" type="lines">
+   <element value="a"/>
+   <element value="amp"/>
+   <element value="and"/>
+   <element value="are"/>
+   <element value="arial"/>
+   <element value="as"/>
+   <element value="at"/> 
+   <element value="be"/>
+   <element value="but"/>
+   <element value="by"/>
+   <element value="can"/>
+   <element value="com"/>
+   <element value="do"/>
+   <element value="font"/>
+   <element value="for"/>
+   <element value="from"/>
+   <element value="gif"/>
+   <element value="had"/>
+   <element value="has"/>
+   <element value="have"/>
+   <element value="he"/>
+   <element value="helvetica"/>
+   <element value="her"/>
+   <element value="his"/>
+   <element value="how"/>
+   <element value="href"/>
+   <element value="i"/>
+   <element value="if"/>
+   <element value="in"/>
+   <element value="is"/>
+   <element value="it"/>
+   <element value="javascript"/>
+   <element value="jpg"/>
+   <element value="made"/>
+   <element value="net"/>
+   <element value="of"/>
+   <element value="on"/>
+   <element value="or"/>
+   <element value="org"/>
+   <element value="our"/>
+   <element value="sans"/>
+   <element value="see"/>
+   <element value="serif"/>
+   <element value="she"/>
+   <element value="that"/>
+   <element value="the"/>
+   <element value="this"/>
+   <element value="to"/>
+   <element value="us"/>
+   <element value="we"/>
+   <element value="with"/>
+   <element value="you"/>
+   <element value="your"/>
+  </property>
+  <property name="fields" type="lines">
+   <element value="seo_title"/>
+   <element value="seo_description"/>
+   <element value="seo_keywords"/>
+  </property>
+  <property name="additional_keywords" type="lines">
+  </property>
+  <property name="default_custom_metatags" type="lines">
+  </property>
+ </object>
+ <object name="site_properties" meta_type="Plone Property Sheet">
+  <property name="exposeDCMetaTags" type="boolean">True</property>
+ </object>
+</object>

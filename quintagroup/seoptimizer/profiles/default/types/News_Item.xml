@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="News Item" meta_type="Factory-based Type Information with dynamic views"
+   i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <action title="SEO Properties" action_id="seo_properties" category="object" condition_expr=""
+    url_expr="string:${object_url}/qseo_properties_edit_form" visible="True"
+    i18n:attributes="">
+  <permission value="Modify portal content"/>
+ </action>
+</object>

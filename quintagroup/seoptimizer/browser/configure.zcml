@@ -40,4 +40,12 @@
         permission="zope2.View"
         />
 
+    <!--Views-->
+    <browser:page
+        name="seo-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".views.SEOControlPanel"
+        permission="cmf.ManagePortal"
+        />
+
 </configure>
