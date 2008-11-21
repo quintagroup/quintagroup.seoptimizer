@@ -3,7 +3,7 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="plone">
  <configlet title="Search Engine Optimizer" action_id="qSEOptimizer"
     appId="qSEOptimizer" category="Products" condition_expr=""
-    url_expr="string:${portal_url}/prefs_qseo_setup_form"
+    url_expr="string:${portal_url}/@@seo-controlpanel"
     visible="True" i18n:attributes="">
   <permission>ManagePortal</permission>
  </configlet>

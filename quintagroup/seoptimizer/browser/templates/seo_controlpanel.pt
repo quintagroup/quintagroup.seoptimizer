@@ -6,10 +6,9 @@
       i18n:domain="quintagroup.seoptimizer">
   <body>
     <div metal:fill-slot="prefs_configlet_main"
-        tal:define="errors python:request.get('errors', {})">
+        tal:define="errors python:request.get('errors', {})"><!--TODO:implement validation and errors handling-->
       <h1>Search Engine Optimizer configuration</h1>
-        <a href=""
-           class="link-parent"
+        <a href="" class="link-parent"
            tal:attributes="href string: $portal_url/plone_control_panel"
            i18n:translate="label_up_to_plone_setup">
            Up to Plone Setup
@@ -19,19 +18,13 @@
            qSEOptimizer-enabled, and control if Dublin Core metatags
            are exposed in the header of content pages.
         </div>
-
-        <form name="edit_form"
-              action="."
-              method="post"
-              enctype="multipart/form-data"
-                tal:attributes="action string:${here_url}/${template/getId}" >
-
-                    <div class="field">
-                        <input type="checkbox"
-                               id="exposeDCMetaTags"
-                               name="exposeDCMetaTags"
-                               tal:define="exposeDCMetaTags portal/portal_properties/site_properties/exposeDCMetaTags"
-                               tal:attributes="checked exposeDCMetaTags"/>
+        <form name="edit_form" action="." method="post" enctype="multipart/form-data"
+              tal:attributes="action string:${context/absolute_url}/@@seo-controlpanel" >
+          <div class="field">
+            <input type="checkbox"
+                   id="exposeDCMetaTags"
+                   name="exposeDCMetaTags"
+                   tal:attributes="checked view/getExposeDCMetaTags"/>
                         <label for="exposeDCMetaTags">Expose <abbr title="Dublin Core">DC</abbr> meta tags</label>
                         <div class="formHelp" i18n:translate="description_seo_dc_metatags">
                            Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
@@ -40,8 +33,7 @@
                         </div>
                     </div>
 
-                    <div class="field"
-                         tal:define="default_custom_metatags portal/portal_properties/seo_properties/default_custom_metatags|python:[]">
+                    <div class="field">
                         <label for="default_custom_metatags" i18n:translate="label_default_custom_metatags">
                             Default custom metatags.
                         </label>
@@ -51,12 +43,11 @@
                         </div>
                         <div class="widget">
                             <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
-                                      tal:content="python:'\n'.join(default_custom_metatags)"></textarea>
+                                      tal:content="python:'\n'.join(view.getDefaultCustomMetatags())"></textarea>
                         </div>
                     </div>
 
-                    <div class="field"
-                         tal:define="additionalKeywords portal/portal_properties/seo_properties/additional_keywords">
+                    <div class="field">
                         <label for="additionalKeywords" i18n:translate="label_additional_keywords">
                             Additional keywords that should be added to the content types.
                         </label>
@@ -67,14 +58,12 @@
                         </div>
                         <div class="widget">
                             <textarea cols="60" id="additionalKeywords" name="additionalKeywords" rows="15"
-                                      tal:content="python:'\n'.join(additionalKeywords)"></textarea>
+                                      tal:content="python:'\n'.join(view.getAdditionalKeywords())"></textarea>
                         </div>
                     </div>
 
                     <fieldset class="portalTypes"
-                              tal:define="portal_types    portal/portal_types;
-                                          allTypes        portal_types/listContentTypes;
-                                          typeLists       python:modules['quintagroup.seoptimizer.util'].createMultiColumnList(context, allTypes, numCols=3, sort_on='title_or_id')">
+                              tal:define="typeLists view/createMultiColumnList">
                         <legend i18n:translate="label_content_type_title">Content Types</legend>
 
                         <div class="formHelp" i18n:translate="description_seo_content_types">
@@ -84,14 +73,14 @@
                         <div style="float:left; margin-right: 2em;" tal:repeat="sublist typeLists">
                             <ul class="configlets">
                                 <li tal:repeat="ptypeInfo sublist">
-                                    <tal:type define="type python:portal_types.getTypeInfo(ptypeInfo);
+                                    <tal:type define="type python:view.typeInfo(ptypeInfo);
                                                       name type/getId;">
 
                                         <input  type="checkbox"
                                                 name="portalTypes:list"
                                                 tal:attributes="id name;
                                                                 value name;
-                                                                checked python:test(filter(lambda x:x.id == 'seo_properties', type.listActions()), True, None)"/>
+                                                                checked python:view.hasSEOAction(type)"/>
                                         <label tal:attributes="for python:type.getId()"
                                                tal:content="type/Title"/>
                                     </tal:type>
@@ -101,7 +90,6 @@
                     </fieldset>
 
                     <div class="formControls"
-                         tal:define="process_creation request/process_creation|nothing;"
                          i18n:domain="plone">
                          <input class="context"
                              tabindex=""
