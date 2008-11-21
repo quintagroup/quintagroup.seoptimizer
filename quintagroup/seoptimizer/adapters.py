@@ -1,5 +1,6 @@
 import re, commands
 from zope.interface import implements
+from zope.component import queryMultiAdapter
 from Products.CMFCore.utils import getToolByName
 from quintagroup.seoptimizer.interfaces import IKeywords
 
@@ -20,7 +21,9 @@ class AdditionalKeywords(object):
         #text = set(self.context.SearchableText().split())
         #keywords = list(additional.intersection(text).union(original))
 
-        keywords = list(self.context.qSEO_Keywords())
+        request = self.context.REQUEST
+        seo_context = queryMultiAdapter((self.context, request), name='seo_context')
+        keywords = list(seo_context.seo_keywords())
         lower_keywords = map(lambda x: x.lower(), keywords)
         additional = seo_props.additional_keywords
 

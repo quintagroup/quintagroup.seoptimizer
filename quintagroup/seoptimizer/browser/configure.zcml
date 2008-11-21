@@ -46,4 +46,11 @@
         permission="cmf.ManagePortal"
         />
 
+    <browser:page
+        name="seo_context"
+        for="*"
+        class=".views.SEOContext"
+        permission="zope2.View"
+        />
+
 </configure>

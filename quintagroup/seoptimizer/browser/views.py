@@ -1,9 +1,116 @@
 from Acquisition import aq_inner
 from plone.app.controlpanel.form import ControlPanelView
 
+from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
+class SEOContext( BrowserView ):
+    """
+    """
+    def seo_description( self ):
+        """
+            Generate Description from SEO properties 
+        """
+        
+        prop_name = 'qSEO_description'
+        accessor = 'Description'
+
+        context = aq_inner(self.context)
+        if context.hasProperty(prop_name):
+            return context.getProperty(prop_name)
+
+        method = getattr(context, accessor, None)
+        if not callable(method):
+            return None
+
+        # Catch AttributeErrors raised by some AT applications
+        try:
+            value = method()
+        except AttributeError:
+            value = None
+        return value
+
+    def seo_distribution( self ):
+        """
+           Generate Description from SEO properties
+        """
+        prop_name = 'qSEO_distribution'
+        context = aq_inner(self.context)
+
+        if context.hasProperty(prop_name):
+            return context.getProperty(prop_name)
+        return 'Global'
+
+    def seo_customMetaTags( self ):
+        """
+           Return context's properties prefixed with qSEO_custom_
+        """
+        result = []
+        added = []
+        property_prefix = 'qSEO_custom_'
+
+        context = aq_inner(self.context)
+
+        for property, value in context.propertyItems():
+            idx = property.find(property_prefix)
+            if idx == 0 and len(property) > len(property_prefix):
+                added.append(property[len(property_prefix):])
+                result.append({'meta_name'    : property[len(property_prefix):],
+                               'meta_content' : value})
+
+        site_properties = getToolByName(context, 'portal_properties')
+        if hasattr(site_properties, 'seo_properties'):
+            names = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
+            for name in names:
+                if name not in added:
+                    result.append({'meta_name'    : name,
+                                   'meta_content' : ''})
+        return result
+    
+    def seo_html_comment( self ):
+        """
+        """
+        prop_name = 'qSEO_html_comment'
+        context = aq_inner(self.context)
+        if context.hasProperty(prop_name):
+            return context.getProperty(prop_name)
+        return ''
+    
+    def seo_keywords( self ):
+        """
+           Generate Keywords from SEO properties
+        """
+
+        prop_name = 'qSEO_keywords'
+        add_keywords = 'additional_keywords'
+        accessor = 'Subject'
+        context = aq_inner(self.context)
+
+        keywords = []
+        if context.hasProperty(prop_name):
+            keywords = context.getProperty(prop_name)
+
+        pprops = getToolByName(context, 'portal_properties')
+        sheet = getattr(pprops, 'seo_properties', None)
+        if sheet and sheet.hasProperty(add_keywords):
+            keywords += sheet.getProperty(add_keywords)
+
+        if keywords:
+            return keywords
+
+        method = getattr(context, accessor, None)
+        if not callable(method):
+            return None
+
+        # Catch AttributeErrors raised by some AT applications
+        try:
+            value = method()
+        except AttributeError:
+            value = None
+
+        return value
+    
 class SEOControlPanel( ControlPanelView ):
     """
     """
