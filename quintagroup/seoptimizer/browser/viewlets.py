@@ -38,13 +38,15 @@ class TitleCommentViewlet(ViewletBase):
                 qseo_comments = u"<!--%s-->"%safe_unicode(self.context.qSEO_HTML_Comment())
                 return u"%s\n%s"%(qseo_title, qseo_comments)
 
-
 class HTTPEquiv(ViewletBase):
     
     def charset( self ):
         context = self.context.aq_inner
         site_properties = getToolByName( context, 'portal_properties').site_properties
         return site_properties.getProperty('default_charset', 'utf-8')
+    
+    def render( self ):
+        return """<meta http-equiv="Content-Type" content="text/html; charset=%s" />"""%self.charset()
          
 class BaseUrlViewlet( ViewletBase ):
     """
@@ -64,7 +66,6 @@ class BaseUrlViewlet( ViewletBase ):
 
     def render( self ):
         return """<base href="%s" /><!--[if lt IE 7]></base><![endif]-->"""% self.renderBase()
-
 
 class MetaTagsViewlet( ViewletBase ):
 
@@ -122,6 +123,8 @@ class MetaTagsViewlet( ViewletBase ):
             if keywords:
                 metaTags['keywords'] = keywords
 
-        return metaTags.items()
-        
+        return metaTags
+
+    def render( self ):
+        return '\n'.join(["""<meta name="%s" content="%s" />"""%(name, content) for name, content in self.listMetaTags().items()])
 

@@ -13,7 +13,6 @@
     <browser:viewlet
         name="quintagroup.seoptimizer.http_equiv"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
-        template="templates/http_equiv.pt"
         class=".viewlets.HTTPEquiv"
         permission="zope2.View"
         />
@@ -36,7 +35,6 @@
         name="quintagroup.seoptimizer.metatags"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.MetaTagsViewlet"
-        template="templates/metatags.pt"
         permission="zope2.View"
         />
 
