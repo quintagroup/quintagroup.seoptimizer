@@ -24,18 +24,19 @@ class TitleCommentViewlet(ViewletBase):
         std_title = u"<title>%s &mdash; %s</title>" % ( safe_unicode(self.page_title()),
                                                         safe_unicode(self.portal_title())
                                                       )
+        seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
         if not self.override_title:
             if not self.override_comments:
                 return std_title
             else:
-                qseo_comments = u"<!--%s-->"%safe_unicode(self.context.qSEO_HTML_Comment())
+                qseo_comments = u"<!--%s-->"%safe_unicode(seo_context.seo_html_comment())
                 return u"%s\n%s"%(std_title, qseo_comments)
         else:
-            qseo_title = u"<title>%s</title>" % safe_unicode(self.context.qSEO_Title())
+            qseo_title = u"<title>%s</title>" % safe_unicode(seo_context.seo_title())
             if not self.override_comments:
                 return qseo_title
             else:
-                qseo_comments = u"<!--%s-->"%safe_unicode(self.context.qSEO_HTML_Comment())
+                qseo_comments = u"<!--%s-->"%safe_unicode(seo_context.seo_html_comment())
                 return u"%s\n%s"%(qseo_title, qseo_comments)
 
 class HTTPEquiv(ViewletBase):

@@ -8,39 +8,52 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 class SEOContext( BrowserView ):
     """
     """
+    def getSEOProperty( self, property_name, accessor='' ):
+        """
+        """
+        context = aq_inner(self.context)
+
+        if context.hasProperty(property_name):
+            return context.getProperty(property_name)
+        
+        if accessor:
+            method = getattr(context, accessor, None)
+            if not callable(method):
+                return None
+
+            # Catch AttributeErrors raised by some AT applications
+            try:
+                value = method()
+            except AttributeError:
+                value = None
+        
+            return value
+
+    def seo_title( self ):
+        """
+        """
+        return self.getSEOProperty( 'qSEO_title', accessor='Title' )
+
+    def seo_robots( self ):
+        """
+        """
+        robots = self.getSEOProperty( 'qSEO_robots' )
+        return robots and robots or 'ALL'
+
     def seo_description( self ):
         """
             Generate Description from SEO properties 
         """
         
-        prop_name = 'qSEO_description'
-        accessor = 'Description'
-
-        context = aq_inner(self.context)
-        if context.hasProperty(prop_name):
-            return context.getProperty(prop_name)
-
-        method = getattr(context, accessor, None)
-        if not callable(method):
-            return None
-
-        # Catch AttributeErrors raised by some AT applications
-        try:
-            value = method()
-        except AttributeError:
-            value = None
-        return value
+        return self.getSEOProperty( 'qSEO_description', accessor = 'Description')
 
     def seo_distribution( self ):
         """
            Generate Description from SEO properties
         """
-        prop_name = 'qSEO_distribution'
-        context = aq_inner(self.context)
+        dist = self.getSEOProperty( 'qSEO_distribution' )
 
-        if context.hasProperty(prop_name):
-            return context.getProperty(prop_name)
-        return 'Global'
+        return dist and dist or 'Global'
 
     def seo_customMetaTags( self ):
         """
@@ -71,12 +84,9 @@ class SEOContext( BrowserView ):
     def seo_html_comment( self ):
         """
         """
-        prop_name = 'qSEO_html_comment'
-        context = aq_inner(self.context)
-        if context.hasProperty(prop_name):
-            return context.getProperty(prop_name)
-        return ''
-    
+        html_comment = self.getSEOProperty( 'qSEO_html_comment' )
+        return html_comment and html_comment or '' 
+        
     def seo_keywords( self ):
         """
            Generate Keywords from SEO properties

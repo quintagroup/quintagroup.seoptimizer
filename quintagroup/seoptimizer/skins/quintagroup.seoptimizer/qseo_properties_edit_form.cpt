@@ -83,7 +83,7 @@
                    size="40"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/title | here/qSEO_Title;
+                   tal:attributes="value request/title | here/@@seo_context/seo_title;
                                    tabindex tabindex/next;"
                    />
           </div>
@@ -120,7 +120,7 @@
                       cols="15"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:content="request/description | here/qSEO_Description"
+                      tal:content="request/description | here/@@seo_context/seo_description"
                       ></textarea>
 
           </div>
@@ -159,7 +159,7 @@
                       wrap="off"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:define="keywords request/keywords | here/qSEO_Keywords"
+                      tal:define="keywords request/keywords | here/@@seo_context/seo_keywords"
                       tal:content="python:'\n'.join(keywords)"
                       ></textarea>
           </div>
@@ -192,7 +192,7 @@
                       cols="15"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:content="request/html_comment | here/qSEO_HTML_Comment"
+                      tal:content="request/html_comment | here/@@seo_context/seo_html_comment"
                       ></textarea>
           </div>
 
@@ -224,7 +224,7 @@
                    size="25"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/robots | here/qSEO_Robots;
+                   tal:attributes="value request/robots | here/@@seo_context/seo_robots;
                                    tabindex tabindex/next;"
                    />
           </div>
@@ -257,7 +257,7 @@
                    size="25"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/distribution | here/qSEO_Distribution;
+                   tal:attributes="value request/distribution | here/@@seo_context/seo_distribution;
                                    tabindex tabindex/next;"
                    />
           </div>
