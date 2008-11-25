@@ -84,16 +84,17 @@ class MetaTagsViewlet( ViewletBase ):
         metaTags = SortedDict()
         metaTags.update(pu.listMetaTags(context))
         metadataList = [
-            ('qSEO_Description', 'description'),
-            ('qSEO_Keywords',    'keywords'),
-            ('qSEO_Robots',      'robots'),
-            ('qSEO_Distribution','distribution')]
+            ('seo_description', 'description'),
+            ('seo_keywords',    'keywords'),
+            ('seo_robots',      'robots'),
+            ('seo_distribution','distribution')]
 
         if exposeDCMetaTags:
             metadataList.append(('qSEO_Distribution', 'DC.distribution'))
 
+        seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
         for accessor, key in metadataList:
-            method = getattr(context, accessor, None)
+            method = getattr(seo_context, accessor, None)
             if not callable(method):
                 # ups
                 continue

@@ -1,4 +1,4 @@
-PROJECT_NAME = 'qSEOptimizer'
+PROJECT_NAME = 'quintagroup.seoptimizer'
 SKINS_DIR = 'skins'
 
 GLOBALS = globals()

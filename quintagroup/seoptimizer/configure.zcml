@@ -6,10 +6,19 @@
     xmlns:cmf="http://namespaces.zope.org/cmf"
     >
 
+  <five:registerPackage package="." />
+
   <genericsetup:registerProfile
       name="default"
       title="quintagroup.seoptimizer"
       directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="quintagroup.seoptimizer"
+      directory="profiles/uninstall"
       description=""
       provides="Products.GenericSetup.interfaces.EXTENSION" />
 

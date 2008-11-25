@@ -4,6 +4,7 @@
   <property name="title">SEO Properties</property>
   <property name="stop_words" type="lines">
    <element value="a"/>
+   <element value="an"/>
    <element value="amp"/>
    <element value="and"/>
    <element value="are"/>
@@ -62,10 +63,8 @@
    <element value="seo_description"/>
    <element value="seo_keywords"/>
   </property>
-  <property name="additional_keywords" type="lines">
-  </property>
-  <property name="default_custom_metatags" type="lines">
-  </property>
+  <property name="additional_keywords" type="lines"/>
+  <property name="default_custom_metatags" type="lines"/>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>
