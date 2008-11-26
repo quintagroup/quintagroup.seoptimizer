@@ -55,6 +55,8 @@ def remove_configlets( context, conf_ids ):
             configTool.unregisterConfiglet(id)
 
 def uninstall( context ):
+    if context.readDataFile('seo_uninstall.txt') is None:
+        return
     site = context.getSite()
     removeSkin( site, 'quintagroup.seoptimizer' )
     removeActions( site )
