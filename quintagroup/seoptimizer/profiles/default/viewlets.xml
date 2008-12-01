@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <object>
   <order manager="plone.htmlhead" skinname="Plone Default">
+    <viewlet name="quintagroup.seoptimizer.http_equiv" />
     <viewlet name="plone.htmlhead.title" />
     <viewlet name="quintagroup.seoptimizer.base" />
-    <viewlet name="quintagroup.seoptimizer.http_equiv" />
     <viewlet name="quintagroup.seoptimizer.generator" />
     <viewlet name="quintagroup.seoptimizer.metatags" />
     <viewlet name="plone.resourceregistries" />
