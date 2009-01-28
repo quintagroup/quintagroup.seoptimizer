@@ -185,7 +185,7 @@
                    />
             <label i18n:translate="label_override" for="robots_override">
               Override
-            </label>
+            </label><br />
             <input type="text"
                    id="seo_robots"
                    name="robots"
@@ -213,7 +213,7 @@
                    />
             <label i18n:translate="label_override" for="distribution_override">
               Override
-            </label>
+            </label><br />
             <input type="text"
                    id="seo_distribution"
                    name="distribution"
