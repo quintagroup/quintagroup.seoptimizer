@@ -128,5 +128,6 @@ class MetaTagsViewlet( ViewletBase ):
         return metaTags
 
     def render( self ):
-        return '\n'.join(["""<meta name="%s" content="%s" />"""%(name, content) for name, content in self.listMetaTags().items()])
+        return '\n'.join([safe_unicode("""<meta name="%s" content="%s" />"""%(name, content)) \
+                                       for name, content in self.listMetaTags().items()])
 
