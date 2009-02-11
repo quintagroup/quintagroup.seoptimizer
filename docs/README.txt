@@ -74,3 +74,5 @@ Authors
   * Volodymyr Cherepanyak
 
   * Melnychuk Taras
+
+  * Stepanov Vitaliy

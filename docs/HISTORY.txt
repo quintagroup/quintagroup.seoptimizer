@@ -1,4 +1,7 @@
-2.0.0 
+Changelog
+=========
+
+2.0.0 - February 11, 2009
 
     * Some refactoring of product was done, some python script are moved to zope 3 views.
       Also all main parts of html head section was moved to viewlets and now easily can be
