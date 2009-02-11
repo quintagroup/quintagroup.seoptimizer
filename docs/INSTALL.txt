@@ -1,13 +1,60 @@
-To install development version of the quintagroup.seoproperties package add it to buildout.cfg this way
+quintagroup.seoptimizer Installation
+==========================
 
-[src-eggs]
-recipe=infrae.subversion
-urls =
-    http://svn.quintagroup.com/products/quintagroup.seoptimizer/trunk quintagroup.seoptimizer
-as_eggs = true
-location = src
+To install quintagroup.seoptimizer into the global Python environment (or a workingenv),
+using a traditional Zope 2 instance, you can do this:
 
-[instance]
-zcml =
-    quintagroup.seoptimizer
-    quintagroup.seoptimizer-overrides
+ * When you're reading this you have probably already run
+   ``easy_install quintagroup.seoptimizer``. Find out how to install setuptools
+   (and EasyInstall) here:
+   http://peak.telecommunity.com/DevCenter/EasyInstall
+
+ * Create a file called ``quintagroup.seoptimizer-configure.zcml`` in the
+   ``/path/to/instance/etc/package-includes`` directory.  The file
+   should only contain this::
+
+       <include package="quintagroup.seoptimizer" file="configure.zcml" />
+
+    and create a file called ``quintagroup.seoptimizer-overrides.zcml`` in the
+   ``/path/to/instance/etc/package-includes`` directory.  The file
+   should only contain this::
+
+       <include package="quintagroup.seoptimizer" file="overrides.zcml" />
+
+Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance
+recipe to manage your project, you can do this:
+
+ * Add ``quintagroup.seoptimizer`` to the list of eggs to install, e.g.:
+
+    [buildout]
+    parts =
+        ...
+        src-eggs
+    ....
+    eggs =
+        ...
+        quintagroup.seoptimizer
+
+    [src-eggs]
+    recipe=infrae.subversion
+    urls =
+        http://svn.quintagroup.com/products/quintagroup.seoptimizer/trunk quintagroup.seoptimizer
+
+    as_eggs = true
+    location = src
+
+  * Tell the plone.recipe.zope2instance recipe to install a ZCML slug:
+
+    [instance]
+    recipe = plone.recipe.zope2instance
+    ...
+    zcml =
+        quintagroup.seoptimizer
+        quintagroup.seoptimizer-overrides
+
+  * Re-run buildout, e.g. with:
+
+    $ ./bin/buildout
+
+You can skip the ZCML slug if you are going to explicitly include the package
+from another package's configure.zcml file.

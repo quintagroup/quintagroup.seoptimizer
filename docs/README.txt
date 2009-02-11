@@ -2,7 +2,7 @@ Quintagroup Search Engine Optimization Tool
 
   This product was created to enhance SE visibility of Plone sites.
 
-  &copy; "Quintagroup":http://quintagroup.com, 2004-2008
+  &copy; "Quintagroup":http://quintagroup.com, 2004-2009
   
   Product sponsored by "4webresults, SEO and Internet Marketing
   Services provider":http://4webresults.com. Plone-3.x.x compatibility, extra
@@ -26,7 +26,7 @@ Quintagroup Search Engine Optimization Tool
       
       * META Disposition tag
 
-    For Title, description keywords amd comment you have statistics
+    For Title, description keywords and comment you have statistics
     (total/stop/used words, field length counter).
   
   Usage
@@ -75,4 +75,4 @@ Authors
 
   * Melnychuk Taras
 
-  * Stepanov Vitaliy
+  * Vitaliy Stepanov
