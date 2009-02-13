@@ -1,13 +1,10 @@
 from setuptools import setup, find_packages
 
-version = '2.0.0'
-
-desc = file('./docs/README.txt').read()
-
 setup(name='quintagroup.seoptimizer',
-      version=version,
+      version=open('./quintagroup/seoptimizer/version.txt').read(),
       description="Quintagroup Search Engine Optimization Tool",
-      long_description=desc,
+      long_description=open("./docs/README.txt").read() + "\n" + \
+                       open("./docs/HISTORY.txt").read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",

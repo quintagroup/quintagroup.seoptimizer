@@ -1,12 +1,14 @@
 Changelog
 =========
 
-2.0.0 - February 11, 2009
+v2.0.0 - February 11, 2009
+--------------------------
 
-    * Some refactoring of product was done, some python script are moved to zope 3 views.
-      Also all main parts of html head section was moved to viewlets and now easily can be
-      reordered.
+* Some refactoring of product was done, some python script are moved to zope 3 views.
+  Also all main parts of html head section was moved to viewlets and now easily can be
+  reordered.
 
-1.5.1
+v1.5.1
+------
 
-    * added support of additional keywords
+* Added support of additional keywords.
