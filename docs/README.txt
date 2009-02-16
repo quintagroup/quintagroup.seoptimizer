@@ -3,7 +3,7 @@ Quintagroup Search Engine Optimization Tool
 
 This product was created to enhance SE visibility of Plone sites.
 
-Copyright "Quintagroup": http://quintagroup.com, 2004-2009
+Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2009
   
 Product sponsored by "4webresults, SEO and Internet Marketing
 Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra
