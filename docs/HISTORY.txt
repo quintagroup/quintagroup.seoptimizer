@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+v2.0.2 - March 06, 2009
+--------------------------
+
+* Added uninstallation package profile title
+* REAME.txt and INSTALL.txt changed, text format ready for PyPi
+
+
 v2.0.1 - February 16, 2009
 --------------------------
 
