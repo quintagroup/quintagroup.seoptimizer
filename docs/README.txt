@@ -12,8 +12,10 @@ configuration features sponsored by "Eogogics Inc.": http://eogogics.com,
 "eLawSoftware": http:///www.elawsoftware.com.
 
 
-Features. Allows per document editing of
-----------------------------------------
+Features
+--------
+
+quintagroup.seoptimizer allows per document editing of:
 
 * HTML Title tag
 
@@ -29,27 +31,13 @@ Features. Allows per document editing of
 
 For Title, description keywords and comment you have statistics
 (total/stop/used words, field length counter).
-
   
 Usage
 -----
 
-* You may install quintagroup.seoptimizer package by using buildout. 
-  If you have instance that was created manually then you may install
-  package using easy_install script::
-
-    run:
-      easy_install --install-dir='dir-path' quintagroup.seoptimizer
-        where:
-        dir-path - INSTANCE_HOME/lib/python or you can specify any other directory,
-                   but you must be sure that directroy is in PYTHONPATH
-
-* Install in your Plone instance with QuickInstaler (Plone Control
-  Panel -> Add/remove Products)
-
 * Go to a document
 
-* Switch to SEO Properties tab
+* Switch to *SEO Properties* tab
 
 * Select Override checkboxes of features you want to override
 
@@ -57,8 +45,7 @@ Usage
 
 * Save
 
-* Do this for all documents that needs enhanced SEO properties
-
+* Do this for all documents that need enhanced SEO properties
 
 Requirements
 ------------
@@ -79,6 +66,6 @@ Authors
 
 * Volodymyr Cherepanyak
 
-* Melnychuk Taras
+* Taras Melnychuk
 
 * Vitaliy Stepanov
