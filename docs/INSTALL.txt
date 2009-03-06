@@ -42,4 +42,4 @@ Alternatively, install quintagroup.seoptimizer via ZMI portal_setup. Select ``qu
 Uninstallation
 ==============
 
-To unintal quintagroup.seoptimizer - select ``quintagroup.seoptimizer uninstall`` profile from the list of available profiles and press *Import all steps*.
+To uninstall quintagroup.seoptimizer - select ``quintagroup.seoptimizer uninstall`` profile from the list of available profiles and press *Import all steps*.
