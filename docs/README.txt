@@ -52,6 +52,10 @@ Requirements
 
 * Plone 3.0+ 
 
+Installation
+------------
+
+See docs/INSTALL.txt for instructions.
 
 Authors
 -------

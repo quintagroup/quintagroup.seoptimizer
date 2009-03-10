@@ -33,11 +33,8 @@ Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance r
 
    $ ./bin/buildout
 
----------------
 
-Install quintagroup.seoptimizer in your Plone instance with QuickInstaller (Plone Control Panel -> Add/remove Products)
-
-Alternatively, install quintagroup.seoptimizer via ZMI portal_setup. Select ``quintagroup.seoptimizer`` from the list of available profiles and press *Import all steps*.
+Install quintagroup.seoptimizer via ZMI portal_setup. Select ``quintagroup.seoptimizer`` from the list of available profiles and press *Import all steps*.
 
 Uninstallation
 ==============
