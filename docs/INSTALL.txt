@@ -3,13 +3,16 @@ Installation
 
 To install quintagroup.seoptimizer into the global Python environment (or a workingenv), using a traditional Zope 2 instance, you can do this:
 
-* Create a file called ``quintagroup.seoptimizer-configure.zcml`` in the /path/to/instance/etc/package-includes directory. The file should only contain this::
-
-  <include package="quintagroup.seoptimizer" file="configure.zcml" />
+* Copy ``quintagroup`` folder to the /path/to/instance/lib/python directory.
 
 * Create a file called ``quintagroup.seoptimizer-overrides.zcml`` in the /path/to/instance/etc/package-includes directory. The file should only contain this::
 
   <include package="quintagroup.seoptimizer" file="overrides.zcml" />
+
+* Restart the Zope server, for example with the following command in the terminal::
+
+   $ ./bin/zopectl restart
+
 
 Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance recipe to manage your project, you can do this:
 
@@ -33,6 +36,9 @@ Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance r
 
    $ ./bin/buildout
 
+* Restart the Zope server, e.g with the following command in the terminal::
+
+   $ ./bin/instance restart
 
 Install quintagroup.seoptimizer via ZMI portal_setup. Select ``quintagroup.seoptimizer`` from the list of available profiles and press *Import all steps*.
 
