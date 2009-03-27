@@ -63,6 +63,7 @@
    <element value="seo_description"/>
    <element value="seo_keywords"/>
   </property>
+  <property name="custom_script" type="text"/>
   <property name="additional_keywords" type="lines"/>
   <property name="default_custom_metatags" type="lines"/>
  </object>

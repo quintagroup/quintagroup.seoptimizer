@@ -38,6 +38,13 @@
         permission="zope2.View"
         />
 
+    <browser:viewlet
+        name="quintagroup.seoptimizer.customscript"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.CustomScriptViewlet"
+        permission="zope2.View"
+        />
+
     <!--Views-->
     <browser:page
         name="seo-controlpanel"

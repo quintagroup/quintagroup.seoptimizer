@@ -131,3 +131,16 @@ class MetaTagsViewlet( ViewletBase ):
         return '\n'.join([safe_unicode("""<meta name="%s" content="%s" />"""%(name, content)) \
                                        for name, content in self.listMetaTags().items()])
 
+class CustomScriptViewlet( ViewletBase ):
+
+    def getCustomScript( self ):
+        context = self.context.aq_inner
+        portal_props = getToolByName(context, 'portal_properties')
+        seo_props = getToolByName(portal_props, 'seo_properties', None)
+        if seo_props is None:
+            return '' 
+	return seo_props.getProperty('custom_script', '')
+
+    def render( self ):
+        return safe_unicode("""%s"""% self.getCustomScript())
+
