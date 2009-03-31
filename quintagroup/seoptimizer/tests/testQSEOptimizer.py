@@ -167,10 +167,13 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         '''Preparation for functional testing'''
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
+        self.canonurl = 'http://test.site.com/test.html'
 
         my_doc.qseo_properties_edit(title='hello world', description='it is description',
                                     keywords='my1|key2', html_comment='no comments',
-                                    robots='ALL', distribution='Global', title_override=1,
+                                    robots='ALL', distribution='Global', 
+                                    canonical=self.canonurl, canonical_override=1,
+                                    title_override=1,
                                     description_override=1, keywords_override=1,
                                     html_comment_override=1, robots_override=1,
                                     distribution_override=1, custommetatags=custom_metatags)
@@ -213,6 +216,24 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         for tag in custom_metatags:
             m = re.search('<meta name="%(meta_name)s" content="%(meta_content)s" />' % tag, self.html, re.S|re.M)
             self.assert_(m, "Custom meta tag %s not applied." % tag['meta_name'])
+
+    def testCanonical(self):
+        m = re.match('.*<link rel="canonical" href="%s" />' % self.canonurl, self.html, re.S|re.M)
+        self.assert_(m, self.canonurl)
+
+    def testDefaultCanonical(self):
+        """Default canonical url mast add document absolute_url
+        """
+        # Delete custom canonical url
+        my_doc = self.portal['my_doc']
+        my_doc._delProperty(id='qSEO_canonical')
+        # Get document without customized canonical url
+        abs_path = "/%s" % my_doc.absolute_url(1)
+        self.html = self.publish(abs_path, self.basic_auth).getBody()
+
+        my_url = my_doc.absolute_url()
+        m = re.match('.*<link rel="canonical" href="%s" />' % my_url, self.html, re.S|re.M)
+        self.assert_(m, my_url)
 
 class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
 
