@@ -6,7 +6,7 @@
 ##bind state=state
 ##bind subpath=traverse_subpath
 ##title=Update SEO Properties
-##parameters=title=None,description=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[]
+##parameters=title=None,description=None,canonical=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,canonical_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[]
 
 def setProperty(context, property, value, type='string'):
     if context.hasProperty(property):
@@ -41,6 +41,7 @@ setProperty(context, 'qSEO_keywords', keywords, 'lines')
 setProperty(context, 'qSEO_html_comment', html_comment)
 setProperty(context, 'qSEO_robots', robots)
 setProperty(context, 'qSEO_distribution', distribution)
+setProperty(context, 'qSEO_canonical', canonical)
 
 if not title_override:        delete_list.append('qSEO_title')
 if not description_override:  delete_list.append('qSEO_description')
@@ -48,6 +49,7 @@ if not keywords_override:     delete_list.append('qSEO_keywords')
 if not html_comment_override: delete_list.append('qSEO_html_comment')
 if not robots_override:       delete_list.append('qSEO_robots')
 if not distribution_override: delete_list.append('qSEO_distribution')
+if not canonical_override:    delete_list.append('qSEO_canonical')
 
 if delete_list: context.manage_delProperties(delete_list)
 

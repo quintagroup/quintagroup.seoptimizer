@@ -6,6 +6,7 @@
     <viewlet name="quintagroup.seoptimizer.base" />
     <viewlet name="quintagroup.seoptimizer.generator" />
     <viewlet name="quintagroup.seoptimizer.metatags" />
+    <viewlet name="quintagroup.seoptimizer.canonicalurl" />
     <viewlet name="quintagroup.seoptimizer.customscript" />
     <viewlet name="plone.resourceregistries" />
   </order>

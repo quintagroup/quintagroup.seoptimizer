@@ -144,3 +144,13 @@ class CustomScriptViewlet( ViewletBase ):
     def render( self ):
         return safe_unicode("""%s"""% self.getCustomScript())
 
+
+class CanonicalUrlViewlet( ViewletBase ):
+    """
+       simple viewlet for canonical url link rendering
+    """
+
+    def render( self ):
+        seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
+        return """<link rel="canonical" href="%s" />""" % seo_context.seo_canonical()
+

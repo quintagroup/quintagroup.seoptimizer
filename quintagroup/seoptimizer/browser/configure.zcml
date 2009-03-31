@@ -39,6 +39,13 @@
         />
 
     <browser:viewlet
+        name="quintagroup.seoptimizer.canonicalurl"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.CanonicalUrlViewlet"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
         name="quintagroup.seoptimizer.customscript"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.CustomScriptViewlet"

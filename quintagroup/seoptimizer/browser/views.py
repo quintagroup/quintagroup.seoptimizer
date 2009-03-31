@@ -1,9 +1,16 @@
 from Acquisition import aq_inner
+from zope.component import queryAdapter
 from plone.app.controlpanel.form import ControlPanelView
 
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
+HAS_CANONICAL_PATH = True
+try:
+    from quintagroup.canonicalpath.interfaces import ICanonicalPath
+except ImportError:
+    HAS_CANONICAL_PATH = False
 
 class SEOContext( BrowserView ):
     """
@@ -121,6 +128,22 @@ class SEOContext( BrowserView ):
 
         return value
     
+    def seo_canonical( self ):
+        """
+           Get canonical URL
+        """
+        canonical = self.getSEOProperty( 'qSEO_canonical' )
+
+        if not canonical and HAS_CANONICAL_PATH:
+            canpath = queryAdapter(self.context, ICanonicalPath)
+            if canpath:
+                purl = getToolByName(self.context, 'portal_url')()
+                cpath = canpath.canonical_path()
+                canonical = purl + cpath
+
+        return canonical and canonical or self.context.absolute_url()
+
+
 class SEOControlPanel( ControlPanelView ):
     """
     """

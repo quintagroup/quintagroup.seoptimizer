@@ -225,6 +225,38 @@
                    />
           </div>
           <div class="field"
+               tal:define="error errors/canonical|nothing;"
+               tal:attributes="class python:test(error, 'field error', 'field')">
+            <label i18n:translate="label_canonical_tag" for="canonical">
+              Canonical URL
+            </label>
+            <div class="formHelp" i18n:translate="help_seo_canonical">
+              Specify your canonical URL.
+              If your site has identical or vastly similar content that's accessible through multiple URLs,
+              this format provides you with more control over the URL returned in search results.
+            </div>
+            <input type="checkbox"
+                   id="canonical_override"
+                   name="canonical_override"
+                   tabindex=""
+                   tal:attributes="checked python:test(here.hasProperty('qSEO_canonical'), 'on', None);
+                                   tabindex tabindex/next;"
+                   />
+            <label i18n:translate="label_override" for="canonical_override">
+              Override
+            </label><br />
+            <div tal:content="error">Validation error output</div>
+            <input type="text"
+                   id="seo_canonical"
+                   name="canonical"
+                   size="55"
+                   value=""
+                   tabindex=""
+                   tal:attributes="value request/canonical | here/@@seo_context/seo_canonical;
+                                   tabindex tabindex/next;"
+                   />
+          </div>
+          <div class="field"
                tal:define="fieldName string:custommetatags;">
             <label i18n:translate="label_custom_metatags" for="custom_metatags">
               Custom Meta Tags

@@ -5,7 +5,7 @@ title=Edit SEO Properties
 View=0:Authenticated
 
 [validators]
-validators..Save=
+validators..Save=validate_qseo_properties
 validators..Cancel=
 
 [actions]
