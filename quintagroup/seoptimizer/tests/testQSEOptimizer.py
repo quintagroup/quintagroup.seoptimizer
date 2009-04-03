@@ -376,8 +376,6 @@ class TestMetaTagsDuplication(PloneTestCase.FunctionalTestCase):
         abs_path = "/%s" % self.my_doc.absolute_url(1)
         regen = re.compile('<meta\s+[^>]*name=\"generator\"[^>]*>', re.S|re.M)
 
-        #import pdb;pdb.set_trace()
-
         # Before product installation
         html = self.publish(abs_path, self.basic_auth).getBody()
         lengen = len(regen.findall(html))
@@ -409,6 +407,46 @@ class TestMetaTagsDuplication(PloneTestCase.FunctionalTestCase):
 #         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
 #            "after seoptimizer installation" % lendesc)
 
+class TestBaseURL(PloneTestCase.FunctionalTestCase):
+
+    def afterSetUp(self):
+        self.qi = self.portal.portal_quickinstaller
+        self.qi.installProduct(PRODUCT)
+        #self.portal.changeSkin('Plone Default')
+
+        self.basic_auth = 'portal_manager:secret'
+        uf = self.app.acl_users
+        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
+        user = uf.getUserById('portal_manager')
+        if not hasattr(user, 'aq_base'):
+            user = user.__of__(uf)
+        newSecurityManager(None, user)
+
+    def test_notFolderBaseURL(self):
+        my_doc = self.portal.invokeFactory('Document', id='my_doc')
+        my_doc = self.portal['my_doc']
+        regen = re.compile('<base\s+[^>]*href=\"([^\"]*)\"[^>]*>', re.S|re.M)
+        
+        path = "/%s" % my_doc.absolute_url(1)
+        html = self.publish(path, self.basic_auth).getBody()
+        burls = regen.findall(html)
+        
+        mydocurl = my_doc.absolute_url()
+        self.assert_(not [1 for burl in burls if not burl==mydocurl],
+           "Wrong BASE URL for document: %s, all must be: %s" % (burls, mydocurl))
+
+    def test_folderBaseURL(self):
+        my_fldr = self.portal.invokeFactory('Folder', id='my_fldr')
+        my_fldr = self.portal['my_fldr']
+        regen = re.compile('<base\s+[^>]*href=\"([^\"]*)\"[^>]*>', re.S|re.M)
+        
+        path = "/%s" % my_fldr.absolute_url(1)
+        html = self.publish(path, self.basic_auth).getBody()
+        burls = regen.findall(html)
+
+        myfldrurl = my_fldr.absolute_url() + '/'
+        self.assert_(not [1 for burl in burls if not burl==myfldrurl],
+           "Wrong BASE URL for folder: %s , all must be : %s" % (burls, myfldrurl))
 
 TESTS = [TestBeforeInstall,
          TestInstallation,
@@ -416,6 +454,7 @@ TESTS = [TestBeforeInstall,
          TestExposeDCMetaTags,
          TestAdditionalKeywords,
          TestMetaTagsDuplication,
+         TestBaseURL,
         ]
 
 def test_suite():
