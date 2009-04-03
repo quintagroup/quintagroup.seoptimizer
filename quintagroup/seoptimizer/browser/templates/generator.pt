@@ -1,1 +1,2 @@
-<meta name="generator" content="Plone - http://plone.org" />
+<meta name="generator" content="Plone - http://plone.org"
+      tal:condition="here/portal_properties/seo_properties|nothing" />
