@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <object>
-  <order manager="plone.htmlhead" skinname="Plone Default">
+  <order manager="plone.htmlhead" skinname="*">
     <viewlet name="quintagroup.seoptimizer.http_equiv" />
     <viewlet name="plone.htmlhead.title" />
     <viewlet name="quintagroup.seoptimizer.base" />
