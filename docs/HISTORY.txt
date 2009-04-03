@@ -2,10 +2,19 @@ Changelog
 =========
 
 
-2.0.5 (unreleased)
+2.0.5 (2009-04-03)
 ------------------
 
-- Nothing changed yet.
+- Fix seoptimizer intrusion before
+  installation to plone instance
+  [mylan]
+
+- Fix base url for folderish objects
+  [mylan]
+
+- Bind viewlets to specific layer and
+  set viewlets order for all skins.
+  [mylan]
 
 
 2.0.4 (2009-03-31)
