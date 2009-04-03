@@ -61,7 +61,7 @@ class BaseUrlViewlet( ViewletBase ):
 
         # when accessing via WEBDAV you're not allowed to access aq_explicit
         try:
-            return '%s/'%base_url and isFolder or base_url
+            return isFolder and '%s/'%base_url or base_url
         except (Unauthorized, 'Unauthorized'):
             pass
 
