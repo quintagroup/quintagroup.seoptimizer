@@ -70,10 +70,6 @@ class BaseUrlViewlet( ViewletBase ):
 
 class MetaTagsViewlet( ViewletBase ):
 
-    def available(self):
-        pp = getToolByName(self.context, 'portal_properties')
-        return hasattr(pp,'seo_properties')
-
     def listMetaTags( self ):
         context = self.context.aq_inner
         portal_props = getToolByName(context, 'portal_properties')
@@ -132,9 +128,6 @@ class MetaTagsViewlet( ViewletBase ):
         return metaTags
 
     def render( self ):
-        if not self.available():
-           return ''
-       
         return '\n'.join([safe_unicode("""<meta name="%s" content="%s" />"""%(name, content)) \
                                        for name, content in self.listMetaTags().items()])
 
