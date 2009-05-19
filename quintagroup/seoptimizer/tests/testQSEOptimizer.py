@@ -184,9 +184,24 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         abs_path = "/%s" % my_doc.absolute_url(1)
         self.html = self.publish(abs_path, self.basic_auth).getBody()
 
+        # now setup page with title equal to plone site's title
+        my_doc2 = self.portal.invokeFactory('Document', id='my_doc2')
+        my_doc2 = self.portal['my_doc2']
+        my_doc2.update(title=self.portal.Title())
+        wf_tool.doActionFor(my_doc2, 'publish')
+        abs_path2 = "/%s" % my_doc2.absolute_url(1)
+        self.html2 = self.publish(abs_path2, self.basic_auth).getBody()
+
     def testTitle(self):
         m = re.match('.*<title>\\s*hello world\\s*</title>', self.html, re.S|re.M)
         self.assert_(m, 'Title not set in')
+
+    def testTitleDuplication(self):
+        """If we are not overriding page title and current page title equals title of the plone site
+        then there should be no concatenation of both titles. Only one should be displayed.
+        """
+        m = re.match('.*<title>\\s*%s\\s*</title>' % self.portal.Title(), self.html2, re.S|re.M)
+        self.assert_(m, 'Title is not set correctly, perhaps it is duplicated with plone site title')
 
     def testDescription(self):
         m = re.match('.*<meta name="description" content="it is description" />', self.html, re.S|re.M)

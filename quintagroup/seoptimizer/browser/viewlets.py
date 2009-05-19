@@ -1,3 +1,4 @@
+from cgi import escape
 from zope.component import getMultiAdapter
 from zope.viewlet.interfaces import IViewlet
 from Products.CMFPlone.utils import safe_unicode
@@ -20,10 +21,18 @@ class TitleCommentViewlet(ViewletBase):
         self.override_title = self.context.hasProperty('qSEO_title')
         self.override_comments = self.context.hasProperty('qSEO_html_comment')
 
+    def std_title(self):
+        portal_title = safe_unicode(self.portal_title())
+        page_title = safe_unicode(self.page_title())
+        if page_title == portal_title:
+            return u"<title>%s</title>" % (escape(portal_title))
+        else:
+            return u"<title>%s &mdash; %s</title>" % (
+                escape(safe_unicode(page_title)),
+                escape(safe_unicode(portal_title)))
+
     def render(self):
-        std_title = u"<title>%s &mdash; %s</title>" % ( safe_unicode(self.page_title()),
-                                                        safe_unicode(self.portal_title())
-                                                      )
+        std_title = self.std_title()
         seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
         if not self.override_title:
             if not self.override_comments:

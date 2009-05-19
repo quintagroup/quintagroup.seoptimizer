@@ -2,10 +2,12 @@ Changelog
 =========
 
 
-2.0.6 (unreleased)
+2.0.6 (2009-05-19)
 ------------------
 
-- Nothing changed yet.
+- Fix page title tag, now it is not duplicated in case
+  site and current page have equal titles
+  [piv]
 
 
 2.0.5 (2009-04-03)
