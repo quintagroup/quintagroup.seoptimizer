@@ -79,7 +79,7 @@
               Meta Description Tag
             </label>
             <div class="formHelp" i18n:translate="help_seo_description">
-              Description of the document to be indexed by Search Engines. This test will be present in meta description tag in page HTML source. 
+              Description of the document to be indexed by Search Engines. This text will be present in meta description tag in page HTML source. 
             </div>
             <input type="checkbox"
                    id="description_override"
