@@ -28,38 +28,32 @@ Changelog
 2.0.4 (2009-03-31)
 ------------------
 
-* Added canonical url support
+* Canonical url support added
   [mylan]
+* Custom script viewlets in html head added
 
+2.0.2 (2009-03-06)
+------------------
 
-v2.0.3 
------------------------
-
-* Added custom script viewlets in html head
-
-
-v2.0.2 - March 06, 2009
------------------------
-
-* Added uninstallation package profile title
+* Uninstallation package profile title added
 * REAME.txt and INSTALL.txt changed, text format ready for PyPi
 
 
-v2.0.1 - February 16, 2009
---------------------------
+2.0.1 (2009-02-16)
+------------------
 
-* Formatted text in docs for pypi
+* Formatted text in docs for PyPi
 
 
-v2.0.0 - February 11, 2009
---------------------------
+2.0.0 (2009-02-11)
+------------------
 
 * Some refactoring of product was done, some python script are moved to zope 3 views.
-  Also all main parts of html head section was moved to viewlets and now easily can be
+  Also all main parts of html head section were moved to viewlets and now can easily be
   reordered.
 
 
-v1.5.1
-------
+1.5.1
+-----
 
-* Added support of additional keywords.
+* Support of additional keywords added.
