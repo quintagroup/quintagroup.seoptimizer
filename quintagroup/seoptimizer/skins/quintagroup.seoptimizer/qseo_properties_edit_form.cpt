@@ -40,7 +40,7 @@
       <form name="edit_form"
             action=""
             method="post"
-            tal:attributes="action string:${here/getId}/${template/getId}">
+            tal:attributes="action string:${here/absolute_url}/${template/getId}">
         <fieldset>
           <legend i18n:domain="plone" i18n:translate="legend_item_properties">
             Item Properties

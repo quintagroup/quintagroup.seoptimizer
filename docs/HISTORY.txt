@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+2.0.7 (2009-07-25)
+------------------
+
+- Fix url action in qseo_properties_edit_form
+  [liebster]
+
+
 2.0.6 (2009-05-19)
 ------------------
 
