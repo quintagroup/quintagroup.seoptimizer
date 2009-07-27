@@ -13,7 +13,7 @@ configuration features sponsored by:
  
 * "4webresults": http://4webresults.com
 
-* "eLawSoftware": http:///www.elawsoftware.com
+* "eLawSoftware": http://www.elawsoftware.com
 
 
 Features
@@ -38,6 +38,7 @@ quintagroup.seoptimizer allows per document editing of:
 For Title, description keywords and comment you have statistics
 (total/stop/used words, field length counter).
   
+  
 Usage
 -----
 
@@ -61,12 +62,14 @@ Requirements
 
 * Plone 3.0+ 
 
+
 Note
 ----
 
 * For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.6.1  release (http://plone.org/products/plone-seo/releases/1.6.1)
 
 * For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
+
 
 Authors
 -------
@@ -84,6 +87,7 @@ Authors
 * Taras Melnychuk
 
 * Vitaliy Stepanov
+
 
 Links
 -----
