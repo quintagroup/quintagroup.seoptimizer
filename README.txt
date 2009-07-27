@@ -7,9 +7,13 @@ Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2009
   
 Product sponsored by "4webresults, SEO and Internet Marketing
 Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra
-configuration features sponsored by "Eogogics Inc.": http://eogogics.com, 
-"4webresults": http://4webresults.com, and
-"eLawSoftware": http:///www.elawsoftware.com.
+configuration features sponsored by:
+
+* "Eogogics Inc.": http://eogogics.com
+ 
+* "4webresults": http://4webresults.com
+
+* "eLawSoftware": http:///www.elawsoftware.com
 
 
 Features
@@ -29,17 +33,21 @@ quintagroup.seoptimizer allows per document editing of:
 
 * META Disposition tag
 
+* Canonical URl (http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL)
+
 For Title, description keywords and comment you have statistics
 (total/stop/used words, field length counter).
   
 Usage
 -----
 
-* Go to a document
+* Go to Plone Control Panel, enable Plone SEO for desired content types
+
+* Go to a document (Blog entry, news item, event, etc)
 
 * Switch to *SEO Properties* tab
 
-* Select Override checkboxes of features you want to override
+* Select *Override* checkboxes of features you want to override
 
 * Type-in your SEO values
 
@@ -47,15 +55,18 @@ Usage
 
 * Do this for all documents that need enhanced SEO properties
 
+
 Requirements
 ------------
 
 * Plone 3.0+ 
 
-Installation
-------------
+Note
+----
 
-See docs/INSTALL.txt for instructions.
+* For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.6.1  release (http://plone.org/products/plone-seo/releases/1.6.1)
+
+* For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
 
 Authors
 -------
@@ -73,3 +84,8 @@ Authors
 * Taras Melnychuk
 
 * Vitaliy Stepanov
+
+Links
+-----
+
+Watch Plone SEO screencast (http://quintagroup.com/cms/screencasts/plone-seo) to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
