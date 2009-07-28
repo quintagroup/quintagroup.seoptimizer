@@ -6,7 +6,9 @@ from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
+SEPERATOR = '|'
 HAS_CANONICAL_PATH = True
+
 try:
     from quintagroup.canonicalpath.interfaces import ICanonicalPath
 except ImportError:
@@ -81,11 +83,16 @@ class SEOContext( BrowserView ):
 
         site_properties = getToolByName(context, 'portal_properties')
         if hasattr(site_properties, 'seo_properties'):
-            names = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
-            for name in names:
-                if name not in added:
-                    result.append({'meta_name'    : name,
-                                   'meta_content' : ''})
+            custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
+            for tag in custom_meta_tags:
+                name_value = tag.split(SEPERATOR)
+                if name_value[0] and name_value[0] not in added:
+                    if len(name_value) == 1:
+                        result.append({'meta_name'    : name_value[0],
+                                       'meta_content' : ''})
+                    else:
+                        result.append({'meta_name'    : name_value[0],
+                                       'meta_content' : name_value[1]})
         return result
     
     def seo_html_comment( self ):

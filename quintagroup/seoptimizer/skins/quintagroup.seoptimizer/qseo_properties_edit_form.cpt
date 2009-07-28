@@ -266,7 +266,7 @@
                    style="width: 100%"
                    tal:define="columnNames python:['meta name', 'meta content'];
                                columnIds   python:['meta_name', 'meta_content'];
-                               fielddata context/qSEO_CustomMetaTags|python:[];">
+                               fielddata here/@@seo_context/seo_customMetaTags;">
                 <thead>
                     <tr>
                         <th class="discreet" style="text-align: left"

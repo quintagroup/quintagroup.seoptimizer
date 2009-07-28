@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+2.0.8 (2009-07-28)
+------------------
+
+- Added use of default meta tags from the control panel in metatags viewlet
+  [liebster]
+
+
 2.0.7 (2009-07-25)
 ------------------
 
