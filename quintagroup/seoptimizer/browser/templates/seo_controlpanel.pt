@@ -39,7 +39,7 @@
                         </label>
                         <div class="formHelp" i18n:translate="help_default_custom_metatags">
                             Fill in custom metatag names (one per line) which will appear on qseo_properties
-                            edit tab.
+                            edit tab. Example: "metaname|value" or "metaname".
                         </div>
                         <div class="widget">
                             <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
