@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.9 (unreleased)
+------------------
+
+- Fixed bugs in metatags viewlet
+  [liebster]
 
 2.0.8 (2009-07-28)
 ------------------

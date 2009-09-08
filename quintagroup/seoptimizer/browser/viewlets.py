@@ -120,12 +120,10 @@ class MetaTagsViewlet( ViewletBase ):
 
             metaTags[key] = value
 
-        # add custom meta tags (added from qseo tab by user) for given context
-        property_prefix = 'qSEO_custom_'
-        for property, value in context.propertyItems():
-            idx = property.find(property_prefix)
-            if idx == 0 and len(property) > len(property_prefix):
-                metaTags[property[len(property_prefix):]] = value
+        # add custom meta tags (added from qseo tab by user) for given context and default from configlet
+        custom_meta_tags = seo_context.seo_customMetaTags()
+        for tag in custom_meta_tags:
+            metaTags[tag['meta_name']] = tag['meta_content']
 
         # Set the additional matching keywords, if any
         adapter = IKeywords(context, None)
