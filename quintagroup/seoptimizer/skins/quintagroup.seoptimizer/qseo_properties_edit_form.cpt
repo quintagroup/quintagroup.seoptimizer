@@ -254,19 +254,31 @@
                    />
           </div>
           <div class="field"
-               tal:define="fieldName string:custommetatags;">
+               tal:define="fieldName string:custommetatags;
+                           nonEmptylocalMetaTags here/@@seo_context/seo_nonEmptylocalMetaTags;">
             <label i18n:translate="label_custom_metatags" for="custom_metatags">
               Custom Meta Tags
             </label>
             <div class="formHelp" i18n:translate="help_seo_custommetatags">
               Here you can manage your custom meta tags.
             </div>
+            <input type="checkbox"
+                   id="custommetatags_override"
+                   name="custommetatags_override"
+                   tabindex=""
+                   tal:attributes="checked python:test(nonEmptylocalMetaTags, 'on', None);
+                                   tabindex tabindex/next;"
+                   />
+            <label i18n:translate="label_override" for="custommetatags_override">
+              Override
+            </label><br />
             <table class="custom-metatags-table"
                    id="datagridwidget-table-custommetatags"
                    style="width: 100%"
                    tal:define="columnNames python:['meta name', 'meta content'];
                                columnIds   python:['meta_name', 'meta_content'];
-                               fielddata here/@@seo_context/seo_customMetaTags;">
+                               globalMT    here/@@seo_context/seo_globalWithoutLocalCustomMetaTags;
+                               localMT    here/@@seo_context/seo_localCustomMetaTags;">
                 <thead>
                     <tr>
                         <th class="discreet" style="text-align: left"
@@ -278,7 +290,26 @@
                     </tr>
                 </thead>
                 <tbody id="datagridwidget-tbody-custommetatags">
-                    <tal:row-loop tal:repeat="row fielddata">
+                    <tal:row-loop tal:repeat="row globalMT">
+                        <tr id="datagridwidget-row">
+                            <tal:vars define="fieldId string:${fieldName}_${repeat/row/number}">
+                                <td class="datagridwidget-cell"
+                                    tal:repeat="column columnIds">
+                                    <tal:cell tal:define="cell_value python:row.get(column);">
+                                        <input type="text"
+                                               id="columnId_fieldId"
+                                               value=""
+                                               name="fieldId.columnId:records"
+                                               style="width: 100%;"
+                                               tal:attributes="name string:${fieldName}.${column}:records;
+                                                               id string:${column}_${fieldId};
+                                                               value cell_value"/>
+                                    </tal:cell>
+                                </td>
+                            </tal:vars>
+                        </tr>
+                    </tal:row-loop>
+                    <tal:row-loop tal:repeat="row localMT">
                         <tr id="datagridwidget-row">
                             <tal:vars define="fieldId string:${fieldName}_${repeat/row/number}">
                                 <td class="datagridwidget-cell"

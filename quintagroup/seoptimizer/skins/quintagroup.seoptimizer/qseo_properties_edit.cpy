@@ -6,7 +6,7 @@
 ##bind state=state
 ##bind subpath=traverse_subpath
 ##title=Update SEO Properties
-##parameters=title=None,description=None,canonical=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,canonical_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[]
+##parameters=title=None,description=None,canonical=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,canonical_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[],custommetatags_override=0
 
 def setProperty(context, property, value, type='string'):
     if context.hasProperty(property):
@@ -23,11 +23,15 @@ for property, value in context.propertyItems():
     if property.find(property_prefix) == 0 and len(property) > len(property_prefix):
         custom_existing.append(property)
 
+if not custommetatags_override: custommetatags=[]
+
+globalCustomMetaTags = context.restrictedTraverse('@@seo_context').seo_globalCustomMetaTags()
 custom_updated = []
 for tag in custommetatags:
     meta_name, meta_content = tag['meta_name'], tag['meta_content']
-    if meta_name and meta_content:
-        setProperty(context, '%s%s' % (property_prefix, meta_name), meta_content)
+    if meta_name:
+        if not [gmt for gmt in globalCustomMetaTags if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
+            setProperty(context, '%s%s' % (property_prefix, meta_name), meta_content)
         custom_updated.append('%s%s' % (property_prefix, meta_name))
 
 #add not updated custom metatags to delete list

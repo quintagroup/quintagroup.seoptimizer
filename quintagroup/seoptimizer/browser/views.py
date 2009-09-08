@@ -66,35 +66,66 @@ class SEOContext( BrowserView ):
 
     def seo_customMetaTags( self ):
         """
-           Return context's properties prefixed with qSEO_custom_
+        """
+        tags = self.seo_globalCustomMetaTags()
+        loc = self.seo_localCustomMetaTags()
+
+        names = [i['meta_name'] for i in tags]
+        add_tags = []
+        for i in loc:
+            if i['meta_name'] in names:
+                for t in tags:
+                    if t['meta_name'] == i['meta_name']:
+                        t['meta_content'] = i['meta_content']
+            else:
+                add_tags.append(i)
+        tags.extend(add_tags)
+        return tags
+
+    def seo_globalWithoutLocalCustomMetaTags( self ):
+        """
+        """
+        glob = self.seo_globalCustomMetaTags()
+        loc = self.seo_localCustomMetaTags()
+        names = [i['meta_name'] for i in loc]
+        tags = []
+        for i in glob:
+            if i['meta_name'] not in names:
+                tags.append(i)
+        return tags
+
+    def seo_localCustomMetaTags( self ):
+        """
         """
         result = []
-        added = []
         property_prefix = 'qSEO_custom_'
-
         context = aq_inner(self.context)
-
         for property, value in context.propertyItems():
-            idx = property.find(property_prefix)
-            if idx == 0 and len(property) > len(property_prefix):
-                added.append(property[len(property_prefix):])
+            if property.startswith(property_prefix) and property[len(property_prefix):]:
                 result.append({'meta_name'    : property[len(property_prefix):],
                                'meta_content' : value})
+        return result
 
+    def seo_globalCustomMetaTags( self ):
+        """
+        """
+        result = []
+        context = aq_inner(self.context)
         site_properties = getToolByName(context, 'portal_properties')
         if hasattr(site_properties, 'seo_properties'):
             custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
             for tag in custom_meta_tags:
                 name_value = tag.split(SEPERATOR)
-                if name_value[0] and name_value[0] not in added:
-                    if len(name_value) == 1:
-                        result.append({'meta_name'    : name_value[0],
-                                       'meta_content' : ''})
-                    else:
-                        result.append({'meta_name'    : name_value[0],
-                                       'meta_content' : name_value[1]})
+                if name_value[0]:
+                    result.append({'meta_name'    : name_value[0],
+                                   'meta_content' : len(name_value) == 1 and '' or name_value[1]})
         return result
-    
+
+    def seo_nonEmptylocalMetaTags( self ):
+        """
+        """
+        return bool(self.seo_localCustomMetaTags())
+
     def seo_html_comment( self ):
         """
         """
