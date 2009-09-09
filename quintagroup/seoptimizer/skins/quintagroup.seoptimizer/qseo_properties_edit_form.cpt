@@ -260,7 +260,7 @@
               Custom Meta Tags
             </label>
             <div class="formHelp" i18n:translate="help_seo_custommetatags">
-              Here you can manage your custom meta tags.
+              Here you can manage your custom meta tags. Specify local Meta Tags parameters to be added to the global Meta Tags.
             </div>
             <input type="checkbox"
                    id="custommetatags_override"
