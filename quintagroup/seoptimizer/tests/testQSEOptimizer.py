@@ -23,7 +23,12 @@ props = {'stop_words':STOP_WORDS, 'fields':FIELDS, 'additional_keywords': []}
 custom_metatags = [{'meta_name'    : 'metatag1',
                     'meta_content' : 'metatag1value'},
                    {'meta_name'    : 'metatag2',
-                    'meta_content' : 'metatag2value'}]
+                    'meta_content' : 'metatag2value'},
+                   {'meta_name'    : 'metatag3',
+                    'meta_content' : ''}
+                  ]
+
+global_custom_metatags = {'default_custom_metatags':'metatag1|global_metatag1value\nmetatag4|global_metatag4value'}
 
 configlets = ({'id':'qSEOptimizer',
     'name':'Search Engine Optimizer',
@@ -168,20 +173,24 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
         self.canonurl = 'http://test.site.com/test.html'
+        self.sp = self.portal.portal_properties.seo_properties
+        self.sp.manage_changeProperties(**global_custom_metatags)
 
-        my_doc.qseo_properties_edit(title='hello world', description='it is description',
-                                    keywords='my1|key2', html_comment='no comments',
-                                    robots='ALL', distribution='Global', 
+        my_doc.qseo_properties_edit(title='hello world', title_override=1,
+                                    description='it is description', description_override=1,
+                                    keywords='my1|key2', keywords_override=1,
+                                    html_comment='no comments', html_comment_override=1,
+                                    robots='ALL', robots_override=1,
+                                    distribution='Global', distribution_override=1,
                                     canonical=self.canonurl, canonical_override=1,
-                                    title_override=1,
-                                    description_override=1, keywords_override=1,
-                                    html_comment_override=1, robots_override=1,
-                                    distribution_override=1, custommetatags=custom_metatags)
+                                    custommetatags=custom_metatags, custommetatags_override=1)
 
         wf_tool = self.portal.portal_workflow
         wf_tool.doActionFor(my_doc, 'publish')
 
         abs_path = "/%s" % my_doc.absolute_url(1)
+        self.abs_path = abs_path
+        self.my_doc = my_doc
         self.html = self.publish(abs_path, self.basic_auth).getBody()
 
         # now setup page with title equal to plone site's title
@@ -230,7 +239,22 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
     def testCustomMetaTags(self):
         for tag in custom_metatags:
             m = re.search('<meta name="%(meta_name)s" content="%(meta_content)s" />' % tag, self.html, re.S|re.M)
-            self.assert_(m, "Custom meta tag %s not applied." % tag['meta_name'])
+            if tag['meta_content']:
+                self.assert_(m, "Custom meta tag %s not applied." % tag['meta_name'])
+            else:
+                self.assert_(not m, "Meta tag %s has no content, but is present in the page." % tag['meta_name'])
+        m = re.search('<meta name="metatag4" content="global_metatag4value" />' , self.html, re.S|re.M)
+        self.assert_(m, "Global custom meta tag %s not applied." % 'metatag4')
+
+    def testDeleteCustomMetaTags(self):
+        self.sp.manage_changeProperties(**{'default_custom_metatags':'metatag1|global_metatag1value'})
+        my_doc = self.my_doc
+        my_doc.qseo_properties_edit(custommetatags=custom_metatags, custommetatags_override=0)
+        html = self.publish(self.abs_path, self.basic_auth).getBody()
+        m = re.search('<meta name="metatag4" content="global_metatag4value" />' , html, re.S|re.M)
+        self.assert_(not m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
+        m = re.search('<meta name="metatag1" content="global_metatag1value" />' , html, re.S|re.M)
+        self.assert_(m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
 
     def testCanonical(self):
         m = re.match('.*<link rel="canonical" href="%s" />' % self.canonurl, self.html, re.S|re.M)

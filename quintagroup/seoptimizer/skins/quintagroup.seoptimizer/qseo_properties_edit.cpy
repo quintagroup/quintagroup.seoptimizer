@@ -8,6 +8,9 @@
 ##title=Update SEO Properties
 ##parameters=title=None,description=None,canonical=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,canonical_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[],custommetatags_override=0
 
+from Products.CMFCore.utils import getToolByName
+SEPERATOR = '|'
+
 def setProperty(context, property, value, type='string'):
     if context.hasProperty(property):
         context.manage_changeProperties({property: value})
@@ -25,7 +28,16 @@ for property, value in context.propertyItems():
 
 if not custommetatags_override: custommetatags=[]
 
-globalCustomMetaTags = context.restrictedTraverse('@@seo_context').seo_globalCustomMetaTags()
+globalCustomMetaTags = []
+site_properties = getToolByName(context, 'portal_properties')
+if hasattr(site_properties, 'seo_properties'):
+    custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
+    for tag in custom_meta_tags:
+        name_value = tag.split(SEPERATOR)
+        if name_value[0]:
+            globalCustomMetaTags.append({'meta_name'    : name_value[0],
+                                         'meta_content' : len(name_value) == 1 and '' or name_value[1]})
+
 custom_updated = []
 for tag in custommetatags:
     meta_name, meta_content = tag['meta_name'], tag['meta_content']
