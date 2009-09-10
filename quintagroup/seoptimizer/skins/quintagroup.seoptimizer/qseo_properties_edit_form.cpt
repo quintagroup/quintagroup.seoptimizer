@@ -260,7 +260,9 @@
               Custom Meta Tags
             </label>
             <div class="formHelp" i18n:translate="help_seo_custommetatags">
-              Here you can manage your custom meta tags. Specify local Meta Tags parameters to be added to the global Meta Tags.
+              Here you can manage your custom meta tags. Specify local Meta Tags parameters to be added to the global Meta Tags.  
+              If metacontent field is empty, then a meta tag will not be present on this page.
+
             </div>
             <input type="checkbox"
                    id="custommetatags_override"
