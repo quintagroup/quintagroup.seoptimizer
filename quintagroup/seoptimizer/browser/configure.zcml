@@ -11,29 +11,29 @@
         permission="zope2.View"
         />
        
-    <browser:viewlet
+    <!--browser:viewlet
         name="quintagroup.seoptimizer.http_equiv"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.HTTPEquiv"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
-        />
+        /-->
 
-    <browser:viewlet
+    <!--browser:viewlet
         name="quintagroup.seoptimizer.base"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.BaseUrlViewlet"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
-        />
+        /-->
 
-    <browser:viewlet
+    <!--browser:viewlet
         name="quintagroup.seoptimizer.generator"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         template="templates/generator.pt"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
-        />
+        /-->
 
     <browser:viewlet
         name="quintagroup.seoptimizer.metatags"

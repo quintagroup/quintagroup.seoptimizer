@@ -48,34 +48,34 @@ class TitleCommentViewlet(ViewletBase):
                 qseo_comments = u"<!--%s-->"%safe_unicode(seo_context.seo_html_comment())
                 return u"%s\n%s"%(qseo_title, qseo_comments)
 
-class HTTPEquiv(ViewletBase):
-    
-    def charset( self ):
-        context = self.context.aq_inner
-        site_properties = getToolByName( context, 'portal_properties').site_properties
-        return site_properties.getProperty('default_charset', 'utf-8')
-    
-    def render( self ):
-        return """<meta http-equiv="Content-Type" content="text/html; charset=%s" />"""%self.charset()
-         
-class BaseUrlViewlet( ViewletBase ):
-    """
-       simpel viewlet for base href rendering
-    """
-    def renderBase( self ):
-        # returns correct base href
-        context = self.context.aq_inner
-        isFolder = getattr(context.aq_explicit, 'isPrincipiaFolderish', 0)
-        base_url = context.absolute_url()
-
-        # when accessing via WEBDAV you're not allowed to access aq_explicit
-        try:
-            return isFolder and '%s/'%base_url or base_url
-        except (Unauthorized, 'Unauthorized'):
-            pass
-
-    def render( self ):
-        return """<base href="%s" /><!--[if lt IE 7]></base><![endif]-->"""% self.renderBase()
+#class HTTPEquiv(ViewletBase):
+#    
+#    def charset( self ):
+#        context = self.context.aq_inner
+#        site_properties = getToolByName( context, 'portal_properties').site_properties
+#        return site_properties.getProperty('default_charset', 'utf-8')
+#    
+#    def render( self ):
+#        return """<meta http-equiv="Content-Type" content="text/html; charset=%s" />"""%self.charset()
+#         
+#class BaseUrlViewlet( ViewletBase ):
+#    """
+#       simpel viewlet for base href rendering
+#    """
+#    def renderBase( self ):
+#        # returns correct base href
+#        context = self.context.aq_inner
+#        isFolder = getattr(context.aq_explicit, 'isPrincipiaFolderish', 0)
+#        base_url = context.absolute_url()
+#
+#        # when accessing via WEBDAV you're not allowed to access aq_explicit
+#        try:
+#            return isFolder and '%s/'%base_url or base_url
+#        except (Unauthorized, 'Unauthorized'):
+#            pass
+#
+#    def render( self ):
+#        return """<base href="%s" /><!--[if lt IE 7]></base><![endif]-->"""% self.renderBase()
 
 class MetaTagsViewlet( ViewletBase ):
 
@@ -91,7 +91,7 @@ class MetaTagsViewlet( ViewletBase ):
         exposeDCMetaTags = site_props.exposeDCMetaTags
 
         metaTags = SortedDict()
-        metaTags.update(pu.listMetaTags(context))
+        #metaTags.update(pu.listMetaTags(context))
         metadataList = [
             ('seo_description', 'description'),
             ('seo_keywords',    'keywords'),
@@ -99,7 +99,7 @@ class MetaTagsViewlet( ViewletBase ):
             ('seo_distribution','distribution')]
 
         if exposeDCMetaTags:
-            metadataList.append(('qSEO_Distribution', 'DC.distribution'))
+            metadataList.append(('seo_distribution', 'DC.distribution'))
 
         seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
         for accessor, key in metadataList:
