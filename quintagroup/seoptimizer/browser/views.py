@@ -118,7 +118,7 @@ class SEOContext( BrowserView ):
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
                     result.append({'meta_name'    : name_value[0],
-                                   'meta_content' : len(name_value) == 1 and '' or name_value[1]})
+                                   'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
 
     def seo_nonEmptylocalMetaTags( self ):
