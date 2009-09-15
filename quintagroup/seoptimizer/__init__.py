@@ -10,7 +10,8 @@ qSEO_globals = globals()
 
 
 try:
-    from Products.CMFPlone.PloneTool import PloneTool, METADATA_DCNAME
+    from Products.CMFPlone.PloneTool import PloneTool, METADATA_DCNAME, \
+        FLOOR_DATE, CEILING_DATE
     _present = hasattr(PloneTool, "listMetaTags")
 except ImportError:
     _present = False
