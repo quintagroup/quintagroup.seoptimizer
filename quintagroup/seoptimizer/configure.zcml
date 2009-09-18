@@ -3,8 +3,7 @@
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:cmf="http://namespaces.zope.org/cmf"
-    >
+    xmlns:cmf="http://namespaces.zope.org/cmf">
 
   <five:registerPackage package="." />
 
@@ -13,28 +12,36 @@
       title="quintagroup.seoptimizer"
       directory="profiles/default"
       description="Install quintagroup.seoptimizer"
-      provides="Products.GenericSetup.interfaces.EXTENSION" />
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
   <genericsetup:registerProfile
       name="uninstall"
       title="quintagroup.seoptimizer uninstall"
       directory="profiles/uninstall"
       description="Uninstall quintagroup.seoptimizer"
-      provides="Products.GenericSetup.interfaces.EXTENSION" />
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
-    <browser:page
-        for="Products.Archetypes.interfaces.IBaseObject"
-        attribute="validateKeywords"
-        class=".browser.keywords.ValidateSEOKeywordsView"
-        name="checkSEOKeywords"
-        permission="cmf.ModifyPortalContent"
-        />
+  <browser:page
+      for="Products.Archetypes.interfaces.IBaseObject"
+      attribute="validateKeywords"
+      class=".browser.keywords.ValidateSEOKeywordsView"
+      name="checkSEOKeywords"
+      permission="cmf.ModifyPortalContent"
+      />
 
   <adapter
-    for="Products.Archetypes.public.BaseObject"
-    provides=".interfaces.IKeywords"
-    factory=".adapters.AdditionalKeywords"
-    />
+      for="Products.Archetypes.public.BaseObject"
+      provides=".interfaces.IKeywords"
+      factory=".adapters.AdditionalKeywords"
+      />
+
+  <adapter
+      for="Products.Archetypes.public.BaseContent"
+      provides=".interfaces.IMappingMetaTags"
+      factory=".adapters.MappingMetaTags"
+      />
 
   <cmf:registerDirectory name="quintagroup.seoptimizer" />
 

@@ -1,9 +1,13 @@
 from AccessControl import allow_module
-from util import SortedDict
+from zope.component import queryMultiAdapter
+
 from Acquisition import aq_inner
 from DateTime import DateTime
 
 from Products.CMFCore.utils import getToolByName
+
+from quintagroup.seoptimizer.interfaces import IKeywords, IMappingMetaTags
+from quintagroup.seoptimizer.util import SortedDict
 
 allow_module('quintagroup.seoptimizer.util')
 qSEO_globals = globals()
@@ -17,26 +21,48 @@ except ImportError:
     _present = False
 
 
-
 if _present:
     old_lmt = PloneTool.listMetaTags
 
     def listMetaTags(self, context):
         """Lists meta tags helper.
 
-        Creates a mapping of meta tags -> values for the listMetaTags script.
+        Creates a mapping of meta tags.
         """
-        result = {}
+
+        from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
+        if not IPloneSEOLayer.providedBy(self.REQUEST):
+            return old_lmt(getToolByName(self, 'plone_utils'), context)
+
+        result = SortedDict()
         site_props = getToolByName(self, 'portal_properties').site_properties
         use_all = site_props.getProperty('exposeDCMetaTags', None)
 
-        if not use_all:
-            metadata_names = {'Description': METADATA_DCNAME['Description']}
-        else:
-            metadata_names = METADATA_DCNAME
+        seo_context = queryMultiAdapter((context, self.REQUEST), name='seo_context')
+        adapter = IMappingMetaTags(context, None)
+        mapping_metadata = adapter and adapter.getMappingMetaTags() or SortedDict()
 
-        for accessor, key in metadata_names.items():
-            method = getattr(aq_inner(context).aq_explicit, accessor, None)
+        if not use_all:
+            metadata_names = mapping_metadata.has_key('DC.description') and {'DC.description': mapping_metadata['DC.description']} or SortedDict()
+            if mapping_metadata.has_key('description'):
+                metadata_names['description'] = mapping_metadata['description']
+        else:
+            metadata_names = mapping_metadata
+
+        for key, accessor in metadata_names.items():
+            if accessor == 'seo_keywords':
+                # Set the additional matching keywords, if any
+                adapter = IKeywords(context, None)
+                if adapter is not None:
+                    keywords = adapter.listKeywords()
+                    if keywords:
+                        result['keywords'] = keywords
+                continue
+
+            method = getattr(seo_context, accessor, None)
+            if method is None:
+                method = getattr(aq_inner(context).aq_explicit, accessor, None)
+
             if not callable(method):
                 continue
 
@@ -56,14 +82,13 @@ if _present:
                 # convert a list to a string
                 value = ', '.join(value)
 
-#          Exclusion meta tag description and keywords
-#            # Special cases
-#            if accessor == 'Description':
-#                result['description'] = value
-#            elif accessor == 'Subject':
-#                result['keywords'] = value
+            # Special cases
+            if accessor == 'Description' and not (result.has_key('description') or metadata_names.has_key('description')):
+                result['description'] = value
+            elif accessor == 'Subject' and not (result.has_key('keywords') or metadata_names.has_key('keywords')):
+                result['keywords'] = value
 
-            if use_all:
+            if accessor not in ('Description', 'Subject'):
                 result[key] = value
 
         if use_all:
@@ -102,6 +127,12 @@ if _present:
 
             if exp_str or exp_str:
                 result['DC.date.valid_range'] = '%s - %s' % (eff_str, exp_str)
+
+        # add custom meta tags (added from qseo tab by user) for given context and default from configlet
+        custom_meta_tags = seo_context and seo_context.seo_customMetaTags() or []
+        for tag in custom_meta_tags:
+            if tag['meta_content']:
+                result[tag['meta_name']] = tag['meta_content']
 
         return result
 

@@ -66,6 +66,24 @@
   <property name="custom_script" type="text"/>
   <property name="additional_keywords" type="lines"/>
   <property name="default_custom_metatags" type="lines"/>
+  <property name="metatags_order" type="lines">
+   <element value="DC.publisher Publisher"/>
+   <element value="DC.description Description"/>
+   <element value="DC.contributors Contributors"/>
+   <element value="DC.creator Creator"/>
+   <element value="DC.format Format"/>
+   <element value="DC.rights Rights"/>
+   <element value="DC.language Language"/>
+   <element value="DC.date.modified ModificationDate"/>
+   <element value="DC.date.created CreationDate"/>
+   <element value="DC.type Type"/>
+   <element value="DC.subject Subject"/>
+   <element value="DC.distribution seo_distribution"/>
+   <element value="description seo_description"/>
+   <element value="keywords seo_keywords"/>
+   <element value="robots seo_robots"/>
+   <element value="distribution seo_distribution"/>
+  </property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>

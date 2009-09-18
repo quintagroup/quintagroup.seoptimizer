@@ -216,12 +216,18 @@ class SEOControlPanel( ControlPanelView ):
         """
         sp = self.portal_properties.site_properties
         return sp.getProperty('exposeDCMetaTags')
-    
+
     def getDefaultCustomMetatags( self ):
         """
         """
         seo = self.portal_properties.seo_properties
         return seo.getProperty('default_custom_metatags')
+
+    def getMetaTagsOrder( self ):
+        """
+        """
+        seo = self.portal_properties.seo_properties
+        return seo.getProperty('metatags_order')
 
     def getAdditionalKeywords( self ):
         """
@@ -249,6 +255,7 @@ class SEOControlPanel( ControlPanelView ):
         exposeDCMetaTags=request.get( 'exposeDCMetaTags', None )
         additionalKeywords=request.get('additionalKeywords', [])
         default_custom_metatags=request.get('default_custom_metatags', [])
+        metatags_order=request.get('metatags_order', [])
 
         site_props = getToolByName(self.portal_properties, 'site_properties')
         seo_props = getToolByName(self.portal_properties, 'seo_properties')
@@ -260,6 +267,7 @@ class SEOControlPanel( ControlPanelView ):
             site_props.manage_changeProperties(exposeDCMetaTags=exposeDCMetaTags)
             seo_props.manage_changeProperties(additional_keywords=additionalKeywords)
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
+            seo_props.manage_changeProperties(metatags_order=metatags_order)
 
             for ptype in self.portal_types.objectValues():
                 acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())

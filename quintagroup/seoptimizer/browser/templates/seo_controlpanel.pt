@@ -48,6 +48,20 @@
                     </div>
 
                     <div class="field">
+                        <label for="metatags_order" i18n:translate="label_metatags_order">
+                            Meta tags order in the page.
+                        </label>
+                        <div class="formHelp" i18n:translate="help_metatags_order">
+                            Fill in meta tags order (one per line) which will appear on qseo_properties
+                            edit tab. Example: "metaname accessor".
+                        </div>
+                        <div class="widget">
+                            <textarea cols="60" id="metatags_order" name="metatags_order" rows="15"
+                                      tal:content="python:'\n'.join(view.getMetaTagsOrder())"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <label for="additionalKeywords" i18n:translate="label_additional_keywords">
                             Additional keywords that should be added to the content types.
                         </label>

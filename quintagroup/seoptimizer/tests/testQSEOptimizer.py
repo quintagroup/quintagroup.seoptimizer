@@ -27,6 +27,8 @@ custom_metatags = [{'meta_name'    : 'metatag1',
                    {'meta_name'    : 'metatag3',
                     'meta_content' : ''}
                   ]
+view_metatags = ['DC.creator', 'DC.format', 'DC.date.modified', 'DC.date.created', 'DC.type',
+                   'DC.distribution', 'description', 'keywords', 'robots', 'distribution']
 
 global_custom_metatags = {'default_custom_metatags':'metatag1|global_metatag1value\nmetatag4|global_metatag4value'}
 
@@ -214,18 +216,26 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
 
     def testDescription(self):
         m = re.match('.*<meta name="description" content="it is description" />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta content="it is description" name="description" />', self.html, re.S|re.M)
         self.assert_(m, 'Description not set in')
 
     def testKeywords(self):
         m = re.match('.*<meta name="keywords" content="my1|key2" />', self.html, re.S|re.M)
+        if not m:
+             m = re.match('.*<meta content="my1|key2" name="keywords" />', self.html, re.S|re.M)
         self.assert_(m, 'Keywords not set in')
 
     def testRobots(self):
         m = re.match('.*<meta name="robots" content="ALL" />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta content="ALL" name="robots" />', self.html, re.S|re.M)
         self.assert_(m, 'Robots not set in')
 
     def testDistribution(self):
         m = re.match('.*<meta name="distribution" content="Global" />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta content="Global" name="distribution" />', self.html, re.S|re.M)
         self.assert_(m, 'Distribution not set in')
 
     def testHTMLComments(self):
@@ -233,17 +243,38 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         self.assert_(m, 'Comments not set in')
 
     def testTagsOrder(self):
-        m = re.search('name="description".+name="keywords"', self.html, re.S|re.M)
+        mtop = self.sp.getProperty('metatags_order')
+        metatags_order = [t.split(' ')[0] for t in mtop if len(t.split(' '))==2 and t.split(' ')[0] in view_metatags]
+        m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
         self.assert_(m, "Meta tags order not supported.")
+
+        mtop = list(mtop)
+        mtop.reverse()
+        metatags_order = [t.split(' ')[0] for t in mtop if len(t.split(' '))==2 and t.split(' ')[0] in view_metatags]
+        m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
+        self.assertFalse(m, "Meta tags order not supported.")
+
+        self.sp.manage_changeProperties(**{'metatags_order':tuple(mtop)})
+        html = self.publish(self.abs_path, self.basic_auth).getBody()
+        m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
+        self.assertFalse(m, "Meta tags order not supported.")
+
+        m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), html, re.S|re.M)
+        self.assert_(m, "Meta tags order not supported.")
+
 
     def testCustomMetaTags(self):
         for tag in custom_metatags:
             m = re.search('<meta name="%(meta_name)s" content="%(meta_content)s" />' % tag, self.html, re.S|re.M)
+            if not m:
+                m = re.search('<meta content="%(meta_content)s" name="%(meta_name)s" />' % tag, self.html, re.S|re.M)
             if tag['meta_content']:
                 self.assert_(m, "Custom meta tag %s not applied." % tag['meta_name'])
             else:
                 self.assert_(not m, "Meta tag %s has no content, but is present in the page." % tag['meta_name'])
         m = re.search('<meta name="metatag4" content="global_metatag4value" />' , self.html, re.S|re.M)
+        if not m:
+            m = re.search('<meta content="global_metatag4value" name="metatag4" />' , self.html, re.S|re.M)
         self.assert_(m, "Global custom meta tag %s not applied." % 'metatag4')
 
     def testDeleteCustomMetaTags(self):
@@ -252,8 +283,12 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         my_doc.qseo_properties_edit(custommetatags=custom_metatags, custommetatags_override=0)
         html = self.publish(self.abs_path, self.basic_auth).getBody()
         m = re.search('<meta name="metatag4" content="global_metatag4value" />' , html, re.S|re.M)
+        if not m:
+            m = re.search('<meta content="global_metatag4value" name="metatag4" />' , html, re.S|re.M)
         self.assert_(not m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
         m = re.search('<meta name="metatag1" content="global_metatag1value" />' , html, re.S|re.M)
+        if not m:
+            m = re.search('<meta content="global_metatag1value" name="metatag1" />' , html, re.S|re.M)
         self.assert_(m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
 
     def testCanonical(self):
@@ -310,13 +345,17 @@ class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
     def test_listMetaTags_one(self):        
         self.my_doc.manage_addProperty('qSEO_keywords', ('foo',), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="keywords"\ content="foo"\ />', self.html, re.S|re.M)
+        m = re.match('.*<meta\ content="foo"\ name="keywords"\ />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta\ name="keywords"\ content="foo"\ />', self.html, re.S|re.M)
         self.assert_(m, "No 'foo' keyword find")
 
     def test_listMetaTags_two(self):        
         self.my_doc.manage_addProperty('qSEO_keywords', ('foo', 'bar'), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="keywords"\ content="foo, bar"\ />', self.html, re.S|re.M)
+        m = re.match('.*<meta\ content="foo, bar"\ name="keywords"\ />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta\ name="keywords"\ content="foo, bar"\ />', self.html, re.S|re.M)
         self.assert_(m, "No 'foo, bar' keyword find")
 
     def test_additional_keywords_in_listMetaTags_empty(self):        
@@ -328,14 +367,18 @@ class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
         self.my_doc.setText('<p>foo</p>')
         self.sp.additional_keywords = ('foo',)
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="keywords"\ content="foo"\ />', self.html, re.S|re.M)
+        m = re.match('.*<meta\ content="foo"\ name="keywords"\ />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta\ name="keywords"\ content="foo"\ />', self.html, re.S|re.M)
         self.assert_(m, "No 'foo' keyword find")
 
     def test_additional_keywords_in_listMetaTags_two(self):
         self.my_doc.setText('<p>foo bar</p>')
         self.sp.additional_keywords = ('foo', 'bar')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="keywords"\ content="foo, bar"\ />', self.html, re.S|re.M)
+        m = re.match('.*<meta\ content="foo, bar"\ name="keywords"\ />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta\ name="keywords"\ content="foo, bar"\ />', self.html, re.S|re.M)
         self.assert_(m, "No 'foo, bar' keyword find")
 
     def test_additional_keywords_in_listMetaTags_merge(self):
@@ -343,7 +386,9 @@ class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
         self.sp.additional_keywords = ('foo', 'bar')
         self.my_doc.manage_addProperty('qSEO_keywords', ('baz',), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="keywords"\ content="baz,\ foo,\ bar"\ />', self.html, re.S|re.M)
+        m = re.match('.*<meta\ content="baz,\ foo,\ bar"\ name="keywords"\ />', self.html, re.S|re.M)
+        if not m:
+            m = re.match('.*<meta\ name="keywords"\ content="baz,\ foo,\ bar"\ />', self.html, re.S|re.M)
         self.assert_(m, "No 'foo, bar, baz' keyword find")
 
 
@@ -381,15 +426,26 @@ class TestExposeDCMetaTags(PloneTestCase.FunctionalTestCase):
 
         self.my_doc.qseo_properties_edit()
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-
-        m = re.match('.*<meta content=".*?" name="DC.format" />', self.html, re.S|re.M) or re.match('.*<meta content=".*?" name="DC.distribution" />', self.html, re.S|re.M)
+        m1 = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M)
+        if not m1:
+            m1 = re.match('.*<meta content=".*?" name="DC.format" />', self.html, re.S|re.M)
+        m2 = re.match('.*<meta name="DC.distribution" content=".*?" />', self.html, re.S|re.M)
+        if not m2:
+            m2 = re.match('.*<meta content=".*?" name="DC.distribution" />', self.html, re.S|re.M)
+        m = m1 or m2
         self.assert_(not m, 'DC meta tags avaliable when exposeDCMetaTags=False')
 
     def test_exposeDCMetaTagsPropertyOn(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = True)
         self.my_doc.qseo_properties_edit()
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M) and re.match('.*<meta\ name="DC.type"\ content=".*?"\ />', self.html, re.S|re.M)
+        m1 = re.match('.*<meta\ content=".*?"\ name="DC.format"\ />', self.html, re.S|re.M)
+        if not m1:
+            m1 = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M)
+        m2 = re.match('.*<meta\ content=".*?"\ name="DC.type"\ />', self.html, re.S|re.M)
+        if not m2:
+            m2 = re.match('.*<meta\ name="DC.type"\ content=".*?"\ />', self.html, re.S|re.M)
+        m = m1 and m2
         self.assert_(m, 'DC meta tags not avaliable when createManager=True')
 
 

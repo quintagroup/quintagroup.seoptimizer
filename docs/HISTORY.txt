@@ -1,8 +1,12 @@
 Changelog
 =========
 
-2.0.10 (unreleased)
+2.1.0 (unreleased)
 ------------------
+
+- Added metatags order feature, which is managed
+  by metatags_order property of of configlet
+  [liebster]
 
 - Resolved metatags duplication
   [liebster]

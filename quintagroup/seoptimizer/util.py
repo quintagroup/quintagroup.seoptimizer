@@ -11,14 +11,28 @@ def createMultiColumnList(self,slist, numCols, sort_on='title_or_id'):
 
 class SortedDict(dict):
     security = ClassSecurityInfo()
-    security.declarePublic('items')    
+
+    security.declarePublic('items')
     def items(self):
-        primary_metatags = ['description', 'keywords']
+        primary_metatags = self.pmt
         lst = [(name,self[name]) for name in primary_metatags                    \
                                                  if name in self.keys()] +       \
               [(name, self[name]) for name in self.keys()                        \
                                                  if name not in primary_metatags]
         return lst
+
+
+    security.declarePublic('__init__')
+    def __init__(self, *args, **kwargs):
+        super(SortedDict,self).__init__(*args, **kwargs)
+        self.pmt = []
+
+
+    security.declarePublic('__setitem__')
+    def __setitem__(self, i, y):
+        super(SortedDict,self).__setitem__(i, y)
+        if i not in self.pmt:
+            self.pmt.append(i)
 
 try:
     InitializeClass(SortedDict)
