@@ -83,9 +83,9 @@ if _present:
                 value = ', '.join(value)
 
             # Special cases
-            if accessor == 'Description' and not (result.has_key('description') or metadata_names.has_key('description')):
+            if accessor == 'Description' and not metadata_names.has_key('description'):
                 result['description'] = value
-            elif accessor == 'Subject' and not (result.has_key('keywords') or metadata_names.has_key('keywords')):
+            elif accessor == 'Subject' and not metadata_names.has_key('keywords'):
                 result['keywords'] = value
 
             if accessor not in ('Description', 'Subject'):

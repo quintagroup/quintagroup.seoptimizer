@@ -34,6 +34,12 @@ class SortedDict(dict):
         if i not in self.pmt:
             self.pmt.append(i)
 
+    security.declarePublic('pop')
+    def pop(self, k, *args, **kwargs):
+        super(SortedDict,self).pop(k, *args, **kwargs)
+        if k in self.pmt:
+            self.pmt.remove(k)
+
 try:
     InitializeClass(SortedDict)
 except:
