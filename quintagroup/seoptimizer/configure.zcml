@@ -38,7 +38,7 @@
       />
 
   <adapter
-      for="Products.Archetypes.public.BaseContent"
+      for="Products.Archetypes.public.BaseObject"
       provides=".interfaces.IMappingMetaTags"
       factory=".adapters.MappingMetaTags"
       />
