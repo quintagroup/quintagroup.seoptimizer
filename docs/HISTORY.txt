@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.1.1 (2009-11-09)
+------------------
+
+- Fixed bug of meta-tags absence for folderish objects
+  [mylan]
+
+
 2.1.0 (2009-10-21)
 ------------------
 
