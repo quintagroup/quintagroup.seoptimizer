@@ -44,4 +44,12 @@
         permission="zope2.View"
         />
 
+    <browser:page
+        name="seo-context-properties"
+        for="*"
+        class=".views.SEOContextPropertiesView"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="zope2.View"
+        />
+
 </configure>

@@ -16,6 +16,7 @@ class ValidateSEOKeywordsView(BrowserView):
     def validateKeywords(self, text):
         """ see interface """
         # extract keywords from text
+        import pdb;pdb.set_trace()
         if not text.strip():
             return _(u'Keywords list is empty!')
 

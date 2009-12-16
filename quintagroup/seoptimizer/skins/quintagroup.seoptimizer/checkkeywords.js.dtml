@@ -99,7 +99,7 @@ function checkPageKeywords(event) {
     return false;
 }
 
-function addKeywordsButton(event) {
+function addSeoKeywordsButton(event) {
     for (var i = 0, id; id = KEYWORDS_IDS[i]; i++) {
         var area = document.getElementById(id);
         if (!area || (typeof(area.value) == 'undefined')) continue;
@@ -109,10 +109,10 @@ function addKeywordsButton(event) {
         button.name = id+'_check_keywords';
         button.id = id+'_check_keywords';
         button.className = 'check-keywords-button';
-        area.parentNode.insertBefore(button, area.nextSibling);
+        area.parentNode.insertBefore(button, area.nextSibling.nextSiblin);
         registerEventListener(button, 'click', checkPageKeywords);
 //         KEYWORDS_REPORT[id] = {};
     }
 }
 
-registerPloneFunction(addKeywordsButton);
+registerPloneFunction(addSeoKeywordsButton);
