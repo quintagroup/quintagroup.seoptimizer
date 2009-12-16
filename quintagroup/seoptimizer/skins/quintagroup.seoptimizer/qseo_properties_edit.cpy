@@ -69,6 +69,10 @@ if not canonical_override:    delete_list.append('qSEO_canonical')
 
 if delete_list: context.manage_delProperties(delete_list)
 
+from DateTime import DateTime
+kwargs = {'modification_date' : DateTime()}
+context.plone_utils.contentEdit(context, **kwargs)
+
 msg ='Content SEO properties have been saved.'
 try:
     context.plone_utils.addPortalMessage(msg)
