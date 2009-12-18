@@ -6,6 +6,8 @@ from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
+from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
+
 SEPERATOR = '|'
 HAS_CANONICAL_PATH = True
 SEO_PREFIX = 'seo_'
@@ -280,7 +282,7 @@ class SEOControlPanel( ControlPanelView ):
                     if action is None:
                         ptype.addAction('seo_properties',
                                         'SEO Properties',
-                                        'string:${object_url}/qseo_properties_edit_form',
+                                        'string:${object_url}/@@seo-context-properties',
                                         '',
                                         'Modify portal content',
                                         'object',
@@ -336,8 +338,8 @@ class SEOContextPropertiesView( BrowserView ):
 
     def setSEOCustomMetaTags(self, custommetatags):
         context = aq_inner(self.context)
-        for k, v in custommetatags.items():
-            self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)   
+        for tag in custommetatags:
+            self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, tag['meta_name']), tag['meta_content'])
 
     def delAllSEOCustomMetaTagsByNames(self):
         context = self.context
@@ -365,14 +367,13 @@ class SEOContextPropertiesView( BrowserView ):
                 if name_value[0]:
                     globalCustomMetaTags.append({'meta_name'    : name_value[0],
                                                  'meta_content' : len(name_value) == 1 and '' or name_value[1]})
-  
+        metalist = []
         for tag in custommetatags:
-            metalist = []
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:
                 if not [gmt for gmt in globalCustomMetaTags if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
                     metalist.append(tag)
-                self.setSEOCustomMetaTags(metalist)
+        if metalist: self.setSEOCustomMetaTags(metalist)
       
     def manageSEOCustomMetaTags(self, **kw):
         context = aq_inner(self.context)
@@ -395,8 +396,7 @@ class SEOContextPropertiesView( BrowserView ):
         if submitted:
             self.manageSEOProps(**form)
             self.manageSEOCustomMetaTags(**form)
-            msg = 'Content SEO properties have been saved.'
-            context.plone_utils.addPortalMessage(msg)
+            context.plone_utils.addPortalMessage( _(u'Content SEO properties have been saved.'))
             return request.response.redirect(self.context.absolute_url())
         else:
             return self.template()

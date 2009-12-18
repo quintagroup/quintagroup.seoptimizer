@@ -1,5 +1,6 @@
 from AccessControl import allow_module
 from zope.component import queryMultiAdapter
+from zope.i18nmessageid import MessageFactory
 
 from Acquisition import aq_inner
 from DateTime import DateTime
@@ -8,6 +9,8 @@ from Products.CMFCore.utils import getToolByName
 
 from quintagroup.seoptimizer.interfaces import IKeywords, IMappingMetaTags
 from quintagroup.seoptimizer.util import SortedDict
+
+SeoptimizerMessageFactory = MessageFactory('quintagroup.seoptimizer')
 
 allow_module('quintagroup.seoptimizer.util')
 qSEO_globals = globals()

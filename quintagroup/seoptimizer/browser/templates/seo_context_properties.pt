@@ -3,6 +3,7 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="quintagroup.seoptimizer">
   <metal:border fill-slot="top_slot">
     <tal:border define="dummy python:request.set('enable_border',1)" />

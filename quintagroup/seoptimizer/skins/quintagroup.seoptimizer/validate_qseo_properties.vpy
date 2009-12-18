@@ -9,8 +9,7 @@
 ##parameters=title=None,description=None,canonical=None,keywords=None,html_comment=None,robots=None,distribution=None,title_override=0,description_override=0,canonical_override=0,keywords_override=0,html_comment_override=0,robots_override=0,distribution_override=0,custommetatags=[]
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import MessageFactory
-_ = MessageFactory('seoptimizer')
+from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 def getMainDomain(url):
     url = url.split('//')[-1]

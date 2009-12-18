@@ -5,9 +5,9 @@ from zope.interface import implements
 from Products.Five.browser import BrowserView
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import PloneMessageFactory as _
 
 from interfaces import IValidateSEOKeywordsView
+from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 class ValidateSEOKeywordsView(BrowserView):
 
@@ -16,7 +16,6 @@ class ValidateSEOKeywordsView(BrowserView):
     def validateKeywords(self, text):
         """ see interface """
         # extract keywords from text
-        import pdb;pdb.set_trace()
         if not text.strip():
             return _(u'Keywords list is empty!')
 
