@@ -309,6 +309,13 @@ class SEOContextPropertiesView( BrowserView ):
         """
         """
         return condition and first or second 
+      
+    def setProperty(self, property, value, type='string'):
+        context = aq_inner(self.context)
+        if context.hasProperty(property):
+            context.manage_changeProperties({property: value})
+        else:
+            context.manage_addProperty(property, value, type)
 
     def manageSEOProps(self, **kw):
         context = aq_inner(self.context)
@@ -327,7 +334,12 @@ class SEOContextPropertiesView( BrowserView ):
                 delete_list.append(PROP_PREFIX+val)
         if delete_list: context.manage_delProperties(delete_list)
 
-    def delSEOCustomMetaTags(self):
+    def setSEOCustomMetaTags(self, custommetatags):
+        context = aq_inner(self.context)
+        for k, v in custommetatags.items():
+            self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)   
+
+    def delAllSEOCustomMetaTagsByNames(self):
         context = self.context
         delete_list = []
         for property, value in context.propertyItems():
@@ -335,21 +347,11 @@ class SEOContextPropertiesView( BrowserView ):
                 delete_list.append(property)
         if delete_list: context.manage_delProperties(delete_list)        
 
-    def delSEOCustomMetaTag(self, custommetatag):
+    def delSEOCustomMetaTagByName(self, custommetatagname):
         context = self.context
-        if context.hasProperty(custommetatag):
-            context.manage_delProperties(custommetatag)
-      
-    def manageSEOCustomMetaTags(self, **kw):
-        context = aq_inner(self.context)
-        if kw.has_key('seo_custommetatags_override'):
-            if kw.get('seo_custommetatags_override'):
-                custommetatags = kw.get('seo_custommetatags', {})
-                self.updateSEOCustomMetaTags(custommetatags)
-            else:
-                self.delSEOCustomMetaTags()
-        elif kw.get('seo_custommetatags'):
-            self.delSEOCustomMetaTags()
+        seo_custom_prop = PROP_CUSTOM_PREFIX + custommetatagname
+        if context.hasProperty(seo_custom_prop):
+            context.manage_delProperties([seo_custom__prop])
 
     def updateSEOCustomMetaTags(self, custommetatags):
         context = aq_inner(self.context)
@@ -365,26 +367,23 @@ class SEOContextPropertiesView( BrowserView ):
                                                  'meta_content' : len(name_value) == 1 and '' or name_value[1]})
   
         for tag in custommetatags:
+            metalist = []
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:
                 if not [gmt for gmt in globalCustomMetaTags if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
-                    self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)
-
-    def setSEOCustomMetaTags(self, custommetatags=None):
-        context = aq_inner(self.context)
-        if custommetatags is not None:
-            if len(custommetatags):
-                self.delSEOCustomMetaTags()
-            else:
-                for k, v in custommetatags.items():
-                    self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)   
+                    metalist.append(tag)
+                self.setSEOCustomMetaTags(metalist)
       
-    def setProperty(self, property, value, type='string'):
+    def manageSEOCustomMetaTags(self, **kw):
         context = aq_inner(self.context)
-        if context.hasProperty(property):
-            context.manage_changeProperties({property: value})
-        else:
-            context.manage_addProperty(property, value, type)
+        if kw.has_key('seo_custommetatags_override'):
+            if kw.get('seo_custommetatags_override'):
+                custommetatags = kw.get('seo_custommetatags', {})
+                self.updateSEOCustomMetaTags(custommetatags)
+            else:
+                self.delAllSEOCustomMetaTagsByNames()
+        elif kw.get('seo_custommetatags'):
+            self.delAllSEOCustomMetaTagsByNames()
 
     def __call__( self ):
         """
