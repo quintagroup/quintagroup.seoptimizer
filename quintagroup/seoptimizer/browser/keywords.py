@@ -15,14 +15,12 @@ class ValidateSEOKeywordsView(BrowserView):
 
     def validateKeywords(self, text):
         """ see interface """
+        ts = getToolByName(self.context, 'translation_service')
         # extract keywords from text
-        if not text.strip():
-            return _(u'Keywords list is empty!')
-
-        keywords = map(lambda x: x.strip(), text.lower().split('\n'))
-        if not keywords:
-            return _(u'Keywords list is empty!')
-
+        if text.lower().strip():
+            keywords = map(lambda x: x.strip(), text.lower().strip().split('\n'))
+        else:
+            return ts.utranslate(None, _(u'Keywords list is empty!'), context=self.context)
         # request html page of context object
         url = '%s?qseo_without_additional_keywords=1' % self.context.absolute_url()
         #try:
@@ -68,18 +66,24 @@ class ValidateSEOKeywordsView(BrowserView):
 
         # check every keyword on appearing in body of html page
         missing = []
+        finding = []
         added = {}
+        finded = {}
         for keyword in keywords:
-            if keyword not in added.keys() and not re.compile(r'\b%s\b' % keyword, re.I).search(page_text):
-                missing.append(keyword)
-                added[keyword] = 1
-
+            if keyword:
+                keyword_on_page =  len(re.compile(r'\s%s\s' % keyword, re.I).findall(page_text))
+                if keyword not in added.keys() and not keyword_on_page:
+                    missing.append(keyword.decode('utf8'))
+                    added[keyword] = 1
+                if keyword not in finded.keys() and keyword_on_page:
+                    finding.append(keyword.decode('utf8')+' - '+repr(keyword_on_page))
+                    finded[keyword] = 1
         # return list of missing keywords
         if missing:
-            msg = u"""Next keywords did not appear on the page:\n%s""" % '\n'.join(missing)
+            msg = ts.utranslate(None, _('missing_keywords', default=u'Next keywords did not appear on the page:\n${missing}', mapping={'missing':'\n'.join(missing)}), context=self.context)
         else:
-            msg = u"""All keywords found on the page!"""
-        return _(msg)
+            msg = ts.utranslate(None, _('finded_keywords', default=u'All keywords found on the page!\nMore detailed:\n${found}', mapping={'found': '\n'.join(finding)}), context=self.context)
+        return msg
 
     def walkTextNodes(self, parent, page_words=[]):
         for node in parent.childNodes:
@@ -99,12 +103,12 @@ class ValidateSEOKeywordsView(BrowserView):
                 while s_list[i] != '>':
                     # pop everything from the the left-angle bracket until the right-angle bracket
                     s_list.pop(i)
-                    
+
                 # pops the right-angle bracket, too
                 s_list.pop(i)
             else:
                 i=i+1
-                
+
         # convert the list back into text
         join_char=''
         return join_char.join(s_list)

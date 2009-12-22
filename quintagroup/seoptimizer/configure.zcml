@@ -9,6 +9,7 @@
 
 
   <five:registerPackage package="." />
+  <i18n:registerTranslations directory="locales" />
 
   <genericsetup:registerProfile
       name="default"

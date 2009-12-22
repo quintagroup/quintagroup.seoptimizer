@@ -306,21 +306,39 @@ class SEOContextPropertiesView( BrowserView ):
     """
     template = ViewPageTemplateFile('templates/seo_context_properties.pt')
 
-
     def test( self, condition, first, second ):
         """
         """
         return condition and first or second 
-      
+
+    def getMainDomain(self, url):
+        url = url.split('//')[-1]
+        dompath = url.split(':')[0]
+        dom = dompath.split('/')[0]
+        return '.'.join(dom.split('.')[-2:])
+
+    def validateSEOProperty(self, property, value):
+        purl = getToolByName(self.context, 'portal_url')()
+        state = ''
+        if property == PROP_PREFIX+'canonical':
+            pdomain = self.getMainDomain(purl)
+            if not pdomain == self.getMainDomain(value):
+                state = _('canonical_msg', default=u'Canonical URL mast be in ${pdomain} domain.', mapping={'pdomain': pdomain})
+        return state
+
     def setProperty(self, property, value, type='string'):
         context = aq_inner(self.context)
-        if context.hasProperty(property):
-            context.manage_changeProperties({property: value})
-        else:
-            context.manage_addProperty(property, value, type)
+        state = self.validateSEOProperty(property, value)
+        if not state:
+            if context.hasProperty(property):
+                context.manage_changeProperties({property: value})
+            else:
+                context.manage_addProperty(property, value, type)
+        return state
 
     def manageSEOProps(self, **kw):
         context = aq_inner(self.context)
+        state = ''
         delete_list, overrides, values = [], [], []
         seo_items = dict([(k[len(SEO_PREFIX):],v) for k,v in kw.items() if k.startswith(SEO_PREFIX)])
         for key in seo_items.keys():
@@ -328,38 +346,36 @@ class SEOContextPropertiesView( BrowserView ):
                 overrides.append(key[:-len(SUFFIX)])
             else:
                 values.append(key)
-
         for val in values:
-            if val in overrides and seo_items[val+SUFFIX]:
-                self.setProperty(PROP_PREFIX+val, seo_items[val])
+            if val in overrides and seo_items.get(val+SUFFIX):
+                state = self.setProperty(PROP_PREFIX+val, seo_items[val])
+                if state:
+                    return state
             elif context.hasProperty(PROP_PREFIX+val):
                 delete_list.append(PROP_PREFIX+val)
-        if delete_list: context.manage_delProperties(delete_list)
+        if delete_list:
+            context.manage_delProperties(delete_list)
+        self.manageSEOCustomMetaTagsProperties(**kw)
+        return state
 
     def setSEOCustomMetaTags(self, custommetatags):
         context = aq_inner(self.context)
         for tag in custommetatags:
             self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, tag['meta_name']), tag['meta_content'])
 
-    def delAllSEOCustomMetaTagsByNames(self):
-        context = self.context
+    def delAllSEOCustomMetaTagsProperties(self):
+        context = aq_inner(self.context)
         delete_list = []
         for property, value in context.propertyItems():
-            if property.find(PROP_CUSTOM_PREFIX) == 0 and len(property) > len(PROP_CUSTOM_PREFIX):
+            if property.startswith(PROP_CUSTOM_PREFIX)  and not property == PROP_CUSTOM_PREFIX:
                 delete_list.append(property)
-        if delete_list: context.manage_delProperties(delete_list)        
+        if delete_list:
+            context.manage_delProperties(delete_list)
 
-    def delSEOCustomMetaTagByName(self, custommetatagname):
-        context = self.context
-        seo_custom_prop = PROP_CUSTOM_PREFIX + custommetatagname
-        if context.hasProperty(seo_custom_prop):
-            context.manage_delProperties([seo_custom__prop])
-
-    def updateSEOCustomMetaTags(self, custommetatags):
+    def updateSEOCustomMetaTagsProperties(self, custommetatags):
         context = aq_inner(self.context)
         site_properties = getToolByName(context, 'portal_properties')
         globalCustomMetaTags = []
-
         if hasattr(site_properties, 'seo_properties'):
             custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
             for tag in custom_meta_tags:
@@ -367,24 +383,18 @@ class SEOContextPropertiesView( BrowserView ):
                 if name_value[0]:
                     globalCustomMetaTags.append({'meta_name'    : name_value[0],
                                                  'meta_content' : len(name_value) == 1 and '' or name_value[1]})
-        metalist = []
         for tag in custommetatags:
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:
                 if not [gmt for gmt in globalCustomMetaTags if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
-                    metalist.append(tag)
-        if metalist: self.setSEOCustomMetaTags(metalist)
-      
-    def manageSEOCustomMetaTags(self, **kw):
+                    self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)
+
+    def manageSEOCustomMetaTagsProperties(self, **kw):
         context = aq_inner(self.context)
-        if kw.has_key('seo_custommetatags_override'):
-            if kw.get('seo_custommetatags_override'):
-                custommetatags = kw.get('seo_custommetatags', {})
-                self.updateSEOCustomMetaTags(custommetatags)
-            else:
-                self.delAllSEOCustomMetaTagsByNames()
-        elif kw.get('seo_custommetatags'):
-            self.delAllSEOCustomMetaTagsByNames()
+        self.delAllSEOCustomMetaTagsProperties()
+        if kw.get('seo_custommetatags_override'):
+            custommetatags = kw.get('seo_custommetatags', {})
+            self.updateSEOCustomMetaTagsProperties(custommetatags)
 
     def __call__( self ):
         """
@@ -394,9 +404,10 @@ class SEOContextPropertiesView( BrowserView ):
         form = self.request.form
         submitted = form.get('form.submitted', False)
         if submitted:
-            self.manageSEOProps(**form)
-            self.manageSEOCustomMetaTags(**form)
-            context.plone_utils.addPortalMessage( _(u'Content SEO properties have been saved.'))
-            return request.response.redirect(self.context.absolute_url())
-        else:
-            return self.template()
+            state = self.manageSEOProps(**form)
+            if not state:
+                state = _('seoproperties_saved', default=u'Content SEO properties have been saved.')
+                context.plone_utils.addPortalMessage(state)
+                return request.response.redirect(self.context.absolute_url())
+            context.plone_utils.addPortalMessage(state, 'error')
+        return self.template()
