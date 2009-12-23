@@ -60,7 +60,7 @@ class ValidateSEOKeywordsView(BrowserView):
         page_text = commands.getoutput('lynx --dump --nolist %s' % url).lower()
         if page_text and page_text != 'sh: lynx: command not found':
             #page_words = page_text.lower().split()
-            page_text = page_text
+            page_text = page_text.decode('utf8')
         else:
             return _(u'Could not find lynx browser!')
 
@@ -70,13 +70,14 @@ class ValidateSEOKeywordsView(BrowserView):
         added = {}
         finded = {}
         for keyword in keywords:
+            keyword = keyword.decode('utf8')
             if keyword:
-                keyword_on_page =  len(re.compile(r'\s%s\s' % keyword, re.I).findall(page_text))
+                keyword_on_page =  len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U))
                 if keyword not in added.keys() and not keyword_on_page:
                     missing.append(keyword.decode('utf8'))
                     added[keyword] = 1
                 if keyword not in finded.keys() and keyword_on_page:
-                    finding.append(keyword.decode('utf8')+' - '+repr(keyword_on_page))
+                    finding.append(keyword+u' - '+repr(keyword_on_page))
                     finded[keyword] = 1
         # return list of missing keywords
         if missing:
