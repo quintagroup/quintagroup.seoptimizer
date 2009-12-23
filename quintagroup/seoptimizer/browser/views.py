@@ -1,3 +1,4 @@
+from sets import Set
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from plone.app.controlpanel.form import ControlPanelView
@@ -148,14 +149,14 @@ class SEOContext( BrowserView ):
         accessor = 'Subject'
         context = aq_inner(self.context)
 
-        keywords = []
+        keywords = Set([])
         if context.hasProperty(prop_name):
-            keywords = context.getProperty(prop_name)
+            keywords = Set(context.getProperty(prop_name))
 
         pprops = getToolByName(context, 'portal_properties')
         sheet = getattr(pprops, 'seo_properties', None)
         if sheet and sheet.hasProperty(add_keywords):
-            keywords += sheet.getProperty(add_keywords)
+            keywords = keywords | Set(sheet.getProperty(add_keywords))
 
         if keywords:
             return keywords
@@ -339,23 +340,28 @@ class SEOContextPropertiesView( BrowserView ):
     def manageSEOProps(self, **kw):
         context = aq_inner(self.context)
         state = ''
-        delete_list, overrides, values = [], [], []
+        delete_list, seo_overrides_keys, seo_keys = [], [], []
         seo_items = dict([(k[len(SEO_PREFIX):],v) for k,v in kw.items() if k.startswith(SEO_PREFIX)])
         for key in seo_items.keys():
             if key.endswith(SUFFIX):
-                overrides.append(key[:-len(SUFFIX)])
+                seo_overrides_keys.append(key[:-len(SUFFIX)])
             else:
-                values.append(key)
-        for val in values:
-            if val in overrides and seo_items.get(val+SUFFIX):
-                state = self.setProperty(PROP_PREFIX+val, seo_items[val])
-                if state:
-                    return state
-            elif context.hasProperty(PROP_PREFIX+val):
-                delete_list.append(PROP_PREFIX+val)
+                seo_keys.append(key)
+        for seo_key in seo_keys:
+            if seo_key == 'custommetatags':
+                self.manageSEOCustomMetaTagsProperties(**kw)
+            else:
+                if seo_key in seo_overrides_keys and seo_items.get(seo_key+SUFFIX):
+                    seo_value = seo_items[seo_key]
+                    t_value = 'string'
+                    if type(seo_value)==type([]) or type(seo_value)==type(()): t_value = 'lines'
+                    state = self.setProperty(PROP_PREFIX+seo_key, seo_value, type=t_value)
+                    if state:
+                        return state
+                elif context.hasProperty(PROP_PREFIX+seo_key):
+                    delete_list.append(PROP_PREFIX+seo_key)
         if delete_list:
             context.manage_delProperties(delete_list)
-        self.manageSEOCustomMetaTagsProperties(**kw)
         return state
 
     def setSEOCustomMetaTags(self, custommetatags):
