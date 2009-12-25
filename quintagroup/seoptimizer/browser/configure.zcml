@@ -54,4 +54,19 @@
         permission="zope2.View"
         />
 
+    <browser:resource
+        file="./seo_custommetatags.js"
+        name="seo_custommetatags.js"
+        />
+
+    <!--browser:resource
+        file="./checkkeywords.js.dtml"
+        name="checkkeywords.js.dtml"
+        />
+
+    <browser:resource
+        file="./statistics.js.dtml"
+        name="statistics.js"
+        /-->
+
 </configure>
