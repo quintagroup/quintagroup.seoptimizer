@@ -7,6 +7,7 @@ from plone.app.controlpanel.form import ControlPanelView
 from Products.Five.browser import BrowserView
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.CMFPlone import PloneMessageFactory as pmf
 
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
@@ -292,7 +293,8 @@ class SEOControlPanel( ControlPanelView ):
                     if action !=None:
                         actions = list(ptype.listActions())
                         ptype.deleteActions([actions.index(a) for a in actions if a.getId()=='seo_properties'])
-            return request.response.redirect('%s/%s'%(self.context.absolute_url(), '@@seo-controlpanel'))
+            context.plone_utils.addPortalMessage(pmf(u'Changes saved.'))
+            return request.response.redirect('%s/%s'%(self.context.absolute_url(), 'plone_control_panel'))
         else:
             return self.template(portalTypes=portalTypes, exposeDCMetaTags=exposeDCMetaTags)
 
