@@ -74,7 +74,7 @@ class ValidateSEOKeywordsView(BrowserView):
             if keyword:
                 keyword_on_page =  len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U))
                 if keyword not in added.keys() and not keyword_on_page:
-                    missing.append(keyword.decode('utf8'))
+                    missing.append(keyword)
                     added[keyword] = 1
                 if keyword not in finded.keys() and keyword_on_page:
                     finding.append(keyword+u' - '+repr(keyword_on_page))
