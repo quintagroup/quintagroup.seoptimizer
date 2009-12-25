@@ -1,4 +1,5 @@
 from sets import Set
+from DateTime import DateTime 
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from plone.app.controlpanel.form import ControlPanelView
@@ -31,7 +32,7 @@ class SEOContext( BrowserView ):
 
         if context.hasProperty(property_name):
             return context.getProperty(property_name)
-        
+
         if accessor:
             method = getattr(context, accessor, None)
             if not callable(method):
@@ -42,7 +43,7 @@ class SEOContext( BrowserView ):
                 value = method()
             except AttributeError:
                 value = None
-        
+
             return value
 
     def seo_title( self ):
@@ -60,7 +61,7 @@ class SEOContext( BrowserView ):
         """
             Generate Description from SEO properties 
         """
-        
+
         return self.getSEOProperty( 'qSEO_description', accessor = 'Description')
 
     def seo_distribution( self ):
@@ -76,7 +77,6 @@ class SEOContext( BrowserView ):
         """
         tags = self.seo_globalCustomMetaTags()
         loc = self.seo_localCustomMetaTags()
-
         names = [i['meta_name'] for i in tags]
         add_tags = []
         for i in loc:
@@ -138,7 +138,7 @@ class SEOContext( BrowserView ):
         """
         html_comment = self.getSEOProperty( 'qSEO_html_comment' )
         return html_comment and html_comment or '' 
-        
+
     def seo_keywords( self ):
         """
            Generate Keywords from SEO properties
@@ -172,7 +172,7 @@ class SEOContext( BrowserView ):
             value = None
 
         return value
-    
+
     def seo_canonical( self ):
         """
            Get canonical URL
@@ -414,6 +414,8 @@ class SEOContextPropertiesView( BrowserView ):
             if not state:
                 state = _('seoproperties_saved', default=u'Content SEO properties have been saved.')
                 context.plone_utils.addPortalMessage(state)
+                kwargs = {'modification_date' : DateTime()} 
+                context.plone_utils.contentEdit(context, **kwargs) 
                 return request.response.redirect(self.context.absolute_url())
             context.plone_utils.addPortalMessage(state, 'error')
         return self.template()

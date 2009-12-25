@@ -1,6 +1,7 @@
 import re
 import string
 import urllib
+from cStringIO import StringIO
 from zope.component import getMultiAdapter
 from Products.Five import zcml, fiveconfigure
 from Testing.ZopeTestCase import installPackage, hasPackage
@@ -166,31 +167,37 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
         self.qi.installProduct(PRODUCT)
-        #self.portal.changeSkin('Plone Default')
+        self.sp = self.portal.portal_properties.seo_properties
+        self.pu = self.portal.plone_utils
+        self.basic_auth = 'portal_manager:secret'
 
-        self.basic_auth = 'mgr:mgrpw'
-        self.loginAsPortalOwner()
+        uf = self.app.acl_users
+        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
+        user = uf.getUserById('portal_manager')
+        if not hasattr(user, 'aq_base'):
+            user = user.__of__(uf)
+        newSecurityManager(None, user)
 
         '''Preparation for functional testing'''
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
-        self.canonurl = 'http://test.site.com/test.html'
-        self.sp = self.portal.portal_properties.seo_properties
+        self.canonurl = 'http://nohost/plone/test.html'
         self.sp.manage_changeProperties(**global_custom_metatags)
-
-        my_doc.qseo_properties_edit(title='hello world', title_override=1,
-                                    description='it is description', description_override=1,
-                                    keywords='my1|key2', keywords_override=1,
-                                    html_comment='no comments', html_comment_override=1,
-                                    robots='ALL', robots_override=1,
-                                    distribution='Global', distribution_override=1,
-                                    canonical=self.canonurl, canonical_override=1,
-                                    custommetatags=custom_metatags, custommetatags_override=1)
+        abs_path = "/%s" % my_doc.absolute_url(1)
+        self.form_data = {'seo_description': 'it is description', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
+                        'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1, 'seo_canonical_override:int': 1,
+                        'seo_keywords:list': 'keyword1', 'seo_html_comment': 'no comments',
+                        'seo_title_override:int': 1, 'seo_title': 'hello world', 'seo_html_comment_override:int': 1,
+                        'seo_distribution_override:int': 1, 'seo_distribution': 'Global', 'seo_canonical': self.canonurl, 'form.submitted:int': 1}
+        st = ''
+        for d in custom_metatags:
+            st += '&seo_custommetatags.meta_name:records=%s&seo_custommetatags.meta_content:records=%s' % (d['meta_name'],d['meta_content'])
+        self.publish(path=abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(self.form_data)+st))
+        #self.publish(abs_path+'/@@seo-context-properties?%s' % urllib.urlencode(self.form_data), self.basic_auth)
 
         wf_tool = self.portal.portal_workflow
         wf_tool.doActionFor(my_doc, 'publish')
 
-        abs_path = "/%s" % my_doc.absolute_url(1)
         self.abs_path = abs_path
         self.my_doc = my_doc
         self.html = self.publish(abs_path, self.basic_auth).getBody()
@@ -221,9 +228,9 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         self.assert_(m, 'Description not set in')
 
     def testKeywords(self):
-        m = re.match('.*<meta name="keywords" content="my1|key2" />', self.html, re.S|re.M)
+        m = re.match('.*<meta name="keywords" content="keyword1" />', self.html, re.S|re.M)
         if not m:
-             m = re.match('.*<meta content="my1|key2" name="keywords" />', self.html, re.S|re.M)
+             m = re.match('.*<meta content="keyword1" name="keywords" />', self.html, re.S|re.M)
         self.assert_(m, 'Keywords not set in')
 
     def testRobots(self):
@@ -280,7 +287,8 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
     def testDeleteCustomMetaTags(self):
         self.sp.manage_changeProperties(**{'default_custom_metatags':'metatag1|global_metatag1value'})
         my_doc = self.my_doc
-        my_doc.qseo_properties_edit(custommetatags=custom_metatags, custommetatags_override=0)
+        self.form_data = {'seo_custommetatags': custom_metatags,  'seo_custommetatags_override:int': 0, 'form.submitted:int': 1}
+        self.publish(path=self.abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(self.form_data)))
         html = self.publish(self.abs_path, self.basic_auth).getBody()
         m = re.search('<meta name="metatag4" content="global_metatag4value" />' , html, re.S|re.M)
         if not m:
@@ -289,7 +297,7 @@ class TestResponse(PloneTestCase.FunctionalTestCase):
         m = re.search('<meta name="metatag1" content="global_metatag1value" />' , html, re.S|re.M)
         if not m:
             m = re.search('<meta content="global_metatag1value" name="metatag1" />' , html, re.S|re.M)
-        self.assert_(m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
+        self.assert_(m, "Global custom meta tag %s not applied." % 'metatag1')
 
     def testCanonical(self):
         m = re.match('.*<link rel="canonical" href="%s" />' % self.canonurl, self.html, re.S|re.M)
@@ -316,7 +324,6 @@ class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
         self.qi.installProduct(PRODUCT)
         self.sp = self.portal.portal_properties.seo_properties
         self.pu = self.portal.plone_utils
-        #self.portal.changeSkin('Plone Default')
 
         self.basic_auth = 'portal_manager:secret'
         uf = self.app.acl_users
@@ -386,9 +393,7 @@ class TestAdditionalKeywords(PloneTestCase.FunctionalTestCase):
         self.sp.additional_keywords = ('foo', 'bar')
         self.my_doc.manage_addProperty('qSEO_keywords', ('baz',), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*<meta\ content="baz,\ foo,\ bar"\ name="keywords"\ />', self.html, re.S|re.M)
-        if not m:
-            m = re.match('.*<meta\ name="keywords"\ content="baz,\ foo,\ bar"\ />', self.html, re.S|re.M)
+        m = re.findall('.*(<meta\s+(?:content="(?:(?:baz|bar|foo),\s*(?:baz|foo|bar),\s*(?:baz|foo|bar)"\s*)|(?:name="keywords"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, "No 'foo, bar, baz' keyword find")
 
 
@@ -398,8 +403,6 @@ class TestExposeDCMetaTags(PloneTestCase.FunctionalTestCase):
         self.qi = self.portal.portal_quickinstaller
         self.sp = self.portal.portal_properties.site_properties
         self.qi.installProduct(PRODUCT)
-        #self.portal.changeSkin('Plone Default')
-
         self.basic_auth = 'portal_manager:secret'
         uf = self.app.acl_users
         uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
@@ -423,8 +426,6 @@ class TestExposeDCMetaTags(PloneTestCase.FunctionalTestCase):
 
     def test_exposeDCMetaTagsPropertyOff(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = False)
-
-        self.my_doc.qseo_properties_edit()
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m1 = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M)
         if not m1:
@@ -437,7 +438,6 @@ class TestExposeDCMetaTags(PloneTestCase.FunctionalTestCase):
 
     def test_exposeDCMetaTagsPropertyOn(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = True)
-        self.my_doc.qseo_properties_edit()
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m1 = re.match('.*<meta\ content=".*?"\ name="DC.format"\ />', self.html, re.S|re.M)
         if not m1:
@@ -521,11 +521,11 @@ class TestBaseURL(PloneTestCase.FunctionalTestCase):
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
         regen = re.compile('<base\s+[^>]*href=\"([^\"]*)\"[^>]*>', re.S|re.M)
-        
+
         path = "/%s" % my_doc.absolute_url(1)
         html = self.publish(path, self.basic_auth).getBody()
         burls = regen.findall(html)
-        
+
         mydocurl = my_doc.absolute_url()
         self.assert_(not [1 for burl in burls if not burl==mydocurl],
            "Wrong BASE URL for document: %s, all must be: %s" % (burls, mydocurl))
@@ -565,12 +565,13 @@ class TestBugs(PloneTestCase.FunctionalTestCase):
         my_doc = self.portal['my_doc']
 
         md_before = my_doc.modification_date
-        my_doc.qseo_properties_edit(title="New Title")
+        abs_path = "/%s" % my_doc.absolute_url(1)
+        form_data = {'seo_title': 'New Title',  'seo_title_override:int': 1, 'form.submitted:int': 1}
+        self.publish(path=abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(form_data)))
         md_after = my_doc.modification_date
-
         self.assertNotEqual(md_before, md_after)
 
-        
+
 TESTS = [TestBeforeInstall,
          TestInstallation,
          TestResponse,
