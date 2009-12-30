@@ -3,10 +3,10 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: quintagroup.seoptimizer\n"
-"POT-Creation-Date: 2009-12-25 14:41+0000\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-12-30 17:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: Vitaliy Stepanov <liebster@quintagroup.com>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -43,11 +43,6 @@ msgstr ""
 #. Default: "Controls if <abbr title=\"Dublin Core\">DC</abbr> metatags are exposed to page header. They include DC.description, DC.type, DC.format, DC.creator and others."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:30
 msgid "description_seo_dc_metatags"
-msgstr ""
-
-#. Default: "All keywords found on the page!\nMore detailed:\n${found}"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:86
-msgid "finded_keywords"
 msgstr ""
 
 #. Default: "Edit SEO Properties"
@@ -180,9 +175,9 @@ msgstr ""
 msgid "label_up_to_plone_setup"
 msgstr ""
 
-#. Default: "Next keywords did not appear on the page:\n${missing}"
+#. Default: "Number of keywords at page:\n${found}\n${missing}"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:84
-msgid "missing_keywords"
+msgid "number_keywords"
 msgstr ""
 
 #. Default: "Content SEO properties have been saved."

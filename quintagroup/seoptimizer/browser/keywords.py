@@ -74,16 +74,17 @@ class ValidateSEOKeywordsView(BrowserView):
             if keyword:
                 keyword_on_page =  len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U))
                 if keyword not in added.keys() and not keyword_on_page:
-                    missing.append(keyword)
+                    missing.append(keyword+u' - 0')
                     added[keyword] = 1
                 if keyword not in finded.keys() and keyword_on_page:
                     finding.append(keyword+u' - '+repr(keyword_on_page))
                     finded[keyword] = 1
-        # return list of missing keywords
-        if missing:
-            msg = ts.utranslate(None, _('missing_keywords', default=u'Next keywords did not appear on the page:\n${missing}', mapping={'missing':'\n'.join(missing)}), context=self.context)
+        # return list of missing and fount keywords
+        if missing or finding:
+            msg = ts.utranslate(None, _('number_keywords', default=u'Number of keywords at page:\n${found}\n${missing}',
+                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)}), context=self.context)
         else:
-            msg = ts.utranslate(None, _('finded_keywords', default=u'All keywords found on the page!\nMore detailed:\n${found}', mapping={'found': '\n'.join(finding)}), context=self.context)
+            msg = ''
         return msg
 
     def walkTextNodes(self, parent, page_words=[]):
