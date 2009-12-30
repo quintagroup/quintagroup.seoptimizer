@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.2.0 (unreleased)
+------------------
+
+- Refactor seo_context_properties cpy script to browser view
+  [liebster]
+
+- Added search numbers of keywords at page
+  [liebster]
+
+
 2.1.1 (2009-11-09)
 ------------------
 
