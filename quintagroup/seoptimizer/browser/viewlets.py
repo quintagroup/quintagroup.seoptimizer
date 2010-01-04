@@ -6,6 +6,8 @@ from Products.CMFCore.utils import getToolByName
 
 
 class TitleCommentViewlet(ViewletBase):
+    """ Simple viewlet for custom title rendering.
+    """
 
     def update(self):
         self.portal_state = getMultiAdapter((self.context, self.request),
@@ -47,7 +49,8 @@ class TitleCommentViewlet(ViewletBase):
 
 
 class CustomScriptViewlet( ViewletBase ):
-
+    """ Simple viewlet for custom script rendering.
+    """
     def getCustomScript( self ):
         context = self.context.aq_inner
         portal_props = getToolByName(context, 'portal_properties')
@@ -61,8 +64,7 @@ class CustomScriptViewlet( ViewletBase ):
 
 
 class CanonicalUrlViewlet( ViewletBase ):
-    """
-       simple viewlet for canonical url link rendering
+    """ Simple viewlet for canonical url link rendering.
     """
 
     def render( self ):

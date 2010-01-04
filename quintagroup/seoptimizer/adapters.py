@@ -14,6 +14,8 @@ class AdditionalKeywords(object):
         self.context = context
 
     def listKeywords(self):
+        """ See interface.
+        """
         portal_props = getToolByName(self.context, 'portal_properties')
         seo_props = getToolByName(portal_props, 'seo_properties', None)
 
@@ -52,6 +54,8 @@ class MappingMetaTags(object):
         self.seo_props = getToolByName(self.portal_props, 'seo_properties', None)
 
     def getMappingMetaTags(self):
+        """ See interface.
+        """
         metadata_name = SortedDict()
         if self.seo_props:
             pmn = self.seo_props.getProperty('metatags_order')

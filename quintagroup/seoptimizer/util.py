@@ -10,6 +10,8 @@ def createMultiColumnList(self,slist, numCols, sort_on='title_or_id'):
         return [slist]
 
 class SortedDict(dict):
+    """ A sorted dictionary.
+    """
     security = ClassSecurityInfo()
 
     security.declarePublic('items')
@@ -46,7 +48,8 @@ except:
     pass
 
 def removeSkin(self, layer):
-    """Remove layers"""
+    """ Remove layers.
+    """
     skinstool = getToolByName(self, 'portal_skins')
     for skinName in skinstool.getSkinSelections():
         original_path = skinstool.getSkinPath(skinName)
@@ -59,6 +62,8 @@ def removeSkin(self, layer):
         skinstool.addSkinSelection(skinName, ','.join(new_path))
 
 def removeActions(self):
+    """ Remove actions.
+    """
     tool = getToolByName(self, 'portal_types')
     for ptype in tool.objectValues():
         if ptype.getId() in ['File','Document','News Item']:
@@ -69,12 +74,16 @@ def removeActions(self):
                 ptype.deleteActions([acts.index(a) for a in acts if a.getId()=='seo_properties'])
 
 def remove_configlets( context, conf_ids ):
+    """ Remove configlets.
+    """
     configTool = getToolByName(context, 'portal_controlpanel', None)
     if configTool:
         for id in conf_ids:
             configTool.unregisterConfiglet(id)
 
 def uninstall( context ):
+    """ Do customized uninstallation.
+    """
     if context.readDataFile('seo_uninstall.txt') is None:
         return
     site = context.getSite()
