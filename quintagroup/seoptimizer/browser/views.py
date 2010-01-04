@@ -24,10 +24,10 @@ except ImportError:
     HAS_CANONICAL_PATH = False
 
 class SEOContext( BrowserView ):
-    """
+    """ This class contains methods that allows to edit html header meta tags.
     """
     def getSEOProperty( self, property_name, accessor='' ):
-        """
+        """ Get value from seo property by property name.
         """
         context = aq_inner(self.context)
 
@@ -48,33 +48,32 @@ class SEOContext( BrowserView ):
             return value
 
     def seo_title( self ):
-        """
+        """ Generate SEO Title from SEO properties.
         """
         return self.getSEOProperty( 'qSEO_title', accessor='Title' )
 
     def seo_robots( self ):
-        """
+        """ Generate SEO Robots from SEO properties.
         """
         robots = self.getSEOProperty( 'qSEO_robots' )
         return robots and robots or 'ALL'
 
     def seo_description( self ):
-        """
-            Generate Description from SEO properties 
+        """ Generate Description from SEO properties.
         """
 
         return self.getSEOProperty( 'qSEO_description', accessor = 'Description')
 
     def seo_distribution( self ):
-        """
-           Generate Description from SEO properties
+        """ Generate Distribution from SEO properties.
         """
         dist = self.getSEOProperty( 'qSEO_distribution' )
 
         return dist and dist or 'Global'
 
     def seo_customMetaTags( self ):
-        """
+        """        Returned seo custom metatags from default_custom_metatags property in seo_properties
+        (global seo custom metatags) with update from seo custom metatags properties in context (local seo custom metatags).
         """
         tags = self.seo_globalCustomMetaTags()
         loc = self.seo_localCustomMetaTags()
@@ -91,7 +90,8 @@ class SEOContext( BrowserView ):
         return tags
 
     def seo_globalWithoutLocalCustomMetaTags( self ):
-        """
+        """        Returned seo custom metatags from default_custom_metatags property in seo_properties
+        (global seo custom metatags) without seo custom metatags from properties in context (local seo custom metatags).
         """
         glob = self.seo_globalCustomMetaTags()
         loc = self.seo_localCustomMetaTags()
@@ -103,7 +103,7 @@ class SEOContext( BrowserView ):
         return tags
 
     def seo_localCustomMetaTags( self ):
-        """
+        """ Returned seo custom metatags from properties in context (local seo custom metatags).
         """
         result = []
         property_prefix = 'qSEO_custom_'
@@ -115,7 +115,7 @@ class SEOContext( BrowserView ):
         return result
 
     def seo_globalCustomMetaTags( self ):
-        """
+        """ Returned seo custom metatags from default_custom_metatags property in seo_properties.
         """
         result = []
         context = aq_inner(self.context)
@@ -135,16 +135,14 @@ class SEOContext( BrowserView ):
         return bool(self.seo_localCustomMetaTags())
 
     def seo_html_comment( self ):
-        """
+        """ Generate HTML Comments from SEO properties.
         """
         html_comment = self.getSEOProperty( 'qSEO_html_comment' )
         return html_comment and html_comment or '' 
 
     def seo_keywords( self ):
+        """ Generate Keywords from SEO properties.
         """
-           Generate Keywords from SEO properties
-        """
-
         prop_name = 'qSEO_keywords'
         add_keywords = 'additional_keywords'
         accessor = 'Subject'
@@ -175,8 +173,7 @@ class SEOContext( BrowserView ):
         return value
 
     def seo_canonical( self ):
-        """
-           Get canonical URL
+        """ Generate canonical URL from SEO properties.
         """
         canonical = self.getSEOProperty( 'qSEO_canonical' )
 
@@ -191,7 +188,7 @@ class SEOContext( BrowserView ):
 
 
 class SEOControlPanel( ControlPanelView ):
-    """
+    """ The class with methods configuration Search Engine Optimizer in configlet.
     """
     template = ViewPageTemplateFile('templates/seo_controlpanel.pt')
 
@@ -204,7 +201,7 @@ class SEOControlPanel( ControlPanelView ):
 
     @property
     def portal_types( self ):
-        """
+        """ Returned a list of portal types.
         """
         context = aq_inner(self.context)
         return getToolByName(context, 'portal_types')
@@ -220,25 +217,25 @@ class SEOControlPanel( ControlPanelView ):
         return condition and first or second 
 
     def getExposeDCMetaTags( self ):
-        """
+        """ Get value from exposeDCMetaTags property in seo_properties.
         """
         sp = self.portal_properties.site_properties
         return sp.getProperty('exposeDCMetaTags')
 
     def getDefaultCustomMetatags( self ):
-        """
+        """ Get values from default_custom_metatags property in seo_properties.
         """
         seo = self.portal_properties.seo_properties
         return seo.getProperty('default_custom_metatags')
 
     def getMetaTagsOrder( self ):
-        """
+        """ Get values from metatags_order property in seo_properties.
         """
         seo = self.portal_properties.seo_properties
         return seo.getProperty('metatags_order')
 
     def getAdditionalKeywords( self ):
-        """
+        """ Get values from additional_keywords property in seo_properties.
         """
         seo = self.portal_properties.seo_properties
         return seo.getProperty('additional_keywords')
@@ -254,7 +251,7 @@ class SEOControlPanel( ControlPanelView ):
             return [slist]
 
     def __call__( self ):
-        """
+        """ Perform the update and redirect if necessary, or render the page.
         """
         context = aq_inner(self.context)
         request = self.request
@@ -299,13 +296,13 @@ class SEOControlPanel( ControlPanelView ):
             return self.template(portalTypes=portalTypes, exposeDCMetaTags=exposeDCMetaTags)
 
     def typeInfo( self, type_name ):
-        """
+        """ Get info type by type name.
         """
         return self.portal_types.getTypeInfo( type_name )
 
 
 class SEOContextPropertiesView( BrowserView ):
-    """
+    """ This class contains methods that allows to manage seo properties.
     """
     template = ViewPageTemplateFile('templates/seo_context_properties.pt')
 
@@ -315,21 +312,30 @@ class SEOContextPropertiesView( BrowserView ):
         return condition and first or second 
 
     def getMainDomain(self, url):
+        """ Get a main domain.
+        """
         url = url.split('//')[-1]
         dompath = url.split(':')[0]
         dom = dompath.split('/')[0]
         return '.'.join(dom.split('.')[-2:])
 
     def validateSEOProperty(self, property, value):
+        """ Validate a seo property.
+        """
         purl = getToolByName(self.context, 'portal_url')()
         state = ''
         if property == PROP_PREFIX+'canonical':
+            # validate seo canonical url property
             pdomain = self.getMainDomain(purl)
             if not pdomain == self.getMainDomain(value):
                 state = _('canonical_msg', default=u'Canonical URL mast be in ${pdomain} domain.', mapping={'pdomain': pdomain})
         return state
 
     def setProperty(self, property, value, type='string'):
+        """ Add a new property.
+
+        Sets a new property with the given id, value and type or changes it.
+        """
         context = aq_inner(self.context)
         state = self.validateSEOProperty(property, value)
         if not state:
@@ -340,6 +346,8 @@ class SEOContextPropertiesView( BrowserView ):
         return state
 
     def manageSEOProps(self, **kw):
+        """ Manage seo properties.
+        """
         context = aq_inner(self.context)
         state = ''
         delete_list, seo_overrides_keys, seo_keys = [], [], []
@@ -367,11 +375,15 @@ class SEOContextPropertiesView( BrowserView ):
         return state
 
     def setSEOCustomMetaTags(self, custommetatags):
+        """ Set seo custom metatags properties.
+        """
         context = aq_inner(self.context)
         for tag in custommetatags:
             self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, tag['meta_name']), tag['meta_content'])
 
     def delAllSEOCustomMetaTagsProperties(self):
+        """ Delete all seo custom metatags properties.
+        """
         context = aq_inner(self.context)
         delete_list = []
         for property, value in context.propertyItems():
@@ -381,6 +393,8 @@ class SEOContextPropertiesView( BrowserView ):
             context.manage_delProperties(delete_list)
 
     def updateSEOCustomMetaTagsProperties(self, custommetatags):
+        """ Update seo custom metatags properties.
+        """
         context = aq_inner(self.context)
         site_properties = getToolByName(context, 'portal_properties')
         globalCustomMetaTags = []
@@ -398,6 +412,11 @@ class SEOContextPropertiesView( BrowserView ):
                     self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)
 
     def manageSEOCustomMetaTagsProperties(self, **kw):
+        """ Update seo custom metatags properties, if enabled checkbox override or delete properties.
+
+        Change object properties by passing either a mapping object
+        of name:value pairs {'foo':6} or passing name=value parameters.
+        """
         context = aq_inner(self.context)
         self.delAllSEOCustomMetaTagsProperties()
         if kw.get('seo_custommetatags_override'):
@@ -405,7 +424,7 @@ class SEOContextPropertiesView( BrowserView ):
             self.updateSEOCustomMetaTagsProperties(custommetatags)
 
     def __call__( self ):
-        """
+        """ Perform the update seo properties and redirect if necessary, or render the page Call method.
         """
         context = aq_inner(self.context)
         request = self.request
