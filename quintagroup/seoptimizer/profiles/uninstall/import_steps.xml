@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <import-steps>
  <import-step id="seo_uninstall" version="20081125-01"
-              handler="quintagroup.seoptimizer.util.uninstall"
+              handler="quintagroup.seoptimizer.setuphandlers.uninstall"
               title="SEO uninstallation">
   SEO uninstallation
  </import-step>
