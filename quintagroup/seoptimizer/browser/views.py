@@ -211,6 +211,13 @@ class SEOControlPanel( ControlPanelView ):
         """
         return filter(lambda x:x.id == 'seo_properties', type_info.listActions())
 
+
+    def isEnableCT(self, type_id):
+        """
+        """
+        seo_props = getToolByName(self.portal_properties, 'seo_properties')
+        return type_id in seo_props.getProperty('content_types_seoprops_enabled', '')
+
     def test( self, condition, first, second ):
         """
         """
@@ -256,11 +263,11 @@ class SEOControlPanel( ControlPanelView ):
         context = aq_inner(self.context)
         request = self.request
 
-        portalTypes=request.get( 'portalTypes', [] )
-        exposeDCMetaTags=request.get( 'exposeDCMetaTags', None )
-        additionalKeywords=request.get('additionalKeywords', [])
-        default_custom_metatags=request.get('default_custom_metatags', [])
-        metatags_order=request.get('metatags_order', [])
+        content_types_seoprops_enabled = request.get( 'contentTypes', [] )
+        exposeDCMetaTags = request.get( 'exposeDCMetaTags', None )
+        additionalKeywords = request.get('additionalKeywords', [])
+        default_custom_metatags = request.get('default_custom_metatags', [])
+        metatags_order = request.get('metatags_order', [])
 
         site_props = getToolByName(self.portal_properties, 'site_properties')
         seo_props = getToolByName(self.portal_properties, 'seo_properties')
@@ -273,16 +280,17 @@ class SEOControlPanel( ControlPanelView ):
             seo_props.manage_changeProperties(additional_keywords=additionalKeywords)
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
             seo_props.manage_changeProperties(metatags_order=metatags_order)
+            seo_props.manage_changeProperties(content_types_seoprops_enabled=content_types_seoprops_enabled)
 
             for ptype in self.portal_types.objectValues():
                 acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
                 action = acts and acts[0] or None
-                if ptype.getId() in portalTypes:
+                if ptype.getId() in content_types_seoprops_enabled:
                     if action is None:
                         ptype.addAction('seo_properties',
                                         'SEO Properties',
                                         'string:${object_url}/@@seo-context-properties',
-                                        '',
+                                        "python:exists('portal/@@seo-context-properties')",
                                         'Modify portal content',
                                         'object',
                                         visible=1)
@@ -293,7 +301,7 @@ class SEOControlPanel( ControlPanelView ):
             context.plone_utils.addPortalMessage(pmf(u'Changes saved.'))
             return request.response.redirect('%s/%s'%(self.context.absolute_url(), 'plone_control_panel'))
         else:
-            return self.template(portalTypes=portalTypes, exposeDCMetaTags=exposeDCMetaTags)
+            return self.template(contentTypes=content_types_seoprops_enabled, exposeDCMetaTags=exposeDCMetaTags)
 
     def typeInfo( self, type_name ):
         """ Get info type by type name.

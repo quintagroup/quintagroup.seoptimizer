@@ -77,7 +77,7 @@
                         </div>
                     </div>
 
-                    <fieldset class="portalTypes"
+                    <fieldset class="contentTypes"
                               tal:define="typeLists view/createMultiColumnList">
                         <legend i18n:translate="label_content_type_title">Content Types</legend>
 
@@ -92,10 +92,10 @@
                                                       name type/getId;">
 
                                         <input  type="checkbox"
-                                                name="portalTypes:list"
+                                                name="contentTypes:list"
                                                 tal:attributes="id name;
                                                                 value name;
-                                                                checked python:view.hasSEOAction(type)"/>
+                                                                checked python:view.isEnableCT(name)"/>
                                         <label tal:attributes="for python:type.getId()"
                                                tal:content="type/Title"/>
                                     </tal:type>
