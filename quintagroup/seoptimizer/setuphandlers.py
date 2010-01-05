@@ -1,19 +1,32 @@
 import logging
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.Expression import Expression
 
 logger = logging.getLogger('quintagroup.seoptimizer')
-
 
 def migrationActions(site):
     old = 'qseo_properties_edit_form'
     new = '@@seo-context-properties'
+    condition = "python:exists('portal/@@seo-context-properties')"
+    seo_props = site.portal_properties.seo_properties
+    content_types_seoprops_enabled = list(seo_props.getProperty('content_types_seoprops_enabled'))
     for ptype in site.portal_types.objectValues():
-        acts = filter(lambda x: x.id == 'seo_properties' and old in x.getActionExpression(), ptype.listActions())
+        acts = filter(lambda x: x.id == 'seo_properties' , ptype.listActions())
         for act in acts:
+            log = 0
+            if ptype.id not in content_types_seoprops_enabled:
+                content_types_seoprops_enabled.append(ptype.id)
+            if not act.condition:
+                act.condition = Expression(condition)
+                log = 1
             ac_exp = act.getActionExpression()
             if old in ac_exp:
                 act.setActionExpression(ac_exp.replace(old, new))
-                logger.log(logging.INFO, "For %s type changed URL Expression \"SEO Properties\" action's from %s to %s." % (ptype.id, old, new))
+                log = 1
+            if log:
+                logger.log(logging.INFO, "Updated \"SEO Properties\" action in %s type." % ptype.id)
+    seo_props.manage_changeProperties(content_types_seoprops_enabled=tuple(content_types_seoprops_enabled))
+
 
 def importVarious(context):
     """ Do customized installation.
