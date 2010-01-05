@@ -2,7 +2,7 @@
 <object name="portal_properties" meta_type="Plone Properties Tool">
  <object name="seo_properties" meta_type="Plone Property Sheet">
   <property name="title">SEO Properties</property>
-  <property name="stop_words" type="lines">
+  <property name="stop_words" type="lines" purge='False'>
    <element value="a"/>
    <element value="an"/>
    <element value="amp"/>
@@ -58,15 +58,15 @@
    <element value="you"/>
    <element value="your"/>
   </property>
-  <property name="fields" type="lines">
+  <property name="fields" type="lines" purge='False'>
    <element value="seo_title"/>
    <element value="seo_description"/>
    <element value="seo_keywords"/>
   </property>
-  <property name="custom_script" type="text"/>
-  <property name="additional_keywords" type="lines"/>
-  <property name="default_custom_metatags" type="lines"/>
-  <property name="metatags_order" type="lines">
+  <property name="custom_script" type="text" purge='False'/>
+  <property name="additional_keywords" type="lines" purge='False'/>
+  <property name="default_custom_metatags" type="lines" purge='False'/>
+  <property name="metatags_order" type="lines" purge='False'>
    <element value="DC.publisher Publisher"/>
    <element value="DC.description Description"/>
    <element value="DC.contributors Contributors"/>
@@ -83,6 +83,11 @@
    <element value="keywords seo_keywords"/>
    <element value="robots seo_robots"/>
    <element value="distribution seo_distribution"/>
+  </property>
+  <property name="content_types_seoprops_enabled" type="lines" purge='False'>
+   <element value="Document"/>
+   <element value="File"/>
+   <element value="News Item"/>
   </property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
