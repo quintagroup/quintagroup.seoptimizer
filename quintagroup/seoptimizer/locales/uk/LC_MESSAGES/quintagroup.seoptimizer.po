@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: quintagroup.seoptimizer\n"
 "POT-Creation-Date: 2009-12-30 17:33+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: Vitaliy Stepanov <liebster@quintagroup.com>\n"
+"PO-Revision-Date: 2010-01-06 12:27+0300\n"
+"Last-Translator: Olha <olha.pelishok@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:23
 msgid "Keywords list is empty!"
-msgstr ""
+msgstr "Список ключових слів порожній!"
 
 #. Default: "Canonical URL mast be in ${pdomain} domain."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:329
@@ -38,7 +38,7 @@ msgstr ""
 #. Default: "Select content types that will have SEO properties enabled."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:84
 msgid "description_seo_content_types"
-msgstr ""
+msgstr "Виберіть типи вмісту, для яких будете прописувати SEO властивості."
 
 #. Default: "Controls if <abbr title=\"Dublin Core\">DC</abbr> metatags are exposed to page header. They include DC.description, DC.type, DC.format, DC.creator and others."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:30
@@ -48,7 +48,7 @@ msgstr ""
 #. Default: "Edit SEO Properties"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:35
 msgid "heading_edit_seo_properties"
-msgstr ""
+msgstr "Редагувати властивості SEO"
 
 #. Default: "Use this field when you want that your content types receive additional keywords from the ones you manually specify. Enter one keyword per line."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:69
@@ -108,7 +108,7 @@ msgstr ""
 #. Default: "Additional keywords that should be added to the content types."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:66
 msgid "label_additional_keywords"
-msgstr ""
+msgstr "Додаткові ключові слова, потрібно додати до типів вмісту."
 
 #. Default: "Canonical URL"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:234
@@ -118,7 +118,7 @@ msgstr ""
 #. Default: "Content Types"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:82
 msgid "label_content_type_title"
-msgstr ""
+msgstr "Типи вмісту"
 
 #. Default: "Custom Meta Tags"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:267
@@ -173,15 +173,18 @@ msgstr ""
 #. Default: "Up to Plone Setup"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:12
 msgid "label_up_to_plone_setup"
-msgstr ""
+msgstr "Вгору до Налаштувань Plone"
 
 #. Default: "Number of keywords at page:\n${found}\n${missing}"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:84
 msgid "number_keywords"
-msgstr "Кількість знайдених ключових слів на сторінці:\n${found}\n${missing}"
+msgstr ""
+"Кількість знайдених ключових слів на сторінці:\n"
+"${found}\n"
+"${missing}"
 
 #. Default: "Content SEO properties have been saved."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:417
 msgid "seoproperties_saved"
-msgstr "Налаштування збереженно."
+msgstr "SEO властивості збереженно."
 
