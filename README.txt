@@ -66,7 +66,7 @@ Requirements
 Note
 ----
 
-* For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.6.1  release (http://plone.org/products/plone-seo/releases/1.6.1)
+* For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
 
 * For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
 
