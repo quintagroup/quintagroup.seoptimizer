@@ -1,13 +1,6 @@
 Changelog
 =========
 
-2.2.1 (unreleased)
-------------------
-
-- Added condition install or reinstall package
-  [liebster]
-
-
 2.2.0 (2010-01-06)
 ------------------
 
