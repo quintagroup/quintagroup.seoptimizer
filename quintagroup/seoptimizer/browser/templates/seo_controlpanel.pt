@@ -39,8 +39,8 @@
                             Default custom metatags.
                         </label>
                         <div class="formHelp" i18n:translate="help_default_custom_metatags">
-                            Fill in meta tags (one per line) in the order in which they will appear on site source
-                            pages. Example: “metaname accessor”.
+                            Fill in custom metatag names (one per line) which will appear on qseo_properties edit tab. 
+                            Example: "metaname|metacontent" or "metaname". 
                         </div>
                         <div class="widget">
                             <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
@@ -53,8 +53,8 @@
                             Meta tags order in the page.
                         </label>
                         <div class="formHelp" i18n:translate="help_metatags_order">
-                            Fill in meta tags order (one per line) which will appear on qseo_properties
-                            edit tab. Example: "metaname accessor".
+                            Fill in meta tags (one per line) in the order in which they will appear on site source
+                            pages. Example: "metaname accessor".
                         </div>
                         <div class="widget">
                             <textarea cols="60" id="metatags_order" name="metatags_order" rows="15"
