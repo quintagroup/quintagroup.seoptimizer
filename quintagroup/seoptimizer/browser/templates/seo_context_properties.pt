@@ -118,7 +118,7 @@
               <strong>Enter each keyword in separate line, please.</strong>
               Though the relevance of listing meta keywords is of 
               questionable value now, it is useful to set meta keywords for
-              pages - for furture reference.
+              pages - for future reference.
             </div>
             <input type="checkbox"
                    id="seo_keywords_override"
@@ -204,7 +204,7 @@
               Distribution Tag
             </label>
             <div class="formHelp" i18n:translate="help_seo_distribution">
-              Distribution meta tag to designate time and area disribution
+              Distribution meta tag to designate time and area distribution
               of the document.
             </div>
             <input type="checkbox"
