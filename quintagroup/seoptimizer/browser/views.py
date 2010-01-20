@@ -211,13 +211,6 @@ class SEOControlPanel( ControlPanelView ):
         """
         return filter(lambda x:x.id == 'seo_properties', type_info.listActions())
 
-
-    def isEnableCT(self, type_id):
-        """
-        """
-        seo_props = getToolByName(self.portal_properties, 'seo_properties')
-        return type_id in seo_props.getProperty('content_types_seoprops_enabled', '')
-
     def test( self, condition, first, second ):
         """
         """

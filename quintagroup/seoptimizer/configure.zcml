@@ -20,6 +20,14 @@
       />
 
   <genericsetup:registerProfile
+      name="reinstall"
+      title="quintagroup.seoptimizer reinstall"
+      directory="profiles/reinstall"
+      description="Reinstall quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
       name="uninstall"
       title="quintagroup.seoptimizer uninstall"
       directory="profiles/uninstall"

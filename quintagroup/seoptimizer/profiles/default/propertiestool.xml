@@ -84,11 +84,6 @@
    <element value="robots seo_robots"/>
    <element value="distribution seo_distribution"/>
   </property>
-  <property name="content_types_seoprops_enabled" type="lines" purge='False'>
-   <element value="Document"/>
-   <element value="File"/>
-   <element value="News Item"/>
-  </property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<import-steps>
+ <import-step id="seo_reinstall" version="20081125-01"
+              handler="quintagroup.seoptimizer.setuphandlers.reinstall"
+              title="SEO reinstallation">
+  SEO reinstallation
+ </import-step>
+</import-steps>

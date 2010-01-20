@@ -95,7 +95,7 @@
                                                 name="contentTypes:list"
                                                 tal:attributes="id name;
                                                                 value name;
-                                                                checked python:view.isEnableCT(name)"/>
+                                                                checked python:view.hasSEOAction(type)"/>
                                         <label tal:attributes="for python:type.getId()"
                                                tal:content="type/Title"/>
                                     </tal:type>
