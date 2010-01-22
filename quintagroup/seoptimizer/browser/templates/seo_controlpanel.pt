@@ -26,96 +26,161 @@
                    id="exposeDCMetaTags"
                    name="exposeDCMetaTags"
                    tal:attributes="checked view/getExposeDCMetaTags"/>
-                        <label for="exposeDCMetaTags">Expose <abbr title="Dublin Core">DC</abbr> meta tags</label>
-                        <div class="formHelp" i18n:translate="description_seo_dc_metatags">
-                           Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
-                           header. They include DC.description, DC.type,
-                           DC.format, DC.creator and others.
-                        </div>
-                    </div>
+            <label for="exposeDCMetaTags">Expose <abbr title="Dublin Core">DC</abbr> meta tags</label>
+            <div class="formHelp" i18n:translate="description_seo_dc_metatags">
+               Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
+               header. They include DC.description, DC.type,
+               DC.format, DC.creator and others.
+            </div>
+          </div>
 
-                    <div class="field">
-                        <label for="default_custom_metatags" i18n:translate="label_default_custom_metatags">
-                            Default custom metatags.
-                        </label>
-                        <div class="formHelp" i18n:translate="help_default_custom_metatags">
-                            Fill in custom metatag names (one per line) which will appear on qseo_properties edit tab. 
-                            Example: "metaname|metacontent" or "metaname". 
-                        </div>
-                        <div class="widget">
-                            <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
-                                      tal:content="python:'\n'.join(view.getDefaultCustomMetatags())"></textarea>
-                        </div>
-                    </div>
+          <div class="field">
+              <label for="default_custom_metatags" i18n:translate="label_default_custom_metatags">
+                  Default custom metatags.
+              </label>
+              <div class="formHelp" i18n:translate="help_default_custom_metatags">
+                  Fill in custom metatag names (one per line) which will appear on qseo_properties edit tab. 
+                  Example: "metaname|metacontent" or "metaname". 
+              </div>
+              <div class="widget">
+                  <textarea cols="60" id="default_custom_metatags" name="default_custom_metatags" rows="15"
+                            tal:content="python:'\n'.join(view.getDefaultCustomMetatags())"></textarea>
+              </div>
+          </div>
 
-                    <div class="field">
-                        <label for="metatags_order" i18n:translate="label_metatags_order">
-                            Meta tags order in the page.
-                        </label>
-                        <div class="formHelp" i18n:translate="help_metatags_order">
-                            Fill in meta tags (one per line) in the order in which they will appear on site source
-                            pages. Example: "metaname accessor".
-                        </div>
-                        <div class="widget">
-                            <textarea cols="60" id="metatags_order" name="metatags_order" rows="15"
-                                      tal:content="python:'\n'.join(view.getMetaTagsOrder())"></textarea>
-                        </div>
-                    </div>
+          <div class="field">
+              <label for="metatags_order" i18n:translate="label_metatags_order">
+                  Meta tags order in the page.
+              </label>
+              <div class="formHelp" i18n:translate="help_metatags_order">
+                  Fill in meta tags (one per line) in the order in which they will appear on site source
+                  pages. Example: "metaname accessor".
+              </div>
+              <div class="widget">
+                  <textarea cols="60" id="metatags_order" name="metatags_order" rows="15"
+                            tal:content="python:'\n'.join(view.getMetaTagsOrder())"></textarea>
+              </div>
+          </div>
 
-                    <div class="field">
-                        <label for="additionalKeywords" i18n:translate="label_additional_keywords">
-                            Additional keywords that should be added to the content types.
-                        </label>
-                        <div class="formHelp" i18n:translate="help_additional_keywords">
-                            Use this field when you want that your content types receive
-                            additional keywords from the ones you manually specify. Enter
-                            one keyword per line.
-                        </div>
-                        <div class="widget">
-                            <textarea cols="60" id="additionalKeywords" name="additionalKeywords" rows="15"
-                                      tal:content="python:'\n'.join(view.getAdditionalKeywords())"></textarea>
-                        </div>
-                    </div>
+          <div class="field">
+              <label for="additionalKeywords" i18n:translate="label_additional_keywords">
+                  Additional keywords that should be added to the content types.
+              </label>
+              <div class="formHelp" i18n:translate="help_additional_keywords">
+                  Use this field when you want that your content types receive
+                  additional keywords from the ones you manually specify. Enter
+                  one keyword per line.
+              </div>
+              <div class="widget">
+                  <textarea cols="60" id="additionalKeywords" name="additionalKeywords" rows="15"
+                            tal:content="python:'\n'.join(view.getAdditionalKeywords())"></textarea>
+              </div>
+          </div>
 
-                    <fieldset class="contentTypes"
-                              tal:define="typeLists view/createMultiColumnList">
-                        <legend i18n:translate="label_content_type_title">Content Types</legend>
+<!--          <div class="field">
+              <label for="settingsUseKeywords" i18n:translate="label_settings_use_keywords">
+                  Settings the use of keywords.
+              </label>
+              <div class="formHelp" i18n:translate="help_settings_use_keywords">
+                  Settings the use of keywords.
+              </div>
+          </div>-->
 
-                        <div class="formHelp" i18n:translate="description_seo_content_types">
-                            Select content types that will have SEO properties
-                            enabled.
-                        </div>
-                        <div style="float:left; margin-right: 2em;" tal:repeat="sublist typeLists">
-                            <ul class="configlets">
-                                <li tal:repeat="ptypeInfo sublist">
-                                    <tal:type define="type python:view.typeInfo(ptypeInfo);
-                                                      name type/getId;">
+          <div class="field">
+              <label for="settingsUseKeywordsSG" i18n:translate="label_settings_use_keywords_sg">
+                  Settings the use Subject and global seo keywords.
+              </label>
+              <div class="formHelp" i18n:translate="help_settings_use_keywords_sg">
+                  Settings the use Subject and global seo keywords.
+              </div>
+              <input  type="radio"
+                      name="settingsUseKeywordsSG"
+                      tal:attributes="id string:sg1;
+                                      value string:1;
+                                      checked python:view.select_settings_use_keywords_sg()==1"/>
+              <label for=""
+                     tal:attributes="for string:sg1">Override Subject by global seo keywords</label>
+              <br/>
+              <input  type="radio"
+                      name="settingsUseKeywordsSG"
+                      tal:attributes="id string:sg2;
+                                      value string:2;
+                                      checked python:view.select_settings_use_keywords_sg()==2"/>
+              <label for=""
+                     tal:attributes="for string:sg2">Override global seo keywords by Subject</label>
+              <br/>
+              <input  type="radio"
+                      name="settingsUseKeywordsSG"
+                      tal:attributes="id string:sg3;
+                                      value string:3;
+                                      checked python:view.select_settings_use_keywords_sg()==3"/>
+              <label for=""
+                     tal:attributes="for string:sg3">Merge global and local seo keywords</label>
+          </div>
 
-                                        <input  type="checkbox"
-                                                name="contentTypes:list"
-                                                tal:attributes="id name;
-                                                                value name;
-                                                                checked python:view.hasSEOAction(type)"/>
-                                        <label tal:attributes="for python:type.getId()"
-                                               tal:content="type/Title"/>
-                                    </tal:type>
-                                </li>
-                            </ul>
-                        </div>
-                    </fieldset>
+          <div class="field">
+              <label for="settingsUseKeywordsLG" i18n:translate="label_settings_use_keywords_lg">
+                  Settings the use local and global seo keywords.
+              </label>
+              <div class="formHelp" i18n:translate="help_settings_use_keywords_lg">
+                  Settings the use local and global seo keywords.
+              </div>
+              <input  type="radio"
+                      name="settingsUseKeywordsLG"
+                      tal:attributes="id string:lg1;
+                                      value string:1;
+                                      checked python:view.select_settings_use_keywords_lg()==1"/>
+              <label for=""
+                     tal:attributes="for string:lg1">Override global by local seo keywords</label>
+              <br/>
+              <input  type="radio"
+                      name="settingsUseKeywordsLG"
+                      tal:attributes="id string:lg2;
+                                      value string:2;
+                                      checked python:view.select_settings_use_keywords_lg()==2"/>
+              <label for=""
+                     tal:attributes="for string:lg2">Merge global and local seo keywords</label>
+          </div>
 
-                    <div class="formControls"
-                         i18n:domain="plone">
-                         <input class="context"
-                             tabindex=""
-                             type="submit"
-                             name="form.button.Save"
-                             value="Save"
-                             i18n:attributes="value"
-                             tal:attributes="tabindex tabindex/next;" />
-                    </div>
-                    <input type="hidden" name="form.submitted" value="1" />
-                </form>
+          <fieldset class="contentTypes"
+                    tal:define="typeLists view/createMultiColumnList">
+              <legend i18n:translate="label_content_type_title">Content Types</legend>
+
+              <div class="formHelp" i18n:translate="description_seo_content_types">
+                  Select content types that will have SEO properties
+                  enabled.
+              </div>
+              <div style="float:left; margin-right: 2em;" tal:repeat="sublist typeLists">
+                  <ul class="configlets">
+                      <li tal:repeat="ptypeInfo sublist">
+                          <tal:type define="type python:view.typeInfo(ptypeInfo);
+                                            name type/getId;">
+
+                              <input  type="checkbox"
+                                      name="contentTypes:list"
+                                      tal:attributes="id name;
+                                                      value name;
+                                                      checked python:view.hasSEOAction(type)"/>
+                              <label tal:attributes="for python:type.getId()"
+                                     tal:content="type/Title"/>
+                          </tal:type>
+                      </li>
+                  </ul>
+              </div>
+          </fieldset>
+
+          <div class="formControls"
+               i18n:domain="plone">
+               <input class="context"
+                   tabindex=""
+                   type="submit"
+                   name="form.button.Save"
+                   value="Save"
+                   i18n:attributes="value"
+                   tal:attributes="tabindex tabindex/next;" />
+          </div>
+          <input type="hidden" name="form.submitted" value="1" />
+      </form>
     </div>
  </body>
 </html>

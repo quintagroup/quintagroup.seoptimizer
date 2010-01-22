@@ -147,7 +147,6 @@ class SEOContext( BrowserView ):
         add_keywords = 'additional_keywords'
         accessor = 'Subject'
         context = aq_inner(self.context)
-
         keywords = Set([])
         if context.hasProperty(prop_name):
             keywords = Set(context.getProperty(prop_name))
@@ -261,6 +260,8 @@ class SEOControlPanel( ControlPanelView ):
         additionalKeywords = request.get('additionalKeywords', [])
         default_custom_metatags = request.get('default_custom_metatags', [])
         metatags_order = request.get('metatags_order', [])
+        settingsUseKeywordsSG = int(request.get('settingsUseKeywordsSG', 1))
+        settingsUseKeywordsLG = int(request.get('settingsUseKeywordsLG', 1))
 
         site_props = getToolByName(self.portal_properties, 'site_properties')
         seo_props = getToolByName(self.portal_properties, 'seo_properties')
@@ -274,6 +275,8 @@ class SEOControlPanel( ControlPanelView ):
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
             seo_props.manage_changeProperties(metatags_order=metatags_order)
             seo_props.manage_changeProperties(content_types_seoprops_enabled=content_types_seoprops_enabled)
+            seo_props.manage_changeProperties(settings_use_keywords_sg=settingsUseKeywordsSG)
+            seo_props.manage_changeProperties(settings_use_keywords_lg=settingsUseKeywordsLG)
 
             for ptype in self.portal_types.objectValues():
                 acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
@@ -300,6 +303,20 @@ class SEOControlPanel( ControlPanelView ):
         """ Get info type by type name.
         """
         return self.portal_types.getTypeInfo( type_name )
+
+    def select_settings_use_keywords_sg(self):
+        context = aq_inner(self.context)
+        site_properties = getToolByName(context, 'portal_properties')
+        if hasattr(site_properties, 'seo_properties'):
+            settings_use_keywords_sg = getattr(site_properties.seo_properties, 'settings_use_keywords_sg', 0)
+        return settings_use_keywords_sg
+
+    def select_settings_use_keywords_lg(self):
+        context = aq_inner(self.context)
+        site_properties = getToolByName(context, 'portal_properties')
+        if hasattr(site_properties, 'seo_properties'):
+            settings_use_keywords_lg = getattr(site_properties.seo_properties, 'settings_use_keywords_lg', 0)
+        return settings_use_keywords_lg
 
 
 class SEOContextPropertiesView( BrowserView ):
