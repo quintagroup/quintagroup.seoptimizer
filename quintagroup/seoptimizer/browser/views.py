@@ -144,32 +144,51 @@ class SEOContext( BrowserView ):
         """ Generate Keywords from SEO properties.
         """
         prop_name = 'qSEO_keywords'
-        add_keywords = 'additional_keywords'
         accessor = 'Subject'
         context = aq_inner(self.context)
         keywords = Set([])
-        if context.hasProperty(prop_name):
-            keywords = Set(context.getProperty(prop_name))
-
         pprops = getToolByName(context, 'portal_properties')
         sheet = getattr(pprops, 'seo_properties', None)
-        if sheet and sheet.hasProperty(add_keywords):
-            keywords = keywords | Set(sheet.getProperty(add_keywords))
-
-        if keywords:
-            return keywords
-
         method = getattr(context, accessor, None)
         if not callable(method):
             return None
 
         # Catch AttributeErrors raised by some AT applications
         try:
-            value = method()
+            subject = Set(method())
         except AttributeError:
-            value = None
+            subject = keywords
 
-        return value
+        if sheet:
+          settings_use_keywords_sg = sheet.getProperty('settings_use_keywords_sg')
+          settings_use_keywords_lg = sheet.getProperty('settings_use_keywords_lg')
+          global_keywords = Set(sheet.getProperty('additional_keywords', None))
+          local_keywords = Set(context.getProperty(prop_name, None))
+          # Subject overrides global seo keywords and global overrides local seo keywords
+          if [settings_use_keywords_sg, settings_use_keywords_lg] == [1, 1]:
+              keywords = subject
+          # Subject overrides global seo keywords and merge global and local seo keywords
+          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [1, 2]:
+              keywords = subject | local_keywords
+          # Global seo keywords overrides Subject and global overrides local seo keywords
+          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 1]:
+              #import pdb;pdb.set_trace()
+              keywords = global_keywords
+          # Global seo keywords overrides Subject and merge global and local seo keywords
+          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 2]:
+              keywords = global_keywords | local_keywords
+          # Merge Subject and global seo keywords and global overrides local seo keywords
+          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [3, 1]:
+              keywords = subject | global_keywords
+          # Merge Subject and global seo keywords and merge global and local seo keywords
+          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [3, 2]:
+              keywords = subject | global_keywords | local_keywords
+          else:
+              keywords = subject
+        else:
+            keywords = subject
+
+        return keywords
 
     def seo_canonical( self ):
         """ Generate canonical URL from SEO properties.

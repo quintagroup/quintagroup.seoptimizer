@@ -99,7 +99,7 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_sg()==1"/>
               <label for=""
-                     tal:attributes="for string:sg1">Override Subject by global seo keywords</label>
+                     tal:attributes="for string:sg1">Subject overrides global seo keywords</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -107,7 +107,7 @@
                                       value string:2;
                                       checked python:view.select_settings_use_keywords_sg()==2"/>
               <label for=""
-                     tal:attributes="for string:sg2">Override global seo keywords by Subject</label>
+                     tal:attributes="for string:sg2">Global seo keywords override Subject</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -115,7 +115,7 @@
                                       value string:3;
                                       checked python:view.select_settings_use_keywords_sg()==3"/>
               <label for=""
-                     tal:attributes="for string:sg3">Merge global and local seo keywords</label>
+                     tal:attributes="for string:sg3">Merge Subject and global seo keywords</label>
           </div>
 
           <div class="field">
@@ -131,7 +131,7 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_lg()==1"/>
               <label for=""
-                     tal:attributes="for string:lg1">Override global by local seo keywords</label>
+                     tal:attributes="for string:lg1">Global override local seo keywords</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsLG"
