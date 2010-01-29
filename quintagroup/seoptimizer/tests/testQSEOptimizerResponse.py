@@ -64,27 +64,19 @@ class TestResponse(FunctionalTestCase):
         self.assert_(m, 'Title is not set correctly, perhaps it is duplicated with plone site title')
 
     def testDescription(self):
-        m = re.match('.*<meta name="description" content="it is description" />', self.html, re.S|re.M)
-        if not m:
-            m = re.match('.*<meta content="it is description" name="description" />', self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="description"\s*)|(?:content="it is description"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Description not set in')
 
     def testKeywords(self):
-        m = re.match('.*<meta name="keywords" content="keyword1" />', self.html, re.S|re.M)
-        if not m:
-             m = re.match('.*<meta content="keyword1" name="keywords" />', self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="keyword1"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Keywords not set in')
 
     def testRobots(self):
-        m = re.match('.*<meta name="robots" content="ALL" />', self.html, re.S|re.M)
-        if not m:
-            m = re.match('.*<meta content="ALL" name="robots" />', self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="robots"\s*)|(?:content="ALL"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Robots not set in')
 
     def testDistribution(self):
-        m = re.match('.*<meta name="distribution" content="Global" />', self.html, re.S|re.M)
-        if not m:
-            m = re.match('.*<meta content="Global" name="distribution" />', self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="distribution"\s*)|(?:content="Global"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Distribution not set in')
 
     def testHTMLComments(self):
@@ -114,16 +106,12 @@ class TestResponse(FunctionalTestCase):
 
     def testCustomMetaTags(self):
         for tag in CUSTOM_METATAGS:
-            m = re.search('<meta name="%(meta_name)s" content="%(meta_content)s" />' % tag, self.html, re.S|re.M)
-            if not m:
-                m = re.search('<meta content="%(meta_content)s" name="%(meta_name)s" />' % tag, self.html, re.S|re.M)
+            m = re.match('.*(<meta\s+(?:(?:name="%(meta_name)s"\s*)|(?:content="%(meta_content)s"\s*)){2}/>)' % tag, self.html, re.S|re.M)
             if tag['meta_content']:
                 self.assert_(m, "Custom meta tag %s not applied." % tag['meta_name'])
             else:
                 self.assert_(not m, "Meta tag %s has no content, but is present in the page." % tag['meta_name'])
-        m = re.search('<meta name="metatag4" content="global_metatag4value" />' , self.html, re.S|re.M)
-        if not m:
-            m = re.search('<meta content="global_metatag4value" name="metatag4" />' , self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="metatag4"\s*)|(?:content="global_metatag4value"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, "Global custom meta tag %s not applied." % 'metatag4')
 
     def testDeleteCustomMetaTags(self):
@@ -131,14 +119,10 @@ class TestResponse(FunctionalTestCase):
         my_doc = self.my_doc
         self.form_data = {'seo_custommetatags': CUSTOM_METATAGS,  'seo_custommetatags_override:int': 0, 'form.submitted:int': 1}
         self.publish(path=self.abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(self.form_data)))
-        html = self.publish(self.abs_path, self.basic_auth).getBody()
-        m = re.search('<meta name="metatag4" content="global_metatag4value" />' , html, re.S|re.M)
-        if not m:
-            m = re.search('<meta content="global_metatag4value" name="metatag4" />' , html, re.S|re.M)
+        self.html = self.publish(self.abs_path, self.basic_auth).getBody()
+        m = re.match('.*(<meta\s+(?:(?:name="metatag4"\s*)|(?:content="global_metatag4value"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(not m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
-        m = re.search('<meta name="metatag1" content="global_metatag1value" />' , html, re.S|re.M)
-        if not m:
-            m = re.search('<meta content="global_metatag1value" name="metatag1" />' , html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="metatag1"\s*)|(?:content="global_metatag1value"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, "Global custom meta tag %s not applied." % 'metatag1')
 
     def testCanonical(self):
