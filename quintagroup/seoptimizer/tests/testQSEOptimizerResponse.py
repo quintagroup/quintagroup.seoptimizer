@@ -24,6 +24,7 @@ class TestResponse(FunctionalTestCase):
         my_doc = self.portal['my_doc']
         self.canonurl = 'http://nohost/plone/test.html'
         self.sp.manage_changeProperties(**GLOBAL_CUSTOM_METATAGS)
+        self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
         abs_path = "/%s" % my_doc.absolute_url(1)
         self.form_data = {'seo_description': 'it is description', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
                         'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1, 'seo_canonical_override:int': 1,
