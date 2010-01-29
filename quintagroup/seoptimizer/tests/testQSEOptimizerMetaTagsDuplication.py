@@ -22,11 +22,11 @@ class TestMetaTagsDuplication(FunctionalTestCase):
     def test_GeneratorMeta(self):
         # Get document without customized canonical url
         abs_path = "/%s" % self.my_doc.absolute_url(1)
-        regen = re.compile('<meta\s+[^>]*name=\"generator\"[^>]*>', re.S|re.M)
 
         # Before product installation
-        html = self.publish(abs_path, self.basic_auth).getBody()
-        lengen = len(regen.findall(html))
+        self.html = self.publish(abs_path, self.basic_auth).getBody()
+        f = re.findall('.*(<meta\s+(?:(?:name="generator"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
+        lengen = len(f)
         self.assert_(lengen==1, "There is %d generator meta tag(s) " \
            "before seoptimizer installation" % lengen)
 
@@ -40,11 +40,11 @@ class TestMetaTagsDuplication(FunctionalTestCase):
     def test_DescriptionMeta(self):
         # Get document without customized canonical url
         abs_path = "/%s" % self.my_doc.absolute_url(1)
-        regen = re.compile('<meta\s+[^>]*name=\"description\"[^>]*>', re.S|re.M)
 
         # Before product installation
-        html = self.publish(abs_path, self.basic_auth).getBody()
-        lendesc = len(regen.findall(html))
+        self.html = self.publish(abs_path, self.basic_auth).getBody()
+        f = re.findall('.*(<meta\s+(?:(?:name="description"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
+        lendesc = len(f)
         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
            "before seoptimizer installation" % lendesc)
 

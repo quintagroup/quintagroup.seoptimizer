@@ -32,24 +32,16 @@ class TestExposeDCMetaTags(FunctionalTestCase):
     def test_exposeDCMetaTagsPropertyOff(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = False)
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m1 = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M)
-        if not m1:
-            m1 = re.match('.*<meta content=".*?" name="DC.format" />', self.html, re.S|re.M)
-        m2 = re.match('.*<meta name="DC.distribution" content=".*?" />', self.html, re.S|re.M)
-        if not m2:
-            m2 = re.match('.*<meta content=".*?" name="DC.distribution" />', self.html, re.S|re.M)
+        m1 = re.match('.*(<meta\s+(?:(?:name="DC.format"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
+        m2 = re.match('.*(<meta\s+(?:(?:name="DC.distribution"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
         m = m1 or m2
         self.assert_(not m, 'DC meta tags avaliable when exposeDCMetaTags=False')
 
     def test_exposeDCMetaTagsPropertyOn(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = True)
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m1 = re.match('.*<meta\ content=".*?"\ name="DC.format"\ />', self.html, re.S|re.M)
-        if not m1:
-            m1 = re.match('.*<meta\ name="DC.format"\ content=".*?"\ />', self.html, re.S|re.M)
-        m2 = re.match('.*<meta\ content=".*?"\ name="DC.type"\ />', self.html, re.S|re.M)
-        if not m2:
-            m2 = re.match('.*<meta\ name="DC.type"\ content=".*?"\ />', self.html, re.S|re.M)
+        m1 = re.match('.*(<meta\s+(?:(?:name="DC.format"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
+        m2 = re.match('.*(<meta\s+(?:(?:name="DC.type"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
         m = m1 and m2
         self.assert_(m, 'DC meta tags not avaliable when createManager=True')
 
