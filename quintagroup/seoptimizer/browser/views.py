@@ -172,7 +172,6 @@ class SEOContext( BrowserView ):
               keywords = subject | local_keywords
           # Global seo keywords overrides Subject and global overrides local seo keywords
           elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 1]:
-              #import pdb;pdb.set_trace()
               keywords = global_keywords
           # Global seo keywords overrides Subject and merge global and local seo keywords
           elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 2]:
