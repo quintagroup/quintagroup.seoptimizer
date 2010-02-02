@@ -45,8 +45,8 @@
 
   <adapter
       for="Products.Archetypes.public.BaseObject"
-      provides=".interfaces.IKeywords"
-      factory=".adapters.AdditionalKeywords"
+      provides=".interfaces.IMetaKeywords"
+      factory=".adapters.MetaKeywordsAdapter"
       />
 
   <adapter

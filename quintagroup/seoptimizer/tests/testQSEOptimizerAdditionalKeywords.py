@@ -48,6 +48,7 @@ class TestAdditionalKeywords(FunctionalTestCase):
         self.assert_('keywords' not in metatags)
 
     def test_listMetaTags_one(self):
+        self.my_doc.setText('<p>foo</p>')
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
         self.my_doc.manage_addProperty('qSEO_keywords', ('foo',), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
@@ -55,6 +56,7 @@ class TestAdditionalKeywords(FunctionalTestCase):
         self.assert_(m, "No 'foo' keyword find")
 
     def test_listMetaTags_two(self):
+        self.my_doc.setText('<p>foo bar</p>')
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
         self.my_doc.manage_addProperty('qSEO_keywords', ('foo', 'bar'), 'lines')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
@@ -69,16 +71,16 @@ class TestAdditionalKeywords(FunctionalTestCase):
         self.assert_('keywords' not in metatags)
 
     def test_additional_keywords_in_listMetaTags_one(self):
+        self.my_doc.setText('<p>foo</p>')
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
-        #self.my_doc.setText('<p>foo</p>') # XXX
         self.sp.additional_keywords = ('foo',)
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="foo"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, "No 'foo' keyword find")
 
     def test_additional_keywords_in_listMetaTags_two(self):
+        self.my_doc.setText('<p>foo bar</p>')
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
-        #self.my_doc.setText('<p>foo bar</p>') # XXX
         self.sp.additional_keywords = ('foo', 'bar')
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="(?:foo|bar),\s*(?:foo|bar)"\s*)){2}/>)',
@@ -86,6 +88,7 @@ class TestAdditionalKeywords(FunctionalTestCase):
         self.assert_(m, "No 'foo, bar' keyword find")
 
     def setup_testing_render_keywords(self):
+        self.my_doc.setText('<p>global local subject</p>')
         self.sp.additional_keywords = (('global',))
         self.my_doc.manage_addProperty('qSEO_keywords', ('local'), 'lines')
         aq_inner(self.my_doc).aq_explicit.setSubject('subject')

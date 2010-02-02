@@ -82,7 +82,7 @@
    <element value="DC.subject Subject"/>
    <element value="DC.distribution seo_distribution"/>
    <element value="description seo_description"/>
-   <element value="keywords seo_keywords"/>
+   <element value="keywords meta_keywords"/>
    <element value="robots seo_robots"/>
    <element value="distribution seo_distribution"/>
   </property>

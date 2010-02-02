@@ -50,7 +50,7 @@
           <legend i18n:domain="plone" i18n:translate="legend_item_properties">
             Item Properties
           </legend>
-  
+
           <div class="field">
             <label i18n:translate="label_page_title_tag" for="seo_title">
               Page Title Tag
@@ -98,7 +98,7 @@
             <label i18n:translate="label_override" for="seo_description_override">
               Override
             </label>
-	    <br />
+            <br />
             <textarea type="text"
                       id="seo_description"
                       name="seo_description"
@@ -130,7 +130,7 @@
             <label i18n:translate="label_override" for="seo_keywords_override">
               Override
             </label>
-	    <br />
+            <br />
             <textarea id="seo_keywords"
                       name="seo_keywords:lines"
                       rows="11"
@@ -188,7 +188,7 @@
             <label i18n:translate="label_override" for="seo_robots_override">
               Override
             </label>
-	    <br />
+            <br />
             <input type="text"
                    id="seo_robots"
                    name="seo_robots"
@@ -217,7 +217,7 @@
             <label i18n:translate="label_override" for="seo_distribution_override">
               Override
             </label>
-	    <br />
+            <br />
             <input type="text"
                    id="seo_distribution"
                    name="seo_distribution"
@@ -249,7 +249,7 @@
             <label i18n:translate="label_override" for="seo_canonical_override">
               Override
             </label>
-	    <br />
+            <br />
             <div tal:content="error">Validation error output</div>
             <input type="text"
                    id="seo_canonical"
@@ -281,7 +281,7 @@
             <label i18n:translate="label_override" for="seo_custommetatags_override">
               Override
             </label>
-	    <br />
+            <br />
             <table class="custom-metatags-table"
                    id="datagridwidget-table-seo_custommetatags"
                    style="width: 100%"

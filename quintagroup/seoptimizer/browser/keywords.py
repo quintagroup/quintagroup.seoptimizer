@@ -22,44 +22,11 @@ class ValidateSEOKeywordsView(BrowserView):
         else:
             return ts.utranslate(None, _(u'Keywords list is empty!'), context=self.context)
         # request html page of context object
-        url = '%s?qseo_without_additional_keywords=1' % self.context.absolute_url()
-        #try:
-            #page = urllib.urlopen(url)
-        #except IOError:
-            #return _('Could not find requested page')
+        url = '%s?without_metatag_keywords=1' % self.context.absolute_url()
 
-        #page_html = page.read()
-        #if not page_html:
-            #return _('Page is empty')
-
-        # extract words from body from html page
-
-        # this block work only with valid html
-        #doc = minidom.parseString(page_html)
-        #rootNode = doc.documentElement
-        #bodies = rootNode.getElementsByTagName('body')
-        #if len(bodies) > 0:
-            #body = bodies[0]
-        #else:
-            #return _(u'Invalid page html')
-        #page_words = []
-        #self.walkTextNodes(body, page_words)
-
-        # this block work even with invalid html
-        #pattern = re.compile('<\s*body[^>]*>(.*?)<\s*/\s*body\s*>', re.S|re.M|re.I)
-        #search = pattern.search(page_html)
-        #if search:
-            #body_html = search.group(1)
-        #else:
-            #return _('Invalid html code on page')
-
-        #page_text = self.strip_tags(body_html)
-        #page_words = page_text.lower().split()
-
-        # extract words from url page using lynx browser
+        # extract words from url page using lynx browser (test page by 'url' randered without metatag keywords)
         page_text = commands.getoutput('lynx --dump --nolist %s' % url).lower()
         if page_text and page_text != 'sh: lynx: command not found':
-            #page_words = page_text.lower().split()
             page_text = page_text.decode('utf8')
         else:
             return _(u'Could not find lynx browser!')

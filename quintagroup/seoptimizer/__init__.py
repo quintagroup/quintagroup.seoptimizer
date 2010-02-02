@@ -7,7 +7,7 @@ from DateTime import DateTime
 
 from Products.CMFCore.utils import getToolByName
 
-from quintagroup.seoptimizer.interfaces import IKeywords, IMappingMetaTags
+from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
 from quintagroup.seoptimizer.util import SortedDict
 
 SeoptimizerMessageFactory = MessageFactory('quintagroup.seoptimizer')
@@ -53,11 +53,11 @@ if _present:
             metadata_names = mapping_metadata
 
         for key, accessor in metadata_names.items():
-            if accessor == 'seo_keywords':
-                # Set the additional matching keywords, if any
-                adapter = IKeywords(context, None)
+            if accessor == 'meta_keywords':
+                # Render all the existing keywords for the current content type
+                adapter = IMetaKeywords(context, None)
                 if adapter is not None:
-                    keywords = adapter.listKeywords()
+                    keywords = adapter.getMetaKeywords()
                     if keywords:
                         result['keywords'] = keywords
                 continue

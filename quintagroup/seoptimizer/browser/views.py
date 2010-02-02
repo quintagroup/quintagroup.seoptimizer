@@ -140,8 +140,9 @@ class SEOContext( BrowserView ):
         html_comment = self.getSEOProperty( 'qSEO_html_comment' )
         return html_comment and html_comment or '' 
 
-    def seo_keywords( self ):
-        """ Generate Keywords from SEO properties.
+    def meta_keywords( self ):
+        """ Generate Meta Keywords from SEO properties (global and local) with Subject,
+            depending on the options in configlet.
         """
         prop_name = 'qSEO_keywords'
         accessor = 'Subject'
@@ -186,6 +187,26 @@ class SEOContext( BrowserView ):
               keywords = subject
         else:
             keywords = subject
+
+        return keywords
+
+    def seo_keywords( self ):
+        """ Generate SEO Keywords from SEO properties (global merde local).
+        """
+        prop_name = 'qSEO_keywords'
+        context = aq_inner(self.context)
+        keywords = Set([])
+        pprops = getToolByName(context, 'portal_properties')
+        sheet = getattr(pprops, 'seo_properties', None)
+
+        if sheet:
+            settings_use_keywords_sg = sheet.getProperty('settings_use_keywords_sg')
+            settings_use_keywords_lg = sheet.getProperty('settings_use_keywords_lg')
+            global_keywords = Set(sheet.getProperty('additional_keywords', None))
+            local_keywords = Set(context.getProperty(prop_name, None))
+            keywords = global_keywords | local_keywords
+        else:
+            keywords = ''
 
         return keywords
 

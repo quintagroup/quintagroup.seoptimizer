@@ -26,7 +26,7 @@ class TestResponse(FunctionalTestCase):
         self.sp.manage_changeProperties(**GLOBAL_CUSTOM_METATAGS)
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
         abs_path = "/%s" % my_doc.absolute_url(1)
-        self.form_data = {'seo_description': 'it is description', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
+        self.form_data = {'seo_description': 'it is description, test keyword1', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
                         'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1, 'seo_canonical_override:int': 1,
                         'seo_keywords:list': 'keyword1', 'seo_html_comment': 'no comments',
                         'seo_title_override:int': 1, 'seo_title': 'hello world', 'seo_html_comment_override:int': 1,
@@ -64,7 +64,7 @@ class TestResponse(FunctionalTestCase):
         self.assert_(m, 'Title is not set correctly, perhaps it is duplicated with plone site title')
 
     def testDescription(self):
-        m = re.match('.*(<meta\s+(?:(?:name="description"\s*)|(?:content="it is description"\s*)){2}/>)', self.html, re.S|re.M)
+        m = re.match('.*(<meta\s+(?:(?:name="description"\s*)|(?:content="it is description, test keyword1"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Description not set in')
 
     def testKeywords(self):
@@ -87,6 +87,7 @@ class TestResponse(FunctionalTestCase):
         mtop = self.sp.getProperty('metatags_order')
         metatags_order = [t.split(' ')[0] for t in mtop if len(t.split(' '))==2 and t.split(' ')[0] in VIEW_METATAGS]
         m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
+        #m = re.match('.*'.join(['.*(<meta\s+(?:(?:name="%s"\s*)|(?:content=".*"\s*)){2}/>)' %t for t in metatags_order]), self.html, re.S|re.M)
         self.assert_(m, "Meta tags order not supported.")
 
         mtop = list(mtop)

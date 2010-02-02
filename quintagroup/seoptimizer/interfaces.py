@@ -1,9 +1,9 @@
 from zope.interface import Interface
 
-class IKeywords(Interface):
+class IMetaKeywords(Interface):
     """Handle the available keywords.
     """
-    def listKeywords():
+    def getMetaKeywords():
         """Returns all the existing keywords for the current content type.
         """
 
