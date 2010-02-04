@@ -79,14 +79,14 @@
 
           <div class="field">
             <input type="checkbox"
-                   id="usageKeywordsInMetatags"
-                   name="usageKeywordsInMetatags"
-                   tal:attributes="checked view/getUsageKeywordsInMetatags"/>
-            <label for="usageKeywordsInMetatags" i18n:translate="label_usage_keywords_in_metatags">
-                Usage of keywords, found on the page, in metatags.
+                   id="filterKeywordsByContent"
+                   name="filterKeywordsByContent"
+                   tal:attributes="checked view/getFilterKeywordsByContent"/>
+            <label for="filterKeywordsByContent" i18n:translate="label_filter_keywords_by_content">
+                Filter keywords by content.
             </label>
-            <div class="formHelp" i18n:translate="help_usage_keywords_in_metatags">
-                Usage of keywords, found on the page, in metatags.
+            <div class="formHelp" i18n:translate="help_filter_keywords_by_content">
+                Usage metatags keywords, which present in content.
               </div>
           </div>
 
