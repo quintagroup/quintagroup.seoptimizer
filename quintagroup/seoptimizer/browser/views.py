@@ -188,7 +188,7 @@ class SEOContext( BrowserView ):
         else:
             keywords = subject
 
-        return keywords
+        return tuple(keywords)
 
     def seo_keywords( self ):
         """ Generate SEO Keywords from SEO properties (global merde local).
@@ -207,8 +207,7 @@ class SEOContext( BrowserView ):
             keywords = global_keywords | local_keywords
         else:
             keywords = ''
-
-        return keywords
+        return tuple(keywords)
 
     def seo_canonical( self ):
         """ Generate canonical URL from SEO properties.
