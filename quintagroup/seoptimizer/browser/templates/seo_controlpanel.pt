@@ -77,14 +77,18 @@
               </div>
           </div>
 
-<!--          <div class="field">
-              <label for="settingsUseKeywords" i18n:translate="label_settings_use_keywords">
-                  Settings the use of keywords.
-              </label>
-              <div class="formHelp" i18n:translate="help_settings_use_keywords">
-                  Settings the use of keywords.
+          <div class="field">
+            <input type="checkbox"
+                   id="usageKeywordsInMetatags"
+                   name="usageKeywordsInMetatags"
+                   tal:attributes="checked view/getUsageKeywordsInMetatags"/>
+            <label for="usageKeywordsInMetatags" i18n:translate="label_usage_keywords_in_metatags">
+                Usage of keywords, found on the page, in metatags.
+            </label>
+            <div class="formHelp" i18n:translate="help_usage_keywords_in_metatags">
+                Usage of keywords, found on the page, in metatags.
               </div>
-          </div>-->
+          </div>
 
           <div class="field">
               <label for="settingsUseKeywordsSG" i18n:translate="label_settings_use_keywords_sg">

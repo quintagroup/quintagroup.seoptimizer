@@ -23,9 +23,10 @@ class MetaKeywordsAdapter(object):
         seo_props = getToolByName(portal_props, 'seo_properties', None)
         seo_context = queryMultiAdapter((self.context, request), name='seo_context')
         if seo_context:
+            usage_keywords_in_metatags = seo_props.getProperty('usage_keywords_in_metatags', None)
             meta_keywords = list(seo_context.meta_keywords())
             is_test = self.context.REQUEST.get('without_metatag_keywords', None)
-            if meta_keywords and is_test is None:
+            if usage_keywords_in_metatags and meta_keywords and is_test is None:
                 # extract words from url page using lynx browser (test page randered without metatag keywords)
                 text = commands.getoutput('lynx --dump --nolist %s?without_metatag_keywords=1' % self.context.absolute_url()).lower()
 

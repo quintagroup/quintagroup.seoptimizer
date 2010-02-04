@@ -277,6 +277,12 @@ class SEOControlPanel( ControlPanelView ):
         seo = self.portal_properties.seo_properties
         return seo.getProperty('additional_keywords')
 
+    def getUsageKeywordsInMetatags( self ):
+        """ Get values from usage_keywords_in_metatags property in seo_properties.
+        """
+        seo = self.portal_properties.seo_properties
+        return seo.getProperty('usage_keywords_in_metatags')
+
     def createMultiColumnList( self ):
         """
         """
@@ -298,6 +304,7 @@ class SEOControlPanel( ControlPanelView ):
         additionalKeywords = request.get('additionalKeywords', [])
         default_custom_metatags = request.get('default_custom_metatags', [])
         metatags_order = request.get('metatags_order', [])
+        usageKeywordsInMetatags = request.get('usageKeywordsInMetatags', None)
         settingsUseKeywordsSG = int(request.get('settingsUseKeywordsSG', 1))
         settingsUseKeywordsLG = int(request.get('settingsUseKeywordsLG', 1))
 
@@ -313,6 +320,7 @@ class SEOControlPanel( ControlPanelView ):
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
             seo_props.manage_changeProperties(metatags_order=metatags_order)
             seo_props.manage_changeProperties(content_types_seoprops_enabled=content_types_seoprops_enabled)
+            seo_props.manage_changeProperties(usage_keywords_in_metatags=usageKeywordsInMetatags)
             seo_props.manage_changeProperties(settings_use_keywords_sg=settingsUseKeywordsSG)
             seo_props.manage_changeProperties(settings_use_keywords_lg=settingsUseKeywordsLG)
 
