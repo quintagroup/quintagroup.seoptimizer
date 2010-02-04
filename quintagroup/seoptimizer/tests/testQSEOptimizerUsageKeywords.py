@@ -3,7 +3,7 @@ from Acquisition import aq_inner
 from base import getToolByName, FunctionalTestCase, newSecurityManager
 from config import *
 
-class TestAdditionalKeywords(FunctionalTestCase):
+class TestUsageKeywords(FunctionalTestCase):
 
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
@@ -139,5 +139,5 @@ class TestAdditionalKeywords(FunctionalTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestAdditionalKeywords))
+    suite.addTest(makeSuite(TestUsageKeywords))
     return suite
