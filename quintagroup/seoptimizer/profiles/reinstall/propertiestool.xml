@@ -21,7 +21,7 @@
    <element value="distribution seo_distribution"/>
   </property>
   <property name="filter_keywords_by_content" type="boolean">True</property>
-  <property name="settings_use_keywords_sg" type="int">1</property>
-  <property name="settings_use_keywords_lg" type="int">1</property>
+  <property name="settings_use_keywords_sg" type="int">3</property>
+  <property name="settings_use_keywords_lg" type="int">2</property>
  </object>
 </object>

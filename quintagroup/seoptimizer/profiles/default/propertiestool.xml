@@ -65,8 +65,8 @@
   </property>
   <property name="custom_script" type="text" purge='False'/>
   <property name="additional_keywords" type="lines" purge='False'/>
-  <property name="settings_use_keywords_sg" type="int">1</property>
-  <property name="settings_use_keywords_lg" type="int">1</property>
+  <property name="settings_use_keywords_sg" type="int">3</property>
+  <property name="settings_use_keywords_lg" type="int">2</property>
   <property name="default_custom_metatags" type="lines" purge='False'/>
   <property name="metatags_order" type="lines" purge='False'>
    <element value="DC.publisher Publisher"/>

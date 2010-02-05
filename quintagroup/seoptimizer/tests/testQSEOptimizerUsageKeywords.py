@@ -24,8 +24,8 @@ class TestUsageKeywords(FunctionalTestCase):
         self.my_doc = self.portal['my_doc']
 
     def test_default_values_radiobutton_in_configlet(self):
-        self.assertEqual(self.sp.getProperty('settings_use_keywords_sg', 0), 1)
-        self.assertEqual(self.sp.getProperty('settings_use_keywords_lg', 0), 1)
+        self.assertEqual(self.sp.getProperty('settings_use_keywords_sg', 0), 3)
+        self.assertEqual(self.sp.getProperty('settings_use_keywords_lg', 0), 2)
 
     def test_changes_using_keywords_in_configlet(self):
         for sg, lg in ((1, 1), (1, 2), (2, 1), (2, 2), (3, 1), (3, 2)):
