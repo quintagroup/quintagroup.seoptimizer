@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quintagroup.seoptimizer\n"
-"POT-Creation-Date: 2009-12-30 17:33+0000\n"
+"POT-Creation-Date: 2010-02-05 14:08+0000\n"
 "PO-Revision-Date: 2010-01-06 12:27+0300\n"
 "Last-Translator: Olha <olha.pelishok@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: quintagroup.seoptimizer\n"
 
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:65
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:32
 msgid "Could not find lynx browser!"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgid "Keywords list is empty!"
 msgstr "Список ключових слів порожній!"
 
 #. Default: "Canonical URL mast be in ${pdomain} domain."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:329
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:395
 msgid "canonical_msg"
 msgstr "Canonical URL повинен знаходитись в домені \"${pdomain}\"."
 
@@ -36,7 +36,7 @@ msgid "description_edit_seo_properties"
 msgstr ""
 
 #. Default: "Select content types that will have SEO properties enabled."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:84
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:153
 msgid "description_seo_content_types"
 msgstr "Виберіть типи вмісту, для яких будете прописувати SEO властивості."
 
@@ -60,18 +60,23 @@ msgstr ""
 msgid "help_default_custom_metatags"
 msgstr ""
 
-#. Default: "Fill in meta tags order (one per line) which will appear on qseo_properties edit tab. Example: \"metaname accessor\"."
+#. Default: "Controls use of meta keywords according to their presence in content."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:88
+msgid "help_filter_keywords_by_content"
+msgstr ""
+
+#. Default: "Fill in meta tags (one per line) in the order in which they will appear on site source pages. Example: \"metaname accessor\"."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:55
 msgid "help_metatags_order"
 msgstr ""
 
 #. Default: "Specify your canonical URL. If your site has identical or vastly similar content that's accessible through multiple URLs, this format provides you with more control over the URL returned in search results."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:237
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:238
 msgid "help_seo_canonical"
 msgstr ""
 
 #. Default: "Here you can manage your custom meta tags. Specify local Meta Tags parameters to be added to the global Meta Tags. If metacontent field is empty, then a meta tag will not be present on this page."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:270
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:271
 msgid "help_seo_custommetatags"
 msgstr ""
 
@@ -80,23 +85,23 @@ msgstr ""
 msgid "help_seo_description"
 msgstr ""
 
-#. Default: "Distribution meta tag to designate time and area disribution of the document."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:206
+#. Default: "Distribution meta tag to designate time and area distribution of the document."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:207
 msgid "help_seo_distribution"
 msgstr ""
 
 #. Default: "Comments embedded into HTML header."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:150
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:151
 msgid "help_seo_html_comment"
 msgstr ""
 
-#. Default: "Keywords, the page will be indexed with. <strong>Enter each keyword in separate line, please.</strong> Though the relevance of listing meta keywords is of questionable value now, it is useful to set meta keywords for pages - for furture reference."
+#. Default: "Keywords, the page will be indexed with. <strong>Enter each keyword in separate line, please.</strong> Though the relevance of listing meta keywords is of questionable value now, it is useful to set meta keywords for pages - for future reference. Use 'Check Keywords' button to check whether words you entered in this block as SEO keywords are present in content."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:116
 msgid "help_seo_keywords"
 msgstr ""
 
 #. Default: "Robots meta tag value. Allows or denies indexing, following links, etc. for spiders indexing your content."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:177
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:178
 msgid "help_seo_robots"
 msgstr ""
 
@@ -105,23 +110,33 @@ msgstr ""
 msgid "help_seo_title"
 msgstr ""
 
+#. Default: "Controls local and global SEO keywords behaviour."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:129
+msgid "help_settings_use_keywords_lg"
+msgstr ""
+
+#. Default: "Controls Plone categories (also known as keywords or tags) and global SEO keywords behaviour."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:97
+msgid "help_settings_use_keywords_sg"
+msgstr ""
+
 #. Default: "Additional keywords that should be added to the content types."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:66
 msgid "label_additional_keywords"
 msgstr "Додаткові ключові слова, потрібно додати до типів вмісту."
 
 #. Default: "Canonical URL"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:234
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:235
 msgid "label_canonical_tag"
 msgstr ""
 
 #. Default: "Content Types"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:82
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:151
 msgid "label_content_type_title"
 msgstr "Типи вмісту"
 
 #. Default: "Custom Meta Tags"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:267
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:268
 msgid "label_custom_metatags"
 msgstr ""
 
@@ -131,12 +146,17 @@ msgid "label_default_custom_metatags"
 msgstr ""
 
 #. Default: "Distribution Tag"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:203
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:204
 msgid "label_distribution_tag"
 msgstr ""
 
+#. Default: "Filter keywords by their availability in content."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:85
+msgid "label_filter_keywords_by_content"
+msgstr ""
+
 #. Default: "HTML Comment"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:147
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:148
 msgid "label_html_comment"
 msgstr ""
 
@@ -166,8 +186,18 @@ msgid "label_page_title_tag"
 msgstr ""
 
 #. Default: "Robot Tag"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:174
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:175
 msgid "label_robot_tag"
+msgstr ""
+
+#. Default: "Global SEO keywords vs local SEO keywords."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:126
+msgid "label_settings_use_keywords_lg"
+msgstr ""
+
+#. Default: "Plone categories and Global SEO keywords."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:94
+msgid "label_settings_use_keywords_sg"
 msgstr ""
 
 #. Default: "Up to Plone Setup"
@@ -176,7 +206,7 @@ msgid "label_up_to_plone_setup"
 msgstr "Вгору до Налаштувань Plone"
 
 #. Default: "Number of keywords at page:\n${found}\n${missing}"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:84
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:51
 msgid "number_keywords"
 msgstr ""
 "Кількість знайдених ключових слів на сторінці:\n"
@@ -184,7 +214,7 @@ msgstr ""
 "${missing}"
 
 #. Default: "Content SEO properties have been saved."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:417
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:500
 msgid "seoproperties_saved"
 msgstr "SEO властивості збереженно."
 
