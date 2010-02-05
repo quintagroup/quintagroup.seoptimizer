@@ -83,19 +83,19 @@
                    name="filterKeywordsByContent"
                    tal:attributes="checked view/getFilterKeywordsByContent"/>
             <label for="filterKeywordsByContent" i18n:translate="label_filter_keywords_by_content">
-                Filter keywords by content.
+                Filter keywords by their availability in content.
             </label>
             <div class="formHelp" i18n:translate="help_filter_keywords_by_content">
-                Usage metatags keywords, which present in content.
+                Controls use of meta keywords according to their presence in content.
               </div>
           </div>
 
           <div class="field">
               <label for="settingsUseKeywordsSG" i18n:translate="label_settings_use_keywords_sg">
-                  Settings the use Subject and global seo keywords.
+                  Plone categories and Global SEO keywords.
               </label>
               <div class="formHelp" i18n:translate="help_settings_use_keywords_sg">
-                  Settings the use Subject and global seo keywords.
+                  Controls Plone categories (also known as keywords or tags) and global SEO keywords behaviour.
               </div>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -103,7 +103,7 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_sg()==1"/>
               <label for=""
-                     tal:attributes="for string:sg1">Subject overrides global seo keywords</label>
+                     tal:attributes="for string:sg1">Plone categories override global SEO keywords</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -111,7 +111,7 @@
                                       value string:2;
                                       checked python:view.select_settings_use_keywords_sg()==2"/>
               <label for=""
-                     tal:attributes="for string:sg2">Global seo keywords override Subject</label>
+                     tal:attributes="for string:sg2">Global SEO keywords override Plone categories</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -119,15 +119,15 @@
                                       value string:3;
                                       checked python:view.select_settings_use_keywords_sg()==3"/>
               <label for=""
-                     tal:attributes="for string:sg3">Merge Subject and global seo keywords</label>
+                     tal:attributes="for string:sg3">Merge Plone categories and global SEO keywords</label>
           </div>
 
           <div class="field">
               <label for="settingsUseKeywordsLG" i18n:translate="label_settings_use_keywords_lg">
-                  Settings the use local and global seo keywords.
+                  Global SEO keywords vs local SEO keywords.
               </label>
               <div class="formHelp" i18n:translate="help_settings_use_keywords_lg">
-                  Settings the use local and global seo keywords.
+                  Controls local and global SEO keywords behaviour.
               </div>
               <input  type="radio"
                       name="settingsUseKeywordsLG"
@@ -135,7 +135,7 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_lg()==1"/>
               <label for=""
-                     tal:attributes="for string:lg1">Global override local seo keywords</label>
+                     tal:attributes="for string:lg1">Global SEO keywords override local SEO keywords</label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsLG"
@@ -143,7 +143,7 @@
                                       value string:2;
                                       checked python:view.select_settings_use_keywords_lg()==2"/>
               <label for=""
-                     tal:attributes="for string:lg2">Merge global and local seo keywords</label>
+                     tal:attributes="for string:lg2">Merge global and local SEO keywords</label>
           </div>
 
           <fieldset class="contentTypes"

@@ -118,7 +118,8 @@
               <strong>Enter each keyword in separate line, please.</strong>
               Though the relevance of listing meta keywords is of 
               questionable value now, it is useful to set meta keywords for
-              pages - for future reference.
+              pages - for future reference. Use 'Check Keywords' button to check whether 
+              words you entered in this block as SEO keywords are present in content.
             </div>
             <input type="checkbox"
                    id="seo_keywords_override"
