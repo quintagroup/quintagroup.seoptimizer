@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-05 14:08+0000\n"
+"POT-Creation-Date: 2010-02-05 14:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 msgid "help_seo_html_comment"
 msgstr ""
 
-#. Default: "Keywords, the page will be indexed with. <strong>Enter each keyword in separate line, please.</strong> Though the relevance of listing meta keywords is of questionable value now, it is useful to set meta keywords for pages - for future reference. Use 'Check Keywords' button to check whether words you entered in this block as SEO keywords are present in content."
+#. Default: "Keywords, the page will be indexed with. <strong>Enter each keyword in separate line, please.</strong> Though the relevance of listing meta keywords is of questionable value now, it is useful to set meta keywords for pages - for future reference.<br />Use 'Check Keywords' button to check whether words you entered in this block as SEO keywords are present in content."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:116
 msgid "help_seo_keywords"
 msgstr ""
