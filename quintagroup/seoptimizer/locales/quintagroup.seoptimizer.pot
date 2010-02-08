@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-05 14:53+0000\n"
+"POT-Creation-Date: 2010-02-08 13:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "help_seo_title"
 msgstr ""
 
-#. Default: "Controls local and global SEO keywords behaviour."
+#. Default: "Controls global and local SEO keywords behaviour."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:129
 msgid "help_settings_use_keywords_lg"
 msgstr ""
@@ -190,12 +190,12 @@ msgstr ""
 msgid "label_robot_tag"
 msgstr ""
 
-#. Default: "Global SEO keywords vs local SEO keywords."
+#. Default: "Settings to control global SEO keywords vs local SEO keywords behaviour."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:126
 msgid "label_settings_use_keywords_lg"
 msgstr ""
 
-#. Default: "Plone categories and Global SEO keywords."
+#. Default: "Settings to control Plone categories and global SEO keywords behaviour."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:94
 msgid "label_settings_use_keywords_sg"
 msgstr ""

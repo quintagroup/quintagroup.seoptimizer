@@ -1,10 +1,19 @@
 Changelog
 =========
 
-2.2.1 (unreleased)
+2.3.0 (unreleased)
 ------------------
 
 - Added condition install or reinstall package
+  [liebster]
+
+- Added filter keywords by their availability in content
+  [liebster]
+
+- Added settings to control Plone categories and global SEO keywords behaviour
+  [liebster]
+
+- Added settings to control Plone global SEO keywords vs local SEO keywords behaviour
   [liebster]
 
 
