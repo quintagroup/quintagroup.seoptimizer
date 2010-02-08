@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.3.0 (unreleased)
+2.3.0 (2010-02-08)
 ------------------
 
 - Added condition install or reinstall package
