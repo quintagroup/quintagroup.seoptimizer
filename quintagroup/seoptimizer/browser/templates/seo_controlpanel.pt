@@ -12,12 +12,12 @@
         <a href="" class="link-parent"
            tal:attributes="href string: $portal_url/plone_control_panel"
            i18n:translate="label_up_to_plone_setup">
-           Up to Plone Setup
+            Up to Plone Setup
         </a>
-        <div class="documentDescription">
-           You can select what content types are
-           qSEOptimizer-enabled, and control if Dublin Core metatags
-           are exposed in the header of content pages.
+        <div class="documentDescription" i18n:translate="seo_configlet_description">
+            You can select what content types are
+            qSEOptimizer-enabled, and control if Dublin Core metatags
+            are exposed in the header of content pages.
         </div>
         <form name="edit_form" action="." method="post" enctype="multipart/form-data"
               tal:attributes="action string:${context/absolute_url}/@@seo-controlpanel" >
@@ -26,11 +26,13 @@
                    id="exposeDCMetaTags"
                    name="exposeDCMetaTags"
                    tal:attributes="checked view/getExposeDCMetaTags"/>
-            <label for="exposeDCMetaTags">Expose <abbr title="Dublin Core">DC</abbr> meta tags</label>
+            <label for="exposeDCMetaTags" i18n:translate="label_exposeDCMetaTags">
+                Expose <abbr title="Dublin Core">DC</abbr> meta tags
+            </label>
             <div class="formHelp" i18n:translate="description_seo_dc_metatags">
-               Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
-               header. They include DC.description, DC.type,
-               DC.format, DC.creator and others.
+                Controls if <abbr title="Dublin Core">DC</abbr> metatags are exposed to page
+                header. They include DC.description, DC.type,
+                DC.format, DC.creator and others.
             </div>
           </div>
 
@@ -103,7 +105,9 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_sg()==1"/>
               <label for=""
-                     tal:attributes="for string:sg1">Plone categories override global SEO keywords</label>
+                     tal:attributes="for string:sg1" i18n:translate="label_subject_override_seoglobal">
+                  Plone categories override global SEO keywords
+              </label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -111,7 +115,9 @@
                                       value string:2;
                                       checked python:view.select_settings_use_keywords_sg()==2"/>
               <label for=""
-                     tal:attributes="for string:sg2">Global SEO keywords override Plone categories</label>
+                     tal:attributes="for string:sg2" i18n:translate="label_seoglobal_override_subject">
+                  Global SEO keywords override Plone categories
+              </label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsSG"
@@ -119,7 +125,9 @@
                                       value string:3;
                                       checked python:view.select_settings_use_keywords_sg()==3"/>
               <label for=""
-                     tal:attributes="for string:sg3">Merge Plone categories and global SEO keywords</label>
+                     tal:attributes="for string:sg3" i18n:translate="label_merge_subject_and_seoglobal">
+                  Merge Plone categories and global SEO keywords
+              </label>
           </div>
 
           <div class="field">
@@ -135,7 +143,9 @@
                                       value string:1;
                                       checked python:view.select_settings_use_keywords_lg()==1"/>
               <label for=""
-                     tal:attributes="for string:lg1">Global SEO keywords override local SEO keywords</label>
+                     tal:attributes="for string:lg1" i18n:translate="label_seoglobal_override_seolocal">
+                  Global SEO keywords override local SEO keywords
+              </label>
               <br/>
               <input  type="radio"
                       name="settingsUseKeywordsLG"
@@ -143,7 +153,9 @@
                                       value string:2;
                                       checked python:view.select_settings_use_keywords_lg()==2"/>
               <label for=""
-                     tal:attributes="for string:lg2">Merge global and local SEO keywords</label>
+                     tal:attributes="for string:lg2" i18n:translate="label_merge_seoglobal_and_seolocal">
+                  Merge global and local SEO keywords
+              </label>
           </div>
 
           <fieldset class="contentTypes"

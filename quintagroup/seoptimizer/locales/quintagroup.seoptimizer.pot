@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-08 13:09+0000\n"
+"POT-Creation-Date: 2010-02-08 16:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,12 +36,12 @@ msgid "description_edit_seo_properties"
 msgstr ""
 
 #. Default: "Select content types that will have SEO properties enabled."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:153
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:165
 msgid "description_seo_content_types"
 msgstr ""
 
 #. Default: "Controls if <abbr title=\"Dublin Core\">DC</abbr> metatags are exposed to page header. They include DC.description, DC.type, DC.format, DC.creator and others."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:30
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:32
 msgid "description_seo_dc_metatags"
 msgstr ""
 
@@ -51,22 +51,22 @@ msgid "heading_edit_seo_properties"
 msgstr ""
 
 #. Default: "Use this field when you want that your content types receive additional keywords from the ones you manually specify. Enter one keyword per line."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:69
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:71
 msgid "help_additional_keywords"
 msgstr ""
 
 #. Default: "Fill in custom metatag names (one per line) which will appear on qseo_properties edit tab. Example: \"metaname|metacontent\" or \"metaname\"."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:41
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:43
 msgid "help_default_custom_metatags"
 msgstr ""
 
 #. Default: "Controls use of meta keywords according to their presence in content."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:88
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:90
 msgid "help_filter_keywords_by_content"
 msgstr ""
 
 #. Default: "Fill in meta tags (one per line) in the order in which they will appear on site source pages. Example: \"metaname accessor\"."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:55
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:57
 msgid "help_metatags_order"
 msgstr ""
 
@@ -111,17 +111,17 @@ msgid "help_seo_title"
 msgstr ""
 
 #. Default: "Controls global and local SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:129
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:137
 msgid "help_settings_use_keywords_lg"
 msgstr ""
 
 #. Default: "Controls Plone categories (also known as keywords or tags) and global SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:97
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:99
 msgid "help_settings_use_keywords_sg"
 msgstr ""
 
 #. Default: "Additional keywords that should be added to the content types."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:66
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:68
 msgid "label_additional_keywords"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgid "label_canonical_tag"
 msgstr ""
 
 #. Default: "Content Types"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:151
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:163
 msgid "label_content_type_title"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgid "label_custom_metatags"
 msgstr ""
 
 #. Default: "Default custom metatags."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:38
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:40
 msgid "label_default_custom_metatags"
 msgstr ""
 
@@ -150,14 +150,29 @@ msgstr ""
 msgid "label_distribution_tag"
 msgstr ""
 
+#. Default: "Expose <abbr title=\"Dublin Core\">DC</abbr> meta tags"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:29
+msgid "label_exposeDCMetaTags"
+msgstr ""
+
 #. Default: "Filter keywords by their availability in content."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:85
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:87
 msgid "label_filter_keywords_by_content"
 msgstr ""
 
 #. Default: "HTML Comment"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:148
 msgid "label_html_comment"
+msgstr ""
+
+#. Default: "Merge global and local SEO keywords"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:155
+msgid "label_merge_seoglobal_and_seolocal"
+msgstr ""
+
+#. Default: "Merge Plone categories and global SEO keywords"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:127
+msgid "label_merge_subject_and_seoglobal"
 msgstr ""
 
 #. Default: "Meta Description Tag"
@@ -171,7 +186,7 @@ msgid "label_meta_keywords_tag"
 msgstr ""
 
 #. Default: "Meta tags order in the page."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:52
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:54
 msgid "label_metatags_order"
 msgstr ""
 
@@ -190,14 +205,29 @@ msgstr ""
 msgid "label_robot_tag"
 msgstr ""
 
+#. Default: "Global SEO keywords override local SEO keywords"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:145
+msgid "label_seoglobal_override_seolocal"
+msgstr ""
+
+#. Default: "Global SEO keywords override Plone categories"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:117
+msgid "label_seoglobal_override_subject"
+msgstr ""
+
 #. Default: "Settings to control global SEO keywords vs local SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:126
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:134
 msgid "label_settings_use_keywords_lg"
 msgstr ""
 
 #. Default: "Settings to control Plone categories and global SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:94
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:96
 msgid "label_settings_use_keywords_sg"
+msgstr ""
+
+#. Default: "Plone categories override global SEO keywords"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:107
+msgid "label_subject_override_seoglobal"
 msgstr ""
 
 #. Default: "Up to Plone Setup"
@@ -208,6 +238,11 @@ msgstr ""
 #. Default: "Number of keywords at page:\n${found}\n${missing}"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/keywords.py:51
 msgid "number_keywords"
+msgstr ""
+
+#. Default: "You can select what content types are qSEOptimizer-enabled, and control if Dublin Core metatags are exposed in the header of content pages."
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:17
+msgid "seo_configlet_description"
 msgstr ""
 
 #. Default: "Content SEO properties have been saved."
