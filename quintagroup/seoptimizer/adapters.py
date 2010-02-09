@@ -6,12 +6,8 @@ from zope.component import queryMultiAdapter
 
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import getToolByName
-from Products.ATContentTypes.interface import IATContentType
 
 from quintagroup.seoptimizer.util import SortedDict
-from quintagroup.seoptimizer.config import HAS_CANONICAL_PATH
-from quintagroup.seoptimizer.interfaces import ICanonicalPath
 from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
 
 
@@ -75,8 +71,6 @@ class canonicalPathAdapter(object):
     """Adapts base content to canonical path, with taking into consideration
        SEO canonical path value.
     """
-    adapts(IATContentType)
-    implements(ICanonicalPath)
 
     def __init__(self, context):
         self.context = context

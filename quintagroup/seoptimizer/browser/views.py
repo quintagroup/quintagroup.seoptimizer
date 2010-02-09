@@ -208,7 +208,7 @@ class SEOContext( BrowserView ):
         """ Generate canonical URL from SEO properties.
         """
         purl = getToolByName(self.context, 'portal_url')()
-        canpath = queryAdapter(self.context, interfaces.ICanonicalPath)
+        canpath = queryAdapter(self.context, interfaces.ISEOCanonicalPath)
         return purl + canpath.canonical_path()
 
 
@@ -488,7 +488,7 @@ class SEOContextPropertiesView( BrowserView ):
                 state = _('seoproperties_saved', default=u'Content SEO properties have been saved.')
                 context.plone_utils.addPortalMessage(state)
                 kwargs = {'modification_date' : DateTime()} 
-                context.plone_utils.contentEdit(context, **kwargs) 
+                context.plone_utils.contentEdit(context, **kwargs)
                 return request.response.redirect(self.context.absolute_url())
             context.plone_utils.addPortalMessage(state, 'error')
         return self.template()

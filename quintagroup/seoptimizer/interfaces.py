@@ -14,13 +14,10 @@ class IMappingMetaTags(Interface):
         """Returns mapping {meta_name:accssesor} all the meta tags.
         """
 
-try:
-    from quintagroup.canonicalpath.interfaces import ICanonicalPath
-except:
-    class ICanonicalPath(Interface):
-        """canonical_path provider interface
-        """
+class ISEOCanonicalPath(Interface):
+    """canonical_path provider interface
+    """
 
-        def canonical_path():
-            """Return canonical path for the object
-            """
+    def canonical_path():
+        """Return canonical path for the object
+        """
