@@ -29,26 +29,23 @@ With that in place, we can go to the portal front page and log in. We will
 do this using the default user from PloneTestCase:
 
     >>> from Products.PloneTestCase.setup import portal_owner, default_password
-
     >>> browser.open(portal_url)
 
 We have the login portlet, so let's use that.
 
-    >>> browser.getControl(name='__ac_name').value = portal_owner
-    >>> browser.getControl(name='__ac_password').value = default_password
-    >>> browser.getControl(name='submit').click()
-
-Here, we set the value of the fields on the login form and then simulate a
-submit click.
-
-We then test that we are still on the portal front page:
-    >>> browser.url == portal_url
-    True
-
-And we ensure that we get the friendly logged-in message:
-
+    >>> browser.open('http://nohost/plone/login_form')
+    >>> browser.getLink('Log in').click()
+    >>> browser.url
+    'http://nohost/plone/login_form'
+    >>> browser.getControl('Login Name').value = portal_owner
+    >>> browser.getControl('Password').value = default_password
+    >>> browser.getControl('Log in').click()
     >>> "You are now logged in" in browser.contents
     True
+    >>> "Login failed" in browser.contents
+    False
+    >>> browser.url
+    'http://nohost/plone/login_form'
 
 
 -*- extra stuff goes here -*-
