@@ -7,7 +7,10 @@
       i18n:domain="quintagroup.seoptimizer">
   <body>
     <div metal:fill-slot="prefs_configlet_main"
-        tal:define="errors python:request.get('errors', {})"><!--TODO:implement validation and errors handling-->
+        tal:define="errors python:request.get('errors', {});
+                    Iterator python:modules['Products.CMFPlone'].IndexIterator;
+                    tabindex python:Iterator(mainSlot=False)"><!--TODO:implement validation and errors handling-->
+
       <h1>Search Engine Optimizer configuration</h1>
         <a href="" class="link-parent"
            tal:attributes="href string: $portal_url/plone_control_panel"
