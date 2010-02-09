@@ -107,7 +107,6 @@ class TestCanonicalURL(FunctionalTestCase):
         catalog.addColumn(name='canonical_path')
 
 
-
     def testCatalogUpdated(self):
         purl = getToolByName(self.portal, 'portal_url')
         catalog = getToolByName(self.portal, 'portal_catalog')
@@ -131,6 +130,11 @@ class TestCanonicalURL(FunctionalTestCase):
         self.assertTrue(newcpath == mydoc_catalog_canonical,
             "canonical path get by adapter: '%s' not equals to cataloged one: '%s'" % (
              newcpath, mydoc_catalog_canonical))
+
+    def test_Canonical4Plone(self):
+        canonical = queryAdapter(self.portal, ISEOCanonicalPath)
+        self.assertTrue(canonical is not None,
+            "No 'ISEOCanonicalPath' adapter registered for the Plone object")
 
 
 def test_suite():
