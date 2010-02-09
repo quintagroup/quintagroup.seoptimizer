@@ -55,6 +55,12 @@
       factory=".adapters.MappingMetaTags"
       />
 
+  <adapter
+      name="qseo_canonical"
+      factory=".adapters.canonicalPathAdapter"
+      />
+
+
   <cmf:registerDirectory name="quintagroup.seoptimizer" />
 
 </configure>

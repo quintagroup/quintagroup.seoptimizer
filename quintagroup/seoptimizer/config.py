@@ -14,3 +14,10 @@ STOP_WORDS = ['a', 'an', 'amp', 'and', 'are', 'arial', 'as', 'at', 'be', 'but', 
 FIELDS = ['seo_title', 'seo_description', 'seo_keywords']
 
 DEFAULT_CUSTOM_METATAGS = []
+
+# BINDINGS TO quintagroup.canonical package
+HAS_CANONICAL_PATH = True
+try:
+    from quintagroup.canonicalpath.interfaces import ICanonicalPath
+except ImportError:
+    HAS_CANONICAL_PATH = False

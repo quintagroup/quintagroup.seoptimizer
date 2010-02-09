@@ -1,10 +1,19 @@
 import re, commands
+
+from zope.component import adapts
 from zope.interface import implements
 from zope.component import queryMultiAdapter
-from Products.CMFCore.utils import getToolByName
 
-from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
+from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getToolByName
+from Products.Archetypes.interfaces import IBaseContent
+
+
 from quintagroup.seoptimizer.util import SortedDict
+from quintagroup.seoptimizer.config import HAS_CANONICAL_PATH
+from quintagroup.seoptimizer.interfaces import ICanonicalPath
+from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
 
 
 class MetaKeywordsAdapter(object):
@@ -61,3 +70,23 @@ class MappingMetaTags(object):
             for mt in [mt.split(' ') for mt in pmn if len(mt.split(' '))==2]:
                 metadata_name[mt[0]] = mt[1]
         return metadata_name
+
+
+class canonicalPathAdapter(object):
+    """Adapts base content to canonical path, with taking into consideration
+       SEO canonical path value.
+    """
+    adapts(IBaseContent)
+    implements(ICanonicalPath)
+
+    def __init__(self, context):
+        self.context = context
+
+    def canonical_path(self):
+        purl = getToolByName(self.context,'portal_url')
+
+        prop = aq_inner(self.context).getProperty('qSEO_canonical', None)
+        if prop is not None:
+            return prop[len(purl()):]
+        
+        return '/'+'/'.join(purl.getRelativeContentPath(self.context))

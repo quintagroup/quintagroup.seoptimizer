@@ -10,18 +10,13 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as pmf
 
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
+from quintagroup.seoptimizer import interfaces
 
 SEPERATOR = '|'
-HAS_CANONICAL_PATH = True
 SEO_PREFIX = 'seo_'
 PROP_PREFIX = 'qSEO_'
 SUFFIX = '_override'
 PROP_CUSTOM_PREFIX = 'qSEO_custom_'
-
-try:
-    from quintagroup.canonicalpath.interfaces import ICanonicalPath
-except ImportError:
-    HAS_CANONICAL_PATH = False
 
 class SEOContext( BrowserView ):
     """ This class contains methods that allows to edit html header meta tags.
@@ -212,16 +207,10 @@ class SEOContext( BrowserView ):
     def seo_canonical( self ):
         """ Generate canonical URL from SEO properties.
         """
-        canonical = self.getSEOProperty( 'qSEO_canonical' )
-
-        if not canonical and HAS_CANONICAL_PATH:
-            canpath = queryAdapter(self.context, ICanonicalPath)
-            if canpath:
-                purl = getToolByName(self.context, 'portal_url')()
-                cpath = canpath.canonical_path()
-                canonical = purl + cpath
-
-        return canonical and canonical or self.context.absolute_url()
+        purl = getToolByName(self.context, 'portal_url')()
+        canpath = queryAdapter(self.context, interfaces.ICanonicalPath,
+            name='qseo_canonical')
+        return purl + canpath.canonical_path()
 
 
 class SEOControlPanel( ControlPanelView ):
