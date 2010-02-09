@@ -56,7 +56,6 @@
       />
 
   <adapter
-      name="qseo_canonical"
       factory=".adapters.canonicalPathAdapter"
       />
 

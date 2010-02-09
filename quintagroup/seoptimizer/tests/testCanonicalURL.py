@@ -55,8 +55,7 @@ class TestCanonicalURL(FunctionalTestCase):
            foundcurls, mydoc_url_new))
 
     def test_canonicalAdapterRegistration(self):
-        canonical = queryAdapter(self.mydoc, interface=ICanonicalPath,
-            name='qseo_canonical')
+        canonical = queryAdapter(self.mydoc, interface=ICanonicalPath)
         self.assertTrue(canonical is not None,
             "Not registered 'qseo_canonical' adapter")
 
@@ -64,12 +63,12 @@ class TestCanonicalURL(FunctionalTestCase):
         purl = getToolByName(self.portal, 'portal_url')
         mydoc_path_rel = '/'+'/'.join(purl.getRelativeContentPath(self.mydoc))
 
-        canonical = queryAdapter(self.mydoc, ICanonicalPath, name='qseo_canonical')
+        canonical = queryAdapter(self.mydoc, ICanonicalPath)
         cpath = canonical.canonical_path()
         self.assertTrue(cpath == mydoc_path_rel,
             "By canonical path adapter got: '%s', must be: '%s'" % (
              cpath, mydoc_path_rel))
-        
+
         # Update canonical url property
         mydoc_url_new = self.mydoc.absolute_url() + '.new'
         self.publish(self.mydoc_path + '/@@seo-context-properties?' \

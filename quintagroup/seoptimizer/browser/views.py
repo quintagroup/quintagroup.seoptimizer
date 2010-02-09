@@ -208,8 +208,7 @@ class SEOContext( BrowserView ):
         """ Generate canonical URL from SEO properties.
         """
         purl = getToolByName(self.context, 'portal_url')()
-        canpath = queryAdapter(self.context, interfaces.ICanonicalPath,
-            name='qseo_canonical')
+        canpath = queryAdapter(self.context, interfaces.ICanonicalPath)
         return purl + canpath.canonical_path()
 
 
