@@ -1,5 +1,9 @@
-from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
+
+try:
+    from App.class_init import InitializeClass
+except ImportError:
+    from Globals import InitializeClass
 
 def createMultiColumnList(self,slist, numCols, sort_on='title_or_id'):
     try:
