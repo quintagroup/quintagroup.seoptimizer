@@ -1,5 +1,9 @@
 import re
 from zope.component import queryAdapter
+from zope.component import provideAdapter
+from plone.indexer.decorator import indexer
+
+from Products.CMFCore.interfaces import IContentish
 from Products.Archetypes.interfaces import IBaseContent
 
 from quintagroup.seoptimizer.interfaces import ISEOCanonicalPath
@@ -11,7 +15,6 @@ class TestCanonicalURL(FunctionalTestCase):
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
         self.qi.installProduct(PROJECT_NAME)
-        #self.portal.changeSkin('Plone Default')
 
         self.basic_auth = 'portal_manager:secret'
         uf = self.app.acl_users
@@ -91,9 +94,9 @@ class TestCanonicalURL(FunctionalTestCase):
 
 
     def addCanonicalPathCatalogColumn(self):
-        from Products.CMFPlone.CatalogTool import registerIndexableAttribute
 
-        def canonical_path(obj, portal, **kwargs):
+        @indexer(IContentish)
+        def canonical_path(obj, **kwargs):
             """Return canonical_path property for the object.
             """
             cpath = queryAdapter(obj, interface=ISEOCanonicalPath)
@@ -101,8 +104,7 @@ class TestCanonicalURL(FunctionalTestCase):
                 return cpath.canonical_path()
             return None
 
-        registerIndexableAttribute('canonical_path', canonical_path)
-
+        provideAdapter(canonical_path, name='canonical_path')
         catalog = getToolByName(self.portal, 'portal_catalog')
         catalog.addColumn(name='canonical_path')
 
