@@ -6,6 +6,7 @@ from plone.indexer.decorator import indexer
 from Products.CMFCore.interfaces import IContentish
 from Products.Archetypes.interfaces import IBaseContent
 
+from quintagroup.canonicalpath.interfaces import ICanonicalPath
 from quintagroup.seoptimizer.interfaces import ISEOCanonicalPath
 from base import getToolByName, FunctionalTestCase, newSecurityManager
 from config import *
@@ -57,18 +58,23 @@ class TestCanonicalURL(FunctionalTestCase):
            "Wrong CANONICAL URL for document: %s, all must be: %s" % (
            foundcurls, mydoc_url_new))
 
-    def test_seoCanonicalAdapterRegistration(self):
-        seocanonical = queryAdapter(self.mydoc, interface=ISEOCanonicalPath)
-        self.assertTrue(seocanonical is not None,
+    def test_SEOCanonicalAdapterRegistration(self):
+        portal_seocanonical = queryAdapter(self.portal, interface=ISEOCanonicalPath)
+        self.assertTrue(portal_seocanonical is not None,
+            "Not registered ISEOCanonicalPath adapter")
+
+        mydoc_seocanonical = queryAdapter(self.mydoc, interface=ISEOCanonicalPath)
+        self.assertTrue(mydoc_seocanonical is not None,
             "Not registered ISEOCanonicalPath adapter")
 
     def test_canonicalAdapterRegistration(self):
-        import quintagroup
-        if hasattr(quintagroup, 'canonicalpath'):
-            from quintagroup.canonicalpath.interfaces import ICanonicalPath
-            canonical = queryAdapter(self.mydoc, interface=ICanonicalPath)
-            self.assertTrue(canonical is not None,
-                "Not registered ICanonicalPath adapter")
+        canonical_portal = queryAdapter(self.portal, interface=ICanonicalPath)
+        self.assertTrue(canonical_portal is not None,
+            "Not registered ICanonicalPath adapter for portal root")
+
+        canonical_mydoc = queryAdapter(self.mydoc, interface=ICanonicalPath)
+        self.assertTrue(canonical_mydoc is not None,
+            "Not registered ICanonicalPath adapter for the documnent")
 
     def test_canonicalAdapter(self):
         purl = getToolByName(self.portal, 'portal_url')
@@ -132,11 +138,6 @@ class TestCanonicalURL(FunctionalTestCase):
         self.assertTrue(newcpath == mydoc_catalog_canonical,
             "canonical path get by adapter: '%s' not equals to cataloged one: '%s'" % (
              newcpath, mydoc_catalog_canonical))
-
-    def test_Canonical4Plone(self):
-        canonical = queryAdapter(self.portal, ISEOCanonicalPath)
-        self.assertTrue(canonical is not None,
-            "No 'ISEOCanonicalPath' adapter registered for the Plone object")
 
 
 def test_suite():
