@@ -34,9 +34,12 @@ setup(name='quintagroup.seoptimizer',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'quintagroup.canonicalpath>=4.0',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
       # -*- Entry points: -*-
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )
