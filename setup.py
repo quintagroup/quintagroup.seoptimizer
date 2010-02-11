@@ -6,7 +6,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '2.3.0'
+version = '2.3.1dev'
 
 setup(name='quintagroup.seoptimizer',
       version=version,
@@ -24,7 +24,7 @@ setup(name='quintagroup.seoptimizer',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, Vitaliy Stepanov',
+      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, Vitaliy Stepanov, Andriy Mylenkyy',
       author_email='support@quintagroup.com',
       url='http://quintagroup.com/services/plone-development/products/qSEOptimizer/',
       license='GPL',
