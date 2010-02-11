@@ -34,7 +34,7 @@ setup(name='quintagroup.seoptimizer',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'quintagroup.canonicalpath>=4.0',
+          'quintagroup.canonicalpath>=0.4',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
