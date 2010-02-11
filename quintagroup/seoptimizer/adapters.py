@@ -78,8 +78,10 @@ class canonicalPathAdapter(object):
     def canonical_path(self):
         purl = getToolByName(self.context,'portal_url')
 
+        # Calculate canonical path from qSEO_canonical property
         prop = aq_inner(self.context).getProperty('qSEO_canonical', None)
         if prop is not None:
             return prop[len(purl()):]
         
+        # Fallback for canonical path calculation
         return '/'+'/'.join(purl.getRelativeContentPath(self.context))

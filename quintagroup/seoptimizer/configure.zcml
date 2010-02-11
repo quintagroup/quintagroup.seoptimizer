@@ -59,12 +59,6 @@
       factory=".adapters.MappingMetaTags"
       />
 
-  <!-- adapter
-      for="Products.Archetypes.interfaces.IBaseObject"
-      provides=".interfaces.ISEOCanonicalPath"
-      factory=".adapters.canonicalPathAdapter"
-      / -->
-
   <adapter
       for="Products.CMFCore.interfaces.IFolderish"
       provides=".interfaces.ISEOCanonicalPath"
@@ -74,13 +68,6 @@
   <adapter
       for="Products.CMFCore.interfaces.IContentish"
       provides=".interfaces.ISEOCanonicalPath"
-      factory=".adapters.canonicalPathAdapter"
-      />
-
-  <adapter
-      zcml:condition="installed quintagroup.canonicalpath"
-      for="Products.ATContentTypes.interface.IATContentType"
-      provides="quintagroup.canonicalpath.interfaces.ICanonicalPath"
       factory=".adapters.canonicalPathAdapter"
       />
 
