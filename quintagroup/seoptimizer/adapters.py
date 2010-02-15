@@ -27,22 +27,7 @@ class MetaKeywordsAdapter(object):
         seo_props = getToolByName(portal_props, 'seo_properties', None)
         seo_context = queryMultiAdapter((self.context, request), name='seo_context')
         if seo_context:
-            filter_keywords_by_content = seo_props.getProperty('filter_keywords_by_content', None)
             meta_keywords = list(seo_context.meta_keywords())
-            is_test = self.context.REQUEST.get('without_metatag_keywords', None)
-            if filter_keywords_by_content and meta_keywords and is_test is None:
-                # extract words from url page using lynx browser (test page randered without metatag keywords)
-                text = commands.getoutput('lynx --dump --nolist %s?without_metatag_keywords=1' % self.context.absolute_url()).lower()
-
-                # for tests package
-                if text and 'lynx: can\'t access startfile http://nohost/plone/my_doc?without_metatag_keywords=1' in text:
-                    text = self.context.getText()
-
-                if text and text != 'sh: lynx: command not found':
-                    for meta_keyword in meta_keywords:
-                        if re.compile('\\b%s\\b' % meta_keyword.lower(), re.I|re.U).search(text):
-                            filtered_keywords.append(meta_keyword)
-                    meta_keywords = filtered_keywords
         return ', '.join(meta_keywords)
 
 
