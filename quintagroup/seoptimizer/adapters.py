@@ -39,9 +39,8 @@ class MetaKeywordsAdapter(object):
                     text = self.context.getText()
 
                 if text and text != 'sh: lynx: command not found':
-                    text = text.decode('utf8')
                     for meta_keyword in meta_keywords:
-                        if re.compile(u'\\b%s\\b' % meta_keyword.decode('utf8').lower(), re.I|re.U).search(text):
+                        if re.compile('\\b%s\\b' % meta_keyword.lower(), re.I|re.U).search(text):
                             filtered_keywords.append(meta_keyword)
                     meta_keywords = filtered_keywords
         return ', '.join(meta_keywords)
