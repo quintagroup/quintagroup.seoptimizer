@@ -2,7 +2,7 @@
 <object name="portal_skins">
  <object name="quintagroup.seoptimizer" meta_type="Filesystem Directory View"
     directory="quintagroup.seoptimizer:skins/quintagroup.seoptimizer"/>
-  <skin-path name="*">
+ <skin-path name="*">
   <layer name="quintagroup.seoptimizer" insert-after="custom"/>
  </skin-path>
 </object>
