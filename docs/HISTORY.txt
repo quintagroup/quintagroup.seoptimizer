@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.3.1 (2010-02-16)
+-----------------
+
+- removed the broken keywords filtering code (fixed the issue #10 decode error).
+  [chervol]
+
 2.3.0 (2010-02-08)
 ------------------
 
