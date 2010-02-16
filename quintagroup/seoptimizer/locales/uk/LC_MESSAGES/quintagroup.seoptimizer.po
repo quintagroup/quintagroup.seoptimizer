@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quintagroup.seoptimizer\n"
-"POT-Creation-Date: 2010-02-10 10:23+0000\n"
+"POT-Creation-Date: 2010-02-16 12:25+0000\n"
 "PO-Revision-Date: 2010-02-11 14:05+0300\n"
 "Last-Translator: Olha <olha.pelishok@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,8 +25,18 @@ msgstr ""
 msgid "Keywords list is empty!"
 msgstr "Список ключових слів порожній!"
 
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/Document.xml
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/File.xml
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/News_Item.xml
+msgid "SEO Properties"
+msgstr ""
+
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/controlpanel.xml
+msgid "Search Engine Optimizer"
+msgstr ""
+
 #. Default: "Canonical URL mast be in ${pdomain} domain."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:383
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:375
 msgid "canonical_msg"
 msgstr "Canonical URL повинен знаходитись в домені \"${pdomain}\"."
 
@@ -36,7 +46,7 @@ msgid "description_edit_seo_properties"
 msgstr "Ця форма дозволяє редагувати мета теґи, які генерує СКВ Plone, з метою збільшення видимості сайту для пошукових систем. Значення, які генерує Plone по замовчуванню, введено у відповідних полях. Щоб перекрити значення за замовчуванням, поставте галочку біля відповідного поля та введіть потрібне значення."
 
 #. Default: "Select content types that will have SEO properties enabled."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:168
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:155
 msgid "description_seo_content_types"
 msgstr "Виберіть типи вмісту, для яких буде можливо прописувати SEO властивості."
 
@@ -59,11 +69,6 @@ msgstr "Використовуйте це поле, якщо Ви хочете, 
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:46
 msgid "help_default_custom_metatags"
 msgstr "Введіть назви додаткових мета теґів (по 1 в кожному рядку), які з'являться при редагуванні  SEO властивостей об'єктів сайту. Наприклад: \ \"metaname | metacontent \" або \ \"metaname \"."
-
-#. Default: "Controls use of meta keywords according to their presence in content."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:93
-msgid "help_filter_keywords_by_content"
-msgstr "Контроль використання ключових слів згідно з їх наявністю в контексті."
 
 #. Default: "Fill in meta tags (one per line) in the order in which they will appear on site source pages. Example: \"metaname accessor\"."
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:60
@@ -111,12 +116,12 @@ msgid "help_seo_title"
 msgstr "Текст, який буде показано в тезі  &lt;TITLE&gt;. Його буде видно у заголовку переглядача. Пошукові системи відображатимуть цей текст як назву документа."
 
 #. Default: "Controls global and local SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:140
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:127
 msgid "help_settings_use_keywords_lg"
 msgstr "Контроль поведінки глобальних та локальних SEO ключових слів."
 
 #. Default: "Controls Plone categories (also known as keywords or tags) and global SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:102
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:89
 msgid "help_settings_use_keywords_sg"
 msgstr "Контроль поведінки Plone категорій (відомих також як ключові слова чи теґи) та глобальних SEO ключових слів."
 
@@ -131,7 +136,7 @@ msgid "label_canonical_tag"
 msgstr ""
 
 #. Default: "Content Types"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:166
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:153
 msgid "label_content_type_title"
 msgstr "Типи вмісту"
 
@@ -155,23 +160,18 @@ msgstr "Мета теґ Distribution"
 msgid "label_exposeDCMetaTags"
 msgstr "Показувати мета теґи <abbr title=\"Dublin Core\">DC</abbr>"
 
-#. Default: "Filter keywords by their availability in content."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:90
-msgid "label_filter_keywords_by_content"
-msgstr "Фільтрувати ключові слова по їх наявності в контексті."
-
 #. Default: "HTML Comment"
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_context_properties.pt:147
 msgid "label_html_comment"
 msgstr "Коментар HTML"
 
 #. Default: "Merge global and local SEO keywords"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:158
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:145
 msgid "label_merge_seoglobal_and_seolocal"
 msgstr "Злиття глобальних і локальних SEO ключових слів"
 
 #. Default: "Merge Plone categories and global SEO keywords"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:130
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:117
 msgid "label_merge_subject_and_seoglobal"
 msgstr "Злиття Plone категорій та глобальних SEO ключових слів"
 
@@ -206,27 +206,27 @@ msgid "label_robot_tag"
 msgstr "Мета теґ Robot"
 
 #. Default: "Global SEO keywords override local SEO keywords"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:148
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:135
 msgid "label_seoglobal_override_seolocal"
 msgstr "Глобальні SEO ключові слова перекривають локальні"
 
 #. Default: "Global SEO keywords override Plone categories"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:120
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:107
 msgid "label_seoglobal_override_subject"
 msgstr "Глобальні SEO ключові слова перекривають Plone категорії"
 
 #. Default: "Settings to control global SEO keywords vs local SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:137
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:124
 msgid "label_settings_use_keywords_lg"
 msgstr "Налаштування поведінки глобальних та локальних SEO ключових слів."
 
 #. Default: "Settings to control Plone categories and global SEO keywords behaviour."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:99
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:86
 msgid "label_settings_use_keywords_sg"
 msgstr "Налаштування поведінки Plone ключових слів та глобальних SEO ключових слів."
 
 #. Default: "Plone categories override global SEO keywords"
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:110
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/templates/seo_controlpanel.pt:97
 msgid "label_subject_override_seoglobal"
 msgstr "Plone категорії перекривають глобальні SEO ключові слова"
 
@@ -249,7 +249,7 @@ msgid "seo_configlet_description"
 msgstr "Тут Ви можете вибрати, які типи вмісту матимуть можливіть налаштування SEO властивостей, а також налаштувати інші SEO параметри на Вашому сайті."
 
 #. Default: "Content SEO properties have been saved."
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:488
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/browser/views.py:480
 msgid "seoproperties_saved"
 msgstr "SEO властивості збереженно."
 

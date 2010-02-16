@@ -86,7 +86,6 @@
    <element value="robots seo_robots"/>
    <element value="distribution seo_distribution"/>
   </property>
-  <property name="filter_keywords_by_content" type="boolean">True</property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>

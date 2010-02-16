@@ -83,19 +83,6 @@
           </div>
 
           <div class="field">
-            <input type="checkbox"
-                   id="filterKeywordsByContent"
-                   name="filterKeywordsByContent"
-                   tal:attributes="checked view/getFilterKeywordsByContent"/>
-            <label for="filterKeywordsByContent" i18n:translate="label_filter_keywords_by_content">
-                Filter keywords by their availability in content.
-            </label>
-            <div class="formHelp" i18n:translate="help_filter_keywords_by_content">
-                Controls use of meta keywords according to their presence in content.
-              </div>
-          </div>
-
-          <div class="field">
               <label for="settingsUseKeywordsSG" i18n:translate="label_settings_use_keywords_sg">
                   Settings to control Plone categories and global SEO keywords behaviour.
               </label>

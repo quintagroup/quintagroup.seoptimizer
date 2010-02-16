@@ -135,30 +135,6 @@ class TestUsageKeywords(FunctionalTestCase):
                     self.html, re.S|re.M)
         self.assert_(m, "No 'subject, global, local' keywords find")
 
-    def test_default_values_filter_keywords_by_content_in_configlet(self):
-        self.assertEqual(self.sp.getProperty('filter_keywords_by_content', None), True)
-
-    def test_changes_filter_keywords_by_content_in_configlet(self):
-        path = self.portal.id+'/@@seo-controlpanel?filter_keywords_by_content=False&form.submitted=1'
-        self.publish(path, self.basic_auth)
-        self.assertEqual(self.sp.getProperty('filter_keywords_by_content', 0), None)
-
-    def test_filter_keywords_by_content_true(self):
-        # Usage metatags keywords, which present in content (filter_keywords_by_content=True)
-        self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2, filter_keywords_by_content=True)
-        self.html = self.setup_testing_render_keywords(html='<p>subject global</p>')
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="(?:subject|global),\s*(?:subject|global)"\s*)){2}/>)',
-                    self.html, re.S|re.M)
-        self.assert_(m, "In metatags keywords not finded \"subject, global\". Checkbox filter_keywords_by_content in configlet is not working.")
-
-    def test_filter_keywords_by_content_false(self):
-        # Usage metatags keywords, without taking into consideration presece in content (filter_keywords_by_content=False)
-        self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2, filter_keywords_by_content=False)
-        self.html = self.setup_testing_render_keywords(html='<p>subject global</p>')
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="(?:subject|global|local),\s*(?:subject|global|local),\s*(?:subject|global|local)"\s*)){2}/>)',
-                    self.html, re.S|re.M)
-        self.assert_(m, "In metatags keywords not finded \"subject, global, locals\". Checkbox filter_keywords_by_content in configlet is not working.")
-
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
