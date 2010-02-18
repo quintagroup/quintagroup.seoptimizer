@@ -86,6 +86,7 @@
    <element value="robots"/>
    <element value="distribution"/>
   </property>
+  <property name="content_types_with_seoproperties" type="lines" purge='False'/>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>

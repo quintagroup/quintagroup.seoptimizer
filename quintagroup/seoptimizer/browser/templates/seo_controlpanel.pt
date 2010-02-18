@@ -166,7 +166,7 @@
                                       name="contentTypes:list"
                                       tal:attributes="id name;
                                                       value name;
-                                                      checked python:view.hasSEOAction(type)"/>
+                                                      checked python:view.isSEOTabVisibile(name)"/>
                               <label tal:attributes="for python:type.getId()"
                                      tal:content="type/Title"/>
                           </tal:type>

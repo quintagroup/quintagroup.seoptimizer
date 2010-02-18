@@ -21,6 +21,14 @@ PROP_CUSTOM_PREFIX = 'qSEO_custom_'
 class SEOContext( BrowserView ):
     """ This class contains methods that allows to edit html header meta tags.
     """
+
+    def isSEOTabVisibile(self):
+        context = aq_inner(self.context)
+        portal_properties = getToolByName(context, 'portal_properties')
+        seo_properties = getToolByName(portal_properties, 'seo_properties')
+        content_types_with_seoproperties = seo_properties.getProperty('content_types_with_seoproperties', '')
+        return bool(self.context.portal_type in content_types_with_seoproperties)
+
     def getSEOProperty( self, property_name, accessor='' ):
         """ Get value from seo property by property name.
         """
@@ -231,10 +239,10 @@ class SEOControlPanel( ControlPanelView ):
         context = aq_inner(self.context)
         return getToolByName(context, 'portal_types')
 
-    def hasSEOAction( self, type_info ):
-        """
-        """
-        return filter(lambda x:x.id == 'seo_properties', type_info.listActions())
+    #def hasSEOAction( self, type_info ):
+        #"""
+        #"""
+        #return filter(lambda x:x.id == 'seo_properties', type_info.listActions())
 
     def test( self, condition, first, second ):
         """
@@ -275,55 +283,45 @@ class SEOControlPanel( ControlPanelView ):
         except AttributeError:
             return [slist]
 
+    def isSEOTabVisibile(self, type):
+        context = aq_inner(self.context)
+        portal_properties = getToolByName(context, 'portal_properties')
+        seo_properties = getToolByName(portal_properties, 'seo_properties')
+        content_types_with_seoproperties = seo_properties.getProperty('content_types_with_seoproperties', '')
+        return bool(type in content_types_with_seoproperties)
+      
     def __call__( self ):
         """ Perform the update and redirect if necessary, or render the page.
         """
         context = aq_inner(self.context)
         request = self.request
 
-        content_types_seoprops_enabled = request.get( 'contentTypes', [] )
         exposeDCMetaTags = request.get( 'exposeDCMetaTags', None )
         additionalKeywords = request.get('additionalKeywords', [])
         default_custom_metatags = request.get('default_custom_metatags', [])
         metatags_order = request.get('metatags_order', [])
         settingsUseKeywordsSG = int(request.get('settingsUseKeywordsSG', 1))
         settingsUseKeywordsLG = int(request.get('settingsUseKeywordsLG', 1))
+        content_types_with_seoproperties = request.get('contentTypes', [])
 
         site_props = getToolByName(self.portal_properties, 'site_properties')
         seo_props = getToolByName(self.portal_properties, 'seo_properties')
 
         form = self.request.form
         submitted = form.get('form.submitted', False)
-
         if submitted:
             site_props.manage_changeProperties(exposeDCMetaTags=exposeDCMetaTags)
             seo_props.manage_changeProperties(additional_keywords=additionalKeywords)
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
             seo_props.manage_changeProperties(metatags_order=metatags_order)
-            seo_props.manage_changeProperties(content_types_seoprops_enabled=content_types_seoprops_enabled)
             seo_props.manage_changeProperties(settings_use_keywords_sg=settingsUseKeywordsSG)
             seo_props.manage_changeProperties(settings_use_keywords_lg=settingsUseKeywordsLG)
+            seo_props.manage_changeProperties(content_types_with_seoproperties=content_types_with_seoproperties)
 
-            for ptype in self.portal_types.objectValues():
-                acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
-                action = acts and acts[0] or None
-                if ptype.getId() in content_types_seoprops_enabled:
-                    if action is None:
-                        ptype.addAction('seo_properties',
-                                        'SEO Properties',
-                                        'string:${object_url}/@@seo-context-properties',
-                                        "python:exists('portal/@@seo-context-properties')",
-                                        'Modify portal content',
-                                        'object',
-                                        visible=1)
-                else:
-                    if action !=None:
-                        actions = list(ptype.listActions())
-                        ptype.deleteActions([actions.index(a) for a in actions if a.getId()=='seo_properties'])
             context.plone_utils.addPortalMessage(pmf(u'Changes saved.'))
             return request.response.redirect('%s/%s'%(self.context.absolute_url(), 'plone_control_panel'))
         else:
-            return self.template(contentTypes=content_types_seoprops_enabled, exposeDCMetaTags=exposeDCMetaTags)
+            return self.template(contentTypes=content_types_with_seoproperties, exposeDCMetaTags=exposeDCMetaTags)
 
     def typeInfo( self, type_name ):
         """ Get info type by type name.

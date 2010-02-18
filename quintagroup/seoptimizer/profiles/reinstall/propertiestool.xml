@@ -23,5 +23,6 @@
   <property name="filter_keywords_by_content" type="boolean">True</property>
   <property name="settings_use_keywords_sg" type="int">3</property>
   <property name="settings_use_keywords_lg" type="int">2</property>
+  <property name="content_types_with_seoproperties" type="lines" purge='False'/>
  </object>
 </object>
