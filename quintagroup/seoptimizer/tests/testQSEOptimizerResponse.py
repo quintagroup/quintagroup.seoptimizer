@@ -84,19 +84,15 @@ class TestResponse(FunctionalTestCase):
         self.assert_(m, 'Comments not set in')
 
     def testTagsOrder(self):
-        mtop = self.sp.getProperty('metatags_order')
-        metatags_order = [t.split(' ')[0] for t in mtop if len(t.split(' '))==2 and t.split(' ')[0] in VIEW_METATAGS]
+        metatags_order = [t for t in self.sp.getProperty('metatags_order') if t in VIEW_METATAGS]
         m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
-        #m = re.match('.*'.join(['.*(<meta\s+(?:(?:name="%s"\s*)|(?:content=".*"\s*)){2}/>)' %t for t in metatags_order]), self.html, re.S|re.M)
         self.assert_(m, "Meta tags order not supported.")
 
-        mtop = list(mtop)
-        mtop.reverse()
-        metatags_order = [t.split(' ')[0] for t in mtop if len(t.split(' '))==2 and t.split(' ')[0] in VIEW_METATAGS]
+        metatags_order.reverse()
         m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
         self.assertFalse(m, "Meta tags order not supported.")
 
-        self.sp.manage_changeProperties(**{'metatags_order':tuple(mtop)})
+        self.sp.manage_changeProperties(**{'metatags_order':metatags_order})
         html = self.publish(self.abs_path, self.basic_auth).getBody()
         m = re.search('.*'.join(['<meta.*name="%s".*/>' %t for t in metatags_order]), self.html, re.S|re.M)
         self.assertFalse(m, "Meta tags order not supported.")

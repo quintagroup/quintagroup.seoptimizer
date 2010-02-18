@@ -10,6 +10,23 @@ from Products.CMFCore.utils import getToolByName
 from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
 
+METADATA_MAPS = dict([
+    ("DC.publisher", "Publisher"),
+    ("DC.description", "Description"),
+    ("DC.contributors", "Contributors"),
+    ("DC.creator", "Creator"),
+    ("DC.format", "Format"),
+    ("DC.rights", "Rights"),
+    ("DC.language", "Language"),
+    ("DC.date.modified", "ModificationDate"),
+    ("DC.date.created", "CreationDate"),
+    ("DC.type", "Type"),
+    ("DC.subject", "Subject"),
+    ("DC.distribution", "seo_distribution"),
+    ("description", "seo_description"),
+    ("keywords", "meta_keywords"),
+    ("robots", "seo_robots"),
+    ("distribution", "seo_distribution")])
 
 class MetaKeywordsAdapter(object):
     implements(IMetaKeywords)
@@ -44,10 +61,10 @@ class MappingMetaTags(object):
         """
         metadata_name = SortedDict()
         if self.seo_props:
-            pmn = self.seo_props.getProperty('metatags_order')
-            pmn = pmn and pmn or ''
-            for mt in [mt.split(' ') for mt in pmn if len(mt.split(' '))==2]:
-                metadata_name[mt[0]] = mt[1]
+            pmn = self.seo_props.getProperty('metatags_order', ())
+            for mt in pmn:
+                if METADATA_MAPS.has_key(mt):
+                    metadata_name[mt] = METADATA_MAPS[mt]
         return metadata_name
 
 
