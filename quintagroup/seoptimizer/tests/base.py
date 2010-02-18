@@ -42,7 +42,7 @@ def setup_product():
     fiveconfigure.debug_mode = True
     import quintagroup.seoptimizer
     zcml.load_config('configure.zcml', quintagroup.seoptimizer)
-    zcml.load_config('overrides.zcml', quintagroup.seoptimizer)
+    #zcml.load_config('overrides.zcml', quintagroup.seoptimizer)
     fiveconfigure.debug_mode = False
 
     # We need to tell the testing framework that these products

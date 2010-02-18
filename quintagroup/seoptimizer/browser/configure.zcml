@@ -12,10 +12,9 @@
 	/>
 
 
-  <!-- MOVED from overrides.zcml :
-       BECAUSE all views, viewlets registered for
-       own, .interfaces.IPloneSEOLayer layer      -->
-
+    <!-- MOVED from overrides.zcml :
+         BECAUSE all views, viewlets registered for
+         own, .interfaces.IPloneSEOLayer layer      -->
 
     <!-- The customized title -->
     <browser:viewlet
@@ -38,6 +37,14 @@
         name="quintagroup.seoptimizer.customscript"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
         class=".viewlets.CustomScriptViewlet"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="zope2.View"
+        />
+
+    <browser:viewlet
+        name="quintagroup.seoptimizer.seotags"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.SEOTagsViewlet"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
         />

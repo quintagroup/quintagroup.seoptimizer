@@ -1,8 +1,138 @@
 from cgi import escape
+from DateTime import DateTime
+from Acquisition import aq_inner
+
+from zope.component import queryMultiAdapter
 from zope.component import getMultiAdapter
-from Products.CMFPlone.utils import safe_unicode
 from plone.app.layout.viewlets.common import ViewletBase
+
+from Products.CMFPlone.utils import safe_unicode
 from Products.CMFCore.utils import getToolByName
+
+from quintagroup.seoptimizer.util import SortedDict
+from quintagroup.seoptimizer.interfaces import IMetaKeywords
+from quintagroup.seoptimizer.interfaces import IMappingMetaTags
+
+from Products.CMFPlone.PloneTool import *
+
+class SEOTagsViewlet( ViewletBase ):
+    """ Simple viewlet for custom title rendering.
+    """
+
+    def render(self):
+        TEMPLATE = '<meta name="%s" content="%s"/>'
+        return '\n'.join([TEMPLATE % (k,v) \
+                          for k,v in self.listMetaTags().items()])
+    
+    def listMetaTags(self):
+        """Calculate list metatags"""
+
+        result = SortedDict()
+
+        site_props = getToolByName(self, 'portal_properties').site_properties
+        use_all = site_props.getProperty('exposeDCMetaTags', None)
+
+        seo_context = queryMultiAdapter((self.context, self.request), name='seo_context')
+        adapter = IMappingMetaTags(self.context, None)
+        mapping_metadata = adapter and adapter.getMappingMetaTags() or SortedDict()
+
+        if not use_all:
+            metadata_names = mapping_metadata.has_key('DC.description') \
+                             and {'DC.description': mapping_metadata['DC.description']} \
+                             or SortedDict()
+            if mapping_metadata.has_key('description'):
+                metadata_names['description'] = mapping_metadata['description']
+        else:
+            metadata_names = mapping_metadata
+
+        for key, accessor in metadata_names.items():
+            if accessor == 'meta_keywords':
+                # Render all the existing keywords for the current content type
+                adapter = IMetaKeywords(self.context, None)
+                if adapter is not None:
+                    keywords = adapter.getMetaKeywords()
+                    if keywords:
+                        result['keywords'] = keywords
+                continue
+
+            method = getattr(seo_context, accessor, None)
+            if method is None:
+                method = getattr(aq_inner(self.context).aq_explicit, accessor, None)
+
+            if not callable(method):
+                continue
+
+            # Catch AttributeErrors raised by some AT applications
+            try:
+                value = method()
+            except AttributeError:
+                value = None
+
+            if not value:
+                # No data
+                continue
+            if accessor == 'Publisher' and value == 'No publisher':
+                # No publisher is hardcoded (TODO: still?)
+                continue
+            if isinstance(value, (list, tuple)):
+                # convert a list to a string
+                value = ', '.join(value)
+
+            # Special cases
+            if accessor == 'Description' and not metadata_names.has_key('description'):
+                result['description'] = value
+            elif accessor == 'Subject' and not metadata_names.has_key('keywords'):
+                result['keywords'] = value
+
+            if accessor not in ('Description', 'Subject'):
+                result[key] = value
+
+        if use_all:
+            created = self.context.CreationDate()
+
+            try:
+                effective = self.context.EffectiveDate()
+                if effective == 'None':
+                    effective = None
+                if effective:
+                    effective = DateTime(effective)
+            except AttributeError:
+                effective = None
+
+            try:
+                expires = self.context.ExpirationDate()
+                if expires == 'None':
+                    expires = None
+                if expires:
+                    expires = DateTime(expires)
+            except AttributeError:
+                expires = None
+
+            # Filter out DWIMish artifacts on effective / expiration dates
+            if effective is not None and \
+               effective > FLOOR_DATE and \
+               effective != created:
+                eff_str = effective.Date()
+            else:
+                eff_str = ''
+
+            if expires is not None and expires < CEILING_DATE:
+                exp_str = expires.Date()
+            else:
+                exp_str = ''
+
+            if exp_str or exp_str:
+                result['DC.date.valid_range'] = '%s - %s' % (eff_str, exp_str)
+
+        # add custom meta tags (added from qseo tab by user)
+        # for given context and default from configlet
+        custom_meta_tags = seo_context and seo_context.seo_customMetaTags() or []
+        for tag in custom_meta_tags:
+            if tag['meta_content']:
+                result[tag['meta_name']] = tag['meta_content']
+
+        return result
+
 
 
 class TitleCommentViewlet(ViewletBase):
