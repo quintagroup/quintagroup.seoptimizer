@@ -1,0 +1,30 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="quintagroup.seoptimizer">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="quintagroup.seoptimizer"
+      directory="profiles/default"
+      description="Install quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="reinstall"
+      title="quintagroup.seoptimizer reinstall"
+      directory="profiles/reinstall"
+      description="Reinstall quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="quintagroup.seoptimizer uninstall"
+      directory="profiles/uninstall"
+      description="Uninstall quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>
