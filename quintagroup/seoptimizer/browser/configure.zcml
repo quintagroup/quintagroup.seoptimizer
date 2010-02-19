@@ -16,6 +16,17 @@
          BECAUSE all views, viewlets registered for
          own, .interfaces.IPloneSEOLayer layer      -->
 
+    <!-- Registries for configlet -->
+    <adapter factory=".seo_configlet.SEOConfigletAdapter" />
+
+    <browser:page
+        name="seo-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".seo_configlet.SEOConfiglet"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="cmf.ManagePortal"
+        />
+
     <!-- The customized title -->
     <browser:viewlet
         name="plone.htmlhead.title"
@@ -50,13 +61,6 @@
         />
 
     <!--Views-->
-    <browser:page
-        name="seo-controlpanel"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        class=".views.SEOControlPanel"
-        layer=".interfaces.IPloneSEOLayer"
-        permission="cmf.ManagePortal"
-        />
 
     <browser:page
         name="seo_context"
