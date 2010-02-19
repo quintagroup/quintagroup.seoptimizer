@@ -9,7 +9,7 @@
    <property
       name="url_expr">string:${object_url}/@@seo-context-properties</property>
    <property name="icon_expr"></property>
-   <property name="available_expr">object/@@seo-context-properties</property>
+   <property name="available_expr">context/@@seo_context/isSEOTabVisibile</property>
    <property name="permissions">
     <element value="Modify portal content"/>
    </property>
