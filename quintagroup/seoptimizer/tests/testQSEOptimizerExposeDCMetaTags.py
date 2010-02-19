@@ -21,12 +21,15 @@ class TestExposeDCMetaTags(FunctionalTestCase):
         self.my_doc = self.portal['my_doc']
 
     def test_exposeDCMetaTags_in_configletOn(self):
-        path = self.portal.id+'/@@seo-controlpanel?exposeDCMetaTags=True&form.submitted=1'
+        path = self.portal.id+'/@@seo-controlpanel?form.actions.save=1' \
+            '&form.exposeDCMetaTags=on&_authenticator=%s' % self._getauth()
         self.publish(path, self.basic_auth)
         self.assert_(self.sp.exposeDCMetaTags)
 
     def test_exposeDCMetaTags_in_configletOff(self):
-        self.publish(self.portal.id+'/@@seo-controlpanel?form.submitted=1', self.basic_auth)
+        self.publish(self.portal.id+'/@@seo-controlpanel?form.actions.save=1' \
+            '&form.exposeDCMetaTags=&_authenticator=%s' % self._getauth(),
+             self.basic_auth)
         self.assert_(not self.sp.exposeDCMetaTags)
 
     def test_exposeDCMetaTagsPropertyOff(self):

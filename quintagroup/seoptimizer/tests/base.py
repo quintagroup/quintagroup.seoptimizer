@@ -65,14 +65,26 @@ def setup_product():
 setup_product()
 ptc.setupPloneSite()
 
+class MixinTestCase:
 
-class TestCase(ptc.PloneTestCase):
+    def _getauth(self):
+        # Fix authenticator for the form
+        import re
+
+        authenticator = self.portal.restrictedTraverse("@@authenticator")
+        html = authenticator.authenticator()
+        handle = re.search('value="(.*)"', html).groups()[0]
+        return handle
+
+
+
+class TestCase(MixinTestCase, ptc.PloneTestCase):
     """We use this base class for all the tests in this package. If
     necessary, we can put common utility or setup code in here. This
     applies to unit test cases.
     """
 
-class FunctionalTestCase(ptc.FunctionalTestCase):
+class FunctionalTestCase(MixinTestCase, ptc.FunctionalTestCase):
     """We use this class for functional integration tests that use
     doctest syntax. Again, we can put basic common utility or setup
     code in here.

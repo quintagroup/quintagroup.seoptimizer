@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 from base import getToolByName, FunctionalTestCase, newSecurityManager
 from config import *
 
+
 class TestUsageKeywords(FunctionalTestCase):
 
     def afterSetUp(self):
@@ -29,18 +30,25 @@ class TestUsageKeywords(FunctionalTestCase):
 
     def test_changes_using_keywords_in_configlet(self):
         for sg, lg in ((1, 1), (1, 2), (2, 1), (2, 2), (3, 1), (3, 2)):
-            path = self.portal.id+'/@@seo-controlpanel?settingsUseKeywordsSG=%s'\
-                                '&settingsUseKeywordsLG=%s&form.submitted=1' % (sg, lg)
-            self.publish(path, self.basic_auth)
+            path = self.portal.id+'/@@seo-controlpanel?form.settings_use_keywords_sg=%s'\
+                                '&form.settings_use_keywords_lg=%s&form.actions.save=1'\
+                                '&_authenticator=%s' % (sg, lg, self._getauth())
+
+            html = self.publish(path, self.basic_auth)
+            open('/tmp/sg.html','w').write(str(html))
+            #self.app.REQUEST.form['_authenticator'] = self._getauth()
             self.assertEqual(self.sp.getProperty('settings_use_keywords_sg', 0), sg)
             self.assertEqual(self.sp.getProperty('settings_use_keywords_lg', 0), lg)
 
     def test_additional_keywords_in_configlet(self):
         quoted_keywords = urllib.quote('foo\nbar')
-        path = self.portal.id+'/@@seo-controlpanel?additionalKeywords:lines=%s&form.submitted=1'%quoted_keywords
+        path = self.portal.id+'/@@seo-controlpanel?form.additional_keywords=%s'\
+            '&form.actions.save=1&_authenticator=%s' % (quoted_keywords, self._getauth())
         self.publish(path, self.basic_auth)
         self.assertEqual(self.sp.additional_keywords, ('foo', 'bar'))
-        self.publish(self.portal.id+'/@@seo-controlpanel?form.submitted=1', self.basic_auth)
+
+        self.publish(self.portal.id+'/@@seo-controlpanel?form.actions.save=1'\
+            '&form.additional_keywords=&_authenticator=%s' % self._getauth(), self.basic_auth)
         self.assertEqual(self.sp.additional_keywords, ())
 
     def test_listMetaTags_empty(self):
