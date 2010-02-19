@@ -5,22 +5,18 @@ from Products.CMFCore.Expression import Expression
 logger = logging.getLogger('quintagroup.seoptimizer')
 
 def migrationActions(site):
-    old = 'qseo_properties_edit_form'
-    new = '@@seo-context-properties'
-    condition = "python:exists('portal/@@seo-context-properties')"
+    p_props = getToolByName(site, 'portal_properties')
+    seo_props = getToolByName(p_props, 'seo_properties')
+    ctws = list(seo_props.getProperty('content_types_with_seoproperties', []))
+
     for ptype in site.portal_types.objectValues():
-        acts = filter(lambda x: x.id == 'seo_properties' , ptype.listActions())
-        for act in acts:
-            log = 0
-            if not act.condition:
-                act.condition = Expression(condition)
-                log = 1
-            ac_exp = act.getActionExpression()
-            if old in ac_exp:
-                act.setActionExpression(ac_exp.replace(old, new))
-                log = 1
-            if log:
-                logger.log(logging.INFO, "Updated \"SEO Properties\" action in %s type." % ptype.id)
+        for idx, act in enumerate(ptype.listActions()):
+            if act.id == 'seo_properties':
+                if  ptype.id not in ctws:
+                    ctws.append(ptype.id)
+                ptype.deleteActions([idx])
+                logger.log(logging.INFO, "Moved \"SEO Properties\" action from %s type in portal actions." % ptype.id)
+    seo_props.manage_changeProperties(content_types_with_seoproperties=ctws)
 
 def removeSkin(self, layer):
     """ Remove layers.
