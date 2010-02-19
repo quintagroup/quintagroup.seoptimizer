@@ -89,7 +89,7 @@
   <property name="content_types_with_seoproperties" type="lines">
    <element value="Document"/>
    <element value="File"/>
-   <element value="News_Item"/>
+   <element value="News Item"/>
   </property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
