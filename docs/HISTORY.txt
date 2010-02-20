@@ -1,10 +1,11 @@
 Changelog
 =========
 
-2.3.3 (unreleased)
+2.3.3 (2010-02-20)
 ------------------
 
-- Nothing changed yet.
+- Fixed translate content type name in configlet (fixed the issue #13)
+  [liebster]
 
 
 2.3.2 (2010-02-16)
