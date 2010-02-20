@@ -168,6 +168,8 @@
                                                       value name;
                                                       checked python:view.hasSEOAction(type)"/>
                               <label tal:attributes="for python:type.getId()"
+                                     i18n:domain="plone"
+                                     i18n:translate=""
                                      tal:content="type/Title"/>
                           </tal:type>
                       </li>

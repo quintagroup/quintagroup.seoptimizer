@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quintagroup.seoptimizer\n"
-"POT-Creation-Date: 2010-02-16 12:25+0000\n"
+"POT-Creation-Date: 2010-02-20 17:15+0000\n"
 "PO-Revision-Date: 2010-02-11 14:05+0300\n"
 "Last-Translator: Olha <olha.pelishok@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
