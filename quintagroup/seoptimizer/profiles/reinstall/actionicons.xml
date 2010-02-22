@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<action-icons  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="quintagroup.seoptimizer">
+ <action-icon category="controlpanel"
+              action_id="quintagroup.seoptimizer"
+              title="Search Engine Optimizer"
+              priority="0"
+              icon_expr="++resource++seo_icon.gif"
+              i18n:attributes="title" />
+</action-icons>
