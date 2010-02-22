@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-20 17:15+0000\n"
+"POT-Creation-Date: 2010-02-22 17:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,12 +25,9 @@ msgstr ""
 msgid "Keywords list is empty!"
 msgstr ""
 
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/Document.xml
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/File.xml
-#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/types/News_Item.xml
-msgid "SEO Properties"
-msgstr ""
-
+#. Default: "Search Engine Optimizer"
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/reinstall/controlpanel.xml
+#: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/reinstall/actionicons.xml
 #: ./quintagroup.seoptimizer/quintagroup/seoptimizer/profiles/default/controlpanel.xml
 msgid "Search Engine Optimizer"
 msgstr ""
