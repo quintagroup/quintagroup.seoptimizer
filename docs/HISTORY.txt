@@ -4,7 +4,7 @@ Changelog
 2.3.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed bugs with using domain by custom content type.
 
 
 2.3.3 (2010-02-22)
