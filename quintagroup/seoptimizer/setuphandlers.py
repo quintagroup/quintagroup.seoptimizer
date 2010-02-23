@@ -3,6 +3,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.Expression import Expression
 
 logger = logging.getLogger('quintagroup.seoptimizer')
+FIX_PTYPES_DOMAIN = ['Document', 'File', 'News Item']
 
 def migrationActions(site):
     p_props = getToolByName(site, 'portal_properties')
@@ -55,6 +56,14 @@ def remove_configlets(context, conf_ids):
             configTool.unregisterConfiglet(id)
             logger.log(logging.INFO, "Unregistered \"%s\" configlet." % id)
 
+def changeDomain(site):
+    """ Fixes old versions bug: Change of content type's domain to 'plone'.
+    """
+    for ptype in [ptypes for ptypes in site.portal_types.objectValues() if ptypes.id in FIX_PTYPES_DOMAIN]:
+        if ptype.i18n_domain == 'quintagroup.seoptimizer':
+            ptype.i18n_domain = 'plone'
+            logger.log(logging.INFO, "I18n Domain of the type \'%s\' changed to \'plone\'." % ptype.id)
+
 def importVarious(context):
     """ Do customized installation.
     """
@@ -68,6 +77,7 @@ def reinstall(context):
         return
     site = context.getSite()
     migrationActions(site)
+    changeDomain(site)
 
 def uninstall(context):
     """ Do customized uninstallation.
