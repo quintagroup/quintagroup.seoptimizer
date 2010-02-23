@@ -2,8 +2,4 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
     <javascript cacheable="true" compression="safe" cookable="true"
         enabled="true" expression="" id="++resource++seo_custommetatags.js" inline="false"/>
-    <!--javascript cacheable="true" compression="safe" cookable="true"
-        enabled="true" expression="" id="++resource++checkkeywords.js.dtml" inline="false"/>
-    <javascript cacheable="true" compression="safe" cookable="true"
-        enabled="true" expression="" id="++resource++statistics.js.dtml" inline="false"/-->
 </object>
