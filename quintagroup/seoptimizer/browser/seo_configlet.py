@@ -1,9 +1,10 @@
+import re
 from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema import Bool, Text, Choice, Tuple
+from zope.schema import Bool, Text, Choice, Tuple, List
 from zope.app.form.browser import RadioWidget
 
 from zope.formlib.form import FormFields
@@ -57,7 +58,7 @@ class ISEOConfigletSchema(Interface):
         default=True,
         required=False)
 
-    default_custom_metatags = Text(
+    default_custom_metatags = List(
         title=_("label_default_custom_metatags", default='Default custom metatags.'),
         description=_("help_default_custom_metatags",
                 default='Fill in custom metatag names (one per line) which will'
@@ -65,7 +66,7 @@ class ISEOConfigletSchema(Interface):
                     '"metaname|metacontent" or "metaname".'),
         required=False)
 
-    metatags_order = Text(
+    metatags_order = List(
         title=_("label_metatags_order",
                 default='Meta tags order in the page.'),
         description=_("help_metatags_order",
@@ -74,7 +75,7 @@ class ISEOConfigletSchema(Interface):
                     '"metaname accessor".'),
         required=False)
 
-    additional_keywords = Text(
+    additional_keywords = List(
         title=_("label_additional_keywords",
                 default='Additional keywords that should be added to the '
                     'content types.'),
@@ -135,27 +136,6 @@ class SEOConfigletAdapter(SchemaAdapterBase):
     def setExposeDC(self, value):
         return self.siteprops._updateProperty('exposeDCMetaTags', bool(value))
 
-    def getDefaultCustomMetatags(self):
-        return '\n'.join(self.context.getProperty('default_custom_metatags'))
-    
-    def setDefaultCustomMetatags(self, value):
-        value = value and value.strip().split('\n') or []
-        self.context._updateProperty('default_custom_metatags', value)
-
-    def getMetatagsOrder(self):
-        return '\n'.join(self.context.getProperty('metatags_order'))
-    
-    def setMetatagsOrder(self, value):
-        value = value and value.strip().split('\n') or []
-        self.context._updateProperty('metatags_order', value)
-
-    def getAdditionalKeywords(self):
-        return '\n'.join(self.context.getProperty('additional_keywords'))
-    
-    def setAdditionalKeywords(self, value):
-        value = value and value.strip().split('\n') or []
-        self.context._updateProperty('additional_keywords', value)
-
     def getTypesSEOEnabled(self):
         ct_with_seo = self.context.content_types_with_seoproperties
         return [t for t in self.ttool.listContentTypes() if t in ct_with_seo]
@@ -166,17 +146,24 @@ class SEOConfigletAdapter(SchemaAdapterBase):
 
 
     exposeDCMetaTags = property(getExposeDC, setExposeDC)
-    metatags_order = property(getMetatagsOrder, setMetatagsOrder)
-    default_custom_metatags = property(getDefaultCustomMetatags, setDefaultCustomMetatags)
-    additional_keywords = property(getAdditionalKeywords, setAdditionalKeywords)
     types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
-
+    metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
+    default_custom_metatags = ProxyFieldProperty(ISEOConfigletSchema['default_custom_metatags'])
+    additional_keywords = ProxyFieldProperty(ISEOConfigletSchema['additional_keywords'])
+    
     settings_use_keywords_sg = ProxyFieldProperty(ISEOConfigletSchema['settings_use_keywords_sg'])
     settings_use_keywords_lg = ProxyFieldProperty(ISEOConfigletSchema['settings_use_keywords_lg'])
 
 
 class SmallTextAreaWidget(TextAreaWidget):
     height = 5
+    splitter = re.compile(u'\\r?\\n', re.S|re.U)
+
+    def _toFieldValue(self, value):
+        return filter(None, self.splitter.split(value))
+
+    def _toFormValue(self, value):
+        return u'\r\n'.join(list(value))
 
 
 class SEOConfiglet(ControlPanelForm):
@@ -184,6 +171,7 @@ class SEOConfiglet(ControlPanelForm):
     form_fields = FormFields(ISEOConfigletSchema)
     form_fields['default_custom_metatags'].custom_widget = SmallTextAreaWidget
     form_fields['additional_keywords'].custom_widget = SmallTextAreaWidget
+    form_fields['metatags_order'].custom_widget = SmallTextAreaWidget
     form_fields['settings_use_keywords_sg'].custom_widget = SEORadioWidget
     form_fields['settings_use_keywords_lg'].custom_widget = SEORadioWidget
     form_fields['types_seo_enabled'].custom_widget = MultiCheckBoxThreeColumnWidget
