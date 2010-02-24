@@ -2,6 +2,7 @@ from sets import Set
 from DateTime import DateTime 
 from Acquisition import aq_inner
 from zope.component import queryAdapter
+from plone.memoize import view
 from plone.app.controlpanel.form import ControlPanelView
 
 from Products.Five.browser import BrowserView
@@ -22,6 +23,63 @@ class SEOContext( BrowserView ):
     """ This class contains methods that allows to edit html header meta tags.
     """
 
+    def __init__(self, *args, **kwargs):
+        super(SEOContext, self).__init__(*args, **kwargs)
+        self._seotags = self._getSEOTags()
+
+    def __getitem__(self, key):
+        return self._seotags.get(key, '')
+
+    @view.memoize
+    def _getSEOTags(self):
+        seotags = {
+            "seo_title": self.getSEOProperty( 'qSEO_title', accessor='Title' ),
+            "seo_robots": self.getSEOProperty( 'qSEO_robots', default='ALL'),
+            "seo_description": self.getSEOProperty( 'qSEO_description', accessor='Description' ),
+            "seo_distribution": self.getSEOProperty( 'qSEO_distribution', default="Global"),
+            "seo_customMetaTags": self.seo_customMetaTags(),
+            "seo_globalWithoutLocalCustomMetaTags": self.seo_globalWithoutLocalCustomMetaTags(),
+            "seo_localCustomMetaTags": self.seo_localCustomMetaTags(),
+            "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
+            "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
+            "meta_keywords": self.meta_keywords(),
+            "seo_keywords": self.seo_keywords(),
+            "seo_canonical": self.seo_canonical(),
+            # Add test properties
+            "has_seo_title": self.context.hasProperty('qSEO_title'),
+            "has_seo_robots": self.context.hasProperty('qSEO_robots'),
+            "has_seo_description": self.context.hasProperty( 'qSEO_description'),
+            "has_seo_distribution": self.context.hasProperty( 'qSEO_distribution'),
+            "has_html_comment": self.context.hasProperty('qSEO_html_comment'),
+            "has_seo_keywords": self.context.hasProperty('qSEO_keywords'),
+            "has_seo_canonical": self.context.hasProperty('qSEO_canonical'),
+            }
+        seotags["seo_nonEmptylocalMetaTags"] = bool(seotags["seo_localCustomMetaTags"])
+        return seotags
+
+        
+    def getSEOProperty( self, property_name, accessor='', default=None ):
+        """ Get value from seo property by property name.
+        """
+        context = aq_inner(self.context)
+
+        if context.hasProperty(property_name):
+            return context.getProperty(property_name, default)
+
+        if accessor:
+            method = getattr(context, accessor, default)
+            if not callable(method):
+                return default
+
+            # Catch AttributeErrors raised by some AT applications
+            try:
+                value = method()
+            except AttributeError:
+                value = default
+
+            return value
+
+
     def isSEOTabVisibile(self):
         context = aq_inner(self.context)
         portal_properties = getToolByName(context, 'portal_properties')
@@ -29,50 +87,6 @@ class SEOContext( BrowserView ):
         content_types_with_seoproperties = seo_properties.getProperty('content_types_with_seoproperties', '')
         return bool(self.context.portal_type in content_types_with_seoproperties)
 
-    def getSEOProperty( self, property_name, accessor='' ):
-        """ Get value from seo property by property name.
-        """
-        context = aq_inner(self.context)
-
-        if context.hasProperty(property_name):
-            return context.getProperty(property_name)
-
-        if accessor:
-            method = getattr(context, accessor, None)
-            if not callable(method):
-                return None
-
-            # Catch AttributeErrors raised by some AT applications
-            try:
-                value = method()
-            except AttributeError:
-                value = None
-
-            return value
-
-    def seo_title( self ):
-        """ Generate SEO Title from SEO properties.
-        """
-        return self.getSEOProperty( 'qSEO_title', accessor='Title' )
-
-    def seo_robots( self ):
-        """ Generate SEO Robots from SEO properties.
-        """
-        robots = self.getSEOProperty( 'qSEO_robots' )
-        return robots and robots or 'ALL'
-
-    def seo_description( self ):
-        """ Generate Description from SEO properties.
-        """
-
-        return self.getSEOProperty( 'qSEO_description', accessor = 'Description')
-
-    def seo_distribution( self ):
-        """ Generate Distribution from SEO properties.
-        """
-        dist = self.getSEOProperty( 'qSEO_distribution' )
-
-        return dist and dist or 'Global'
 
     def seo_customMetaTags( self ):
         """        Returned seo custom metatags from default_custom_metatags property in seo_properties
@@ -131,11 +145,6 @@ class SEOContext( BrowserView ):
                     result.append({'meta_name'    : name_value[0],
                                    'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
-
-    def seo_nonEmptylocalMetaTags( self ):
-        """
-        """
-        return bool(self.seo_localCustomMetaTags())
 
     def seo_html_comment( self ):
         """ Generate HTML Comments from SEO properties.
