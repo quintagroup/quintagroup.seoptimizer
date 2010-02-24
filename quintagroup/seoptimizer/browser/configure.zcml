@@ -4,12 +4,12 @@
     i18n_domain="quintagroup.seoptimizer">
 
     <browser:page
-	for="Products.Archetypes.interfaces.IBaseObject"
-	attribute="validateKeywords"
-	class=".keywords.ValidateSEOKeywordsView"
-	name="checkSEOKeywords"
-	permission="cmf.ModifyPortalContent"
-	/>
+        for="Products.Archetypes.interfaces.IBaseObject"
+        attribute="validateKeywords"
+        class=".keywords.ValidateSEOKeywordsView"
+        name="checkSEOKeywords"
+        permission="cmf.ModifyPortalContent"
+        />
 
 
     <!-- MOVED from overrides.zcml :
@@ -76,6 +76,15 @@
         class=".views.SEOContextPropertiesView"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
+        />
+
+    <browser:page
+        name="seotab-visibility"
+        for="*"
+        class=".views.VisibilityCheckerView"
+        attribute="checkVisibilitySEOAction"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="cmf.ManagePortal"
         />
 
     <browser:resource

@@ -2,6 +2,7 @@ from sets import Set
 from DateTime import DateTime 
 from Acquisition import aq_inner
 from zope.component import queryAdapter
+from zope.component import getMultiAdapter
 from plone.memoize import view
 from plone.app.controlpanel.form import ControlPanelView
 
@@ -12,6 +13,7 @@ from Products.CMFPlone import PloneMessageFactory as pmf
 
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 from quintagroup.seoptimizer import interfaces
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 SEPERATOR = '|'
 SEO_PREFIX = 'seo_'
@@ -57,7 +59,6 @@ class SEOContext( BrowserView ):
         seotags["seo_nonEmptylocalMetaTags"] = bool(seotags["seo_localCustomMetaTags"])
         return seotags
 
-        
     def getSEOProperty( self, property_name, accessor='', default=None ):
         """ Get value from seo property by property name.
         """
@@ -78,15 +79,6 @@ class SEOContext( BrowserView ):
                 value = default
 
             return value
-
-
-    def isSEOTabVisibile(self):
-        context = aq_inner(self.context)
-        portal_properties = getToolByName(context, 'portal_properties')
-        seo_properties = getToolByName(portal_properties, 'seo_properties')
-        content_types_with_seoproperties = seo_properties.getProperty('content_types_with_seoproperties', '')
-        return bool(self.context.portal_type in content_types_with_seoproperties)
-
 
     def seo_customMetaTags( self ):
         """Returned seo custom metatags from default_custom_metatags property in seo_properties
@@ -362,3 +354,16 @@ class SEOContextPropertiesView( BrowserView ):
                 return request.response.redirect(self.context.absolute_url())
             context.plone_utils.addPortalMessage(state, 'error')
         return self.template()
+
+
+class VisibilityCheckerView( BrowserView ):
+    """ This class contains methods that visibility checker.
+    """
+
+    def checkVisibilitySEOAction(self):
+        """ Checks visibility 'SEO Properties' action for content
+        """
+        context = aq_inner(self.context)
+        plone = getMultiAdapter((self, self.request),name="plone_portal_state").portal()
+        adapter = ISEOConfigletSchema(plone)
+        return bool(self.context.portal_type in adapter.types_seo_enabled)
