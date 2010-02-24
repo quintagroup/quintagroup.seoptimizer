@@ -11,6 +11,4 @@ STOP_WORDS = ['a', 'an', 'amp', 'and', 'are', 'arial', 'as', 'at', 'be', 'but', 
               'if', 'in', 'is', 'it', 'javascript', 'jpg', 'made', 'net', 'of', 'on', 'or', 'org', 'our', 'sans',
               'see', 'serif', 'she', 'that', 'the', 'this', 'to', 'us', 'we', 'with', 'you', 'your']
 
-FIELDS = ['seo_title', 'seo_description', 'seo_keywords']
-
 DEFAULT_CUSTOM_METATAGS = []

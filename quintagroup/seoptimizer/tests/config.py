@@ -2,7 +2,7 @@ from Products.CMFCore.permissions import ManagePortal
 
 from quintagroup.seoptimizer.config import *
 
-PROJECT_NAME = 'quintagroup.seoptimizer'
+FIELDS = ['seo_title', 'seo_description', 'seo_keywords']
 
 PROPS = {'stop_words':STOP_WORDS, 'fields':FIELDS, 'additional_keywords': []}
 
