@@ -55,18 +55,21 @@ class SEOTagsViewlet( ViewletBase ):
                         result['keywords'] = keywords
                 continue
 
-            method = getattr(seo_context, accessor, None)
-            if method is None:
-                method = getattr(aq_inner(self.context).aq_explicit, accessor, None)
+            if seo_context._seotags.has_key(accessor):
+                value = seo_context._seotags.get(accessor, None)
+            else:
+                method = getattr(seo_context, accessor, None)
+                if method is None:
+                    method = getattr(aq_inner(self.context).aq_explicit, accessor, None)
 
-            if not callable(method):
-                continue
+                if not callable(method):
+                    continue
 
-            # Catch AttributeErrors raised by some AT applications
-            try:
-                value = method()
-            except AttributeError:
-                value = None
+                # Catch AttributeErrors raised by some AT applications
+                try:
+                    value = method()
+                except AttributeError:
+                    value = None
 
             if not value:
                 # No data
@@ -126,7 +129,7 @@ class SEOTagsViewlet( ViewletBase ):
 
         # add custom meta tags (added from qseo tab by user)
         # for given context and default from configlet
-        custom_meta_tags = seo_context and seo_context.seo_customMetaTags() or []
+        custom_meta_tags = seo_context and seo_context['seo_customMetaTags'] or []
         for tag in custom_meta_tags:
             if tag['meta_content']:
                 result[tag['meta_name']] = tag['meta_content']
@@ -144,15 +147,15 @@ class TitleCommentViewlet(ViewletBase):
                                             name=u'plone_portal_state')
         self.context_state = getMultiAdapter((self.context, self.request),
                                              name=u'plone_context_state')
-        self.page_title = self.context_state.object_title
-        self.portal_title = self.portal_state.portal_title
+        self.seo_context = getMultiAdapter((self.context, self.request),
+                                             name=u'seo_context')
 
-        self.override_title = self.context.hasProperty('qSEO_title')
-        self.override_comments = self.context.hasProperty('qSEO_html_comment')
+        self.override_title = self.seo_context['has_seo_title']
+        self.override_comments = self.seo_context['has_html_comment']
 
     def std_title(self):
-        portal_title = safe_unicode(self.portal_title())
-        page_title = safe_unicode(self.page_title())
+        portal_title = safe_unicode(self.context_state.object_title())
+        page_title = safe_unicode(self.portal_state.portal_title())
         if page_title == portal_title:
             return u"<title>%s</title>" % (escape(portal_title))
         else:
@@ -161,20 +164,22 @@ class TitleCommentViewlet(ViewletBase):
                 escape(safe_unicode(portal_title)))
 
     def render(self):
-        std_title = self.std_title()
-        seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
         if not self.override_title:
+            std_title = self.std_title()
             if not self.override_comments:
                 return std_title
             else:
-                qseo_comments = u"<!--%s-->"%safe_unicode(seo_context.seo_html_comment())
+                qseo_comments = u"<!--%s-->" % safe_unicode(
+                    self.seo_context["seo_html_comment"])
                 return u"%s\n%s"%(std_title, qseo_comments)
         else:
-            qseo_title = u"<title>%s</title>" % safe_unicode(seo_context.seo_title())
+            qseo_title = u"<title>%s</title>" % safe_unicode(
+                self.seo_context["seo_title"])
             if not self.override_comments:
                 return qseo_title
             else:
-                qseo_comments = u"<!--%s-->"%safe_unicode(seo_context.seo_html_comment())
+                qseo_comments = u"<!--%s-->" % safe_unicode(
+                    self.seo_context["seo_html_comment"])
                 return u"%s\n%s"%(qseo_title, qseo_comments)
 
 
@@ -199,4 +204,4 @@ class CanonicalUrlViewlet( ViewletBase ):
 
     def render( self ):
         seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
-        return """<link rel="canonical" href="%s" />""" % seo_context.seo_canonical()
+        return """<link rel="canonical" href="%s" />""" % seo_context['seo_canonical']
