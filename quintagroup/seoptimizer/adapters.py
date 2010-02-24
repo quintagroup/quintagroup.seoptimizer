@@ -38,13 +38,13 @@ class MetaKeywordsAdapter(object):
         """ See interface.
         """
         request = self.context.REQUEST
-        meta_keywords = ''
+        meta_keywords = []
         filtered_keywords = []
         portal_props = getToolByName(self.context, 'portal_properties')
         seo_props = getToolByName(portal_props, 'seo_properties', None)
         seo_context = queryMultiAdapter((self.context, request), name='seo_context')
         if seo_context:
-            meta_keywords = list(seo_context.meta_keywords())
+            meta_keywords = list(seo_context['meta_keywords'])
         return ', '.join(meta_keywords)
 
 

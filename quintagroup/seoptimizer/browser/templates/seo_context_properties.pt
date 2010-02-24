@@ -30,7 +30,8 @@
     <div metal:fill-slot="main"
         tal:define="errors python:request.get('errors', {});
                     Iterator python:modules['Products.CMFPlone'].IndexIterator;
-                    tabindex python:Iterator(mainSlot=False)"><!--TODO:implement validation and errors handling-->
+                    tabindex python:Iterator(mainSlot=False);
+		    seo_context here/@@seo_context"><!--TODO:implement validation and errors handling-->
       <h1 i18n:translate="heading_edit_seo_properties">Edit SEO Properties</h1>
       <div class="documentDescription" i18n:translate="description_edit_seo_properties">
           This form allows you to edit html header meta tags that are produced by 
@@ -63,7 +64,7 @@
                    id="seo_title_override"
                    name="seo_title_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_title'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_title'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_title_override">
@@ -76,7 +77,7 @@
                    size="40"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/seo_title | here/@@seo_context/seo_title;
+                   tal:attributes="value request/seo_title | seo_context/seo_title;
                                    tabindex tabindex/next;"
                    />
           </div>
@@ -91,7 +92,7 @@
                    id="seo_description_override"
                    name="seo_description_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_description'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_description'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_description_override">
@@ -105,7 +106,7 @@
                       cols="15"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:content="request/seo_description | here/@@seo_context/seo_description"
+                      tal:content="request/seo_description | seo_context/seo_description"
                       />
           </div>
           <div class="field">
@@ -124,7 +125,7 @@
                    id="seo_keywords_override"
                    name="seo_keywords_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_keywords'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_keywords'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_keywords_override">
@@ -138,7 +139,7 @@
                       wrap="off"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:define="keywords request/seo_keywords | here/@@seo_context/seo_keywords"
+                      tal:define="keywords request/seo_keywords | seo_context/seo_keywords"
                       tal:content="python:'\n'.join(keywords)"
                       />
             <br />
@@ -154,7 +155,7 @@
                    id="seo_html_comment_override"
                    name="seo_html_comment_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_html_comment'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_html_comment'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_html_comment_override">
@@ -167,7 +168,7 @@
                       cols="15"
                       tabindex=""
                       tal:attributes="tabindex tabindex/next;"
-                      tal:content="request/seo_html_comment | here/@@seo_context/seo_html_comment"
+                      tal:content="request/seo_html_comment | seo_context/seo_html_comment"
                       />
           </div>
           <div class="field">
@@ -182,7 +183,7 @@
                    id="seo_robots_override"
                    name="seo_robots_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_robots'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_robots'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_robots_override">
@@ -195,7 +196,7 @@
                    size="25"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/seo_robots | here/@@seo_context/seo_robots;
+                   tal:attributes="value request/seo_robots | seo_context/seo_robots;
                                    tabindex tabindex/next;"
                    />
           </div>
@@ -211,7 +212,7 @@
                    id="seo_distribution_override"
                    name="seo_distribution_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_distribution'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_distribution'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_distribution_override">
@@ -224,7 +225,7 @@
                    size="25"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/seo_distribution | here/@@seo_context/seo_distribution;
+                   tal:attributes="value request/seo_distribution | seo_context/seo_distribution;
                                    tabindex tabindex/next;"
                    />
           </div>
@@ -243,7 +244,7 @@
                    id="seo_canonical_override"
                    name="seo_canonical_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(here.hasProperty('qSEO_canonical'), 'on', None);
+                   tal:attributes="checked python:view.test(seo_context['has_seo_canonical'], 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_canonical_override">
@@ -257,13 +258,13 @@
                    size="55"
                    value=""
                    tabindex=""
-                   tal:attributes="value request/seo_canonical | here/@@seo_context/seo_canonical;
+                   tal:attributes="value request/seo_canonical | seo_context/seo_canonical;
                                    tabindex tabindex/next;"
                    />
           </div>
           <div class="field"
                tal:define="fieldName string:seo_custommetatags;
-                           nonEmptylocalMetaTags here/@@seo_context/seo_nonEmptylocalMetaTags;">
+                           nonEmptylocalMetaTags seo_context/seo_nonEmptylocalMetaTags;">
             <label i18n:translate="label_custom_metatags" for="seo_custom_metatags">
               Custom Meta Tags
             </label>
@@ -287,8 +288,8 @@
                    style="width: 100%"
                    tal:define="columnNames python:['meta name', 'meta content'];
                                columnIds   python:['meta_name', 'meta_content'];
-                               globalMT    here/@@seo_context/seo_globalWithoutLocalCustomMetaTags;
-                               localMT    here/@@seo_context/seo_localCustomMetaTags;">
+                               globalMT    seo_context/seo_globalWithoutLocalCustomMetaTags;
+                               localMT    seo_context/seo_localCustomMetaTags;">
                 <thead>
                     <tr>
                         <th class="discreet" style="text-align: left"
