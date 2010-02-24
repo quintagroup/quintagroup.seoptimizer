@@ -42,21 +42,6 @@ class TestInstallation(TestCase):
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
         self.assert_(PROJECT_NAME in [a.getId() for a in configTool.listActions()], 'Configlet not found')
 
-    def test_actions_install(self):
-        portal_types = getToolByName(self.portal, 'portal_types')
-        for ptype in portal_types.objectValues():
-            try:
-                #for Plone-2.5 and higher
-                acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
-                action = acts and acts[0] or None
-            except AttributeError:
-                action = ptype.getActionById('seo_properties', default=None )
-
-            if ptype.getId() in qSEO_TYPES:
-                self.assert_(action, 'Action for %s not found' % ptype.getId())
-            else:
-                self.assert_(not action, 'Action found for %s' % ptype.getId())
-
     def test_skins_install(self):
         skinstool=getToolByName(self.portal, 'portal_skins')
 
@@ -74,20 +59,6 @@ class TestInstallation(TestCase):
                 path = skinstool.getSkinPath(skin)
                 path = map( string.strip, string.split( path,',' ) )
                 self.assert_(PROJECT_NAME+'/%s' % plone_version in path, 'qSEOptimizer versioned layer not found in %s' %skin)
-
-    def test_actions_uninstall(self):
-        self.qi.uninstallProducts([PROJECT_NAME])
-        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
-        portal_types = getToolByName(self.portal, 'portal_types')
-        for ptype in portal_types.objectValues():
-            try:
-                #for Plone-2.5 and higher
-                acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
-                action = acts and acts[0] or None
-            except AttributeError:
-                action = ptype.getActionById('seo_properties', default=None )
-
-            self.assert_(not action, 'Action for %s found after uninstallation' % ptype.getId())
 
     def test_skins_uninstall(self):
         self.qi.uninstallProducts([PROJECT_NAME])

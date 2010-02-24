@@ -49,6 +49,77 @@ We have the login portlet, so let's use that.
 
 
 -*- extra stuff goes here -*-
-The my tests
+Test 'SEO Properties' action
 ===============================
 
+Test installation 'SEO Properties' action
+
+    >>> from quintagroup.seoptimizer.config import PROJECT_NAME
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+    >>> self.qi = self.portal.portal_quickinstaller
+    >>> self.qi.installProduct(PROJECT_NAME)
+    'Ran all install steps.'
+    >>> self.sp = self.portal.portal_properties.seo_properties
+    >>> self.object_tabs = self.portal.portal_actions.object
+    >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
+    True
+
+Test visibility 'SEO Properties' action after installation
+
+    >>> self.sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> browser.getLink('SEO Properties').url
+    'http://nohost/plone/front-page/@@seo-context-properties'
+
+Test invisibility 'SEO Properties' action after installation
+
+    >>> self.sp.content_types_with_seoproperties = ('File',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+
+Test reinstallation 'SEO Properties' action
+
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+    >>> self.qi.reinstallProducts((PROJECT_NAME,))
+    >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
+    True
+
+Test visibility 'SEO Properties' action after reinstallation
+
+    >>> self.sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> browser.getLink('SEO Properties').url
+    'http://nohost/plone/front-page/@@seo-context-properties'
+
+Test invisibility 'SEO Properties' action after reinstallation
+
+    >>> self.sp.content_types_with_seoproperties = ('File',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+
+Test uninstallation 'SEO Properties' action
+
+    >>> self.sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> self.qi.uninstallProducts((PROJECT_NAME,))
+    >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
+    False
+
+Test visibility 'SEO Properties' action after uninstallation
+
+    >>> self.sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
