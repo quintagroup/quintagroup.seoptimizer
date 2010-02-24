@@ -89,7 +89,7 @@ class SEOContext( BrowserView ):
 
 
     def seo_customMetaTags( self ):
-        """        Returned seo custom metatags from default_custom_metatags property in seo_properties
+        """Returned seo custom metatags from default_custom_metatags property in seo_properties
         (global seo custom metatags) with update from seo custom metatags properties in context (local seo custom metatags).
         """
         tags = self.seo_globalCustomMetaTags()
@@ -107,7 +107,7 @@ class SEOContext( BrowserView ):
         return tags
 
     def seo_globalWithoutLocalCustomMetaTags( self ):
-        """        Returned seo custom metatags from default_custom_metatags property in seo_properties
+        """Returned seo custom metatags from default_custom_metatags property in seo_properties
         (global seo custom metatags) without seo custom metatags from properties in context (local seo custom metatags).
         """
         glob = self.seo_globalCustomMetaTags()
@@ -145,12 +145,6 @@ class SEOContext( BrowserView ):
                     result.append({'meta_name'    : name_value[0],
                                    'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
-
-    def seo_html_comment( self ):
-        """ Generate HTML Comments from SEO properties.
-        """
-        html_comment = self.getSEOProperty( 'qSEO_html_comment' )
-        return html_comment and html_comment or '' 
 
     def meta_keywords( self ):
         """ Generate Meta Keywords from SEO properties (global and local) with Subject,
