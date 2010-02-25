@@ -14,9 +14,6 @@ from config import *
 class TestCanonicalURL(FunctionalTestCase):
 
     def afterSetUp(self):
-        self.qi = self.portal.portal_quickinstaller
-        self.qi.installProduct(PROJECT_NAME)
-
         self.basic_auth = 'portal_manager:secret'
         uf = self.app.acl_users
         uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])

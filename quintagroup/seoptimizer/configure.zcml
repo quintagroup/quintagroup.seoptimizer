@@ -8,7 +8,10 @@
   <!-- include dependent packages -->
   <include package="quintagroup.canonicalpath" />
 
+  <!-- This need for QI for possibility to find "uninstall"
+       method in then ./Extensions/install.py external method -->
   <five:registerPackage package="." />
+
   <cmf:registerDirectory name="quintagroup.seoptimizer" />
   <i18n:registerTranslations directory="locales" />
 

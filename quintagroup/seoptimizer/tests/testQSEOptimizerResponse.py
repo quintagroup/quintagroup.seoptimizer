@@ -6,8 +6,6 @@ from config import *
 class TestResponse(FunctionalTestCase):
 
     def afterSetUp(self):
-        self.qi = self.portal.portal_quickinstaller
-        self.qi.installProduct(PROJECT_NAME)
         self.sp = self.portal.portal_properties.seo_properties
         self.pu = self.portal.plone_utils
         self.basic_auth = 'portal_manager:secret'

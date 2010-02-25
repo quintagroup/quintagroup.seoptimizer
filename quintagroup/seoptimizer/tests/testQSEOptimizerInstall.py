@@ -26,7 +26,6 @@ class TestInstallation(TestCase):
     def afterSetUp(self):
         self.properties = getToolByName(self.portal, 'portal_properties')
         self.qi = self.portal.portal_quickinstaller
-        self.qi.installProduct(PROJECT_NAME)
 
     def testAddingPropertySheet(self):
         """ Test adding property sheet to portal_properties tool """

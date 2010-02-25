@@ -6,6 +6,8 @@ class TestMetaTagsDuplication(FunctionalTestCase):
 
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
+        self.qi = self.qi.uninstallProducts([PROJECT_NAME])
+
         self.basic_auth = 'portal_manager:secret'
         uf = self.app.acl_users
         uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])

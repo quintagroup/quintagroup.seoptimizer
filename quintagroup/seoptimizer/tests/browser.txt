@@ -52,13 +52,19 @@ We have the login portlet, so let's use that.
 Test 'SEO Properties' action
 ===============================
 
-Test installation 'SEO Properties' action
+First uninstall product, if it is already installed:
 
     >>> from quintagroup.seoptimizer.config import PROJECT_NAME
+    >>> self.qi = self.portal.portal_quickinstaller
+    >>> if self.qi.isProductInstalled(PROJECT_NAME):
+    ...     self.qi.uninstallProducts([PROJECT_NAME,])
+
+
+Test installation 'SEO Properties' action
+
     >>> browser.open('http://nohost/plone/front-page')
     >>> "SEO Properties" in browser.contents
     False
-    >>> self.qi = self.portal.portal_quickinstaller
     >>> self.qi.installProduct(PROJECT_NAME)
     'Ran all install steps.'
     >>> self.sp = self.portal.portal_properties.seo_properties

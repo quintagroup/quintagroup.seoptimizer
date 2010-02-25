@@ -56,6 +56,9 @@ def setup_product():
     # We may also need to load dependencies, e.g.:
     #   ztc.installPackage('borg.localrole')
 
+    # installPackage - register package in Control_Panel.Products
+    # and results to QI can correctly use install/uninstall external
+    # methods
     ztc.installPackage(PROJECT_NAME)
 
 # The order here is important: We first call the (deferred) function
@@ -63,7 +66,8 @@ def setup_product():
 # PloneTestCase set up this product on installation.
 
 setup_product()
-ptc.setupPloneSite()
+# Use products to force QI install method usage
+ptc.setupPloneSite(products=[PROJECT_NAME,])
 
 class MixinTestCase:
 
