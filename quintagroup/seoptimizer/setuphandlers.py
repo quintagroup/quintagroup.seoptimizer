@@ -42,6 +42,18 @@ def changeDomain(site):
             ptype.i18n_domain = 'plone'
             logger.log(logging.INFO, "I18n Domain of the type \'%s\' changed to \'plone\'." % ptype.id)
 
+def changeMetatagsOrderList(site):
+    """ Change format metatags order list from "metaname accessor" to "metaname".
+    """
+    types_tool = getToolByName(site, 'portal_types')
+    pprops_tool = getToolByName(site, 'portal_properties')
+    seoprops_tool = getToolByName(pprops_tool, 'seo_properties')
+    mto = seoprops_tool.getProperty('metatags_order', [])
+    mto_new = [line.split(' ')[0].strip() for line in mto]
+    if not list(mto) == mto_new:
+        logger.log(logging.INFO, "Changed format metatags order list in configlet from \"metaname accessor\" to \"metaname\".")
+    seoprops_tool.manage_changeProperties(metatags_order=mto_new)
+
 def migrationActions(site):
     """ Migration actions from portal_types action to portal_actions.
     """
@@ -73,6 +85,7 @@ def reinstall(context):
     site = context.getSite()
     migrationActions(site)
     changeDomain(site)
+    changeMetatagsOrderList(site)
 
 def uninstall(context):
     """ Do customized uninstallation.

@@ -1,26 +1,6 @@
 <?xml version="1.0"?>
 <object name="portal_properties" meta_type="Plone Properties Tool">
  <object name="seo_properties" meta_type="Plone Property Sheet">
-  <property name="title">SEO Properties</property>
-  <property name="metatags_order" type="lines" purge='True'>
-   <element value="DC.publisher"/>
-   <element value="DC.description"/>
-   <element value="DC.contributors"/>
-   <element value="DC.creator"/>
-   <element value="DC.format"/>
-   <element value="DC.rights"/>
-   <element value="DC.language"/>
-   <element value="DC.date.modified"/>
-   <element value="DC.date.created"/>
-   <element value="DC.type"/>
-   <element value="DC.subject"/>
-   <element value="DC.distribution"/>
-   <element value="description"/>
-   <element value="keywords"/>
-   <element value="robots"/>
-   <element value="distribution"/>
-  </property>
-  <property name="filter_keywords_by_content" type="boolean">True</property>
   <property name="content_types_with_seoproperties" type="lines" purge='False'/>
  </object>
 </object>
