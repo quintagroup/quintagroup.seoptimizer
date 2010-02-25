@@ -22,28 +22,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 
-# Global and local site keyword vocabularies
-keywordsSGVocabulary = SimpleVocabulary((
-    SimpleTerm(1, title="Plone categories override global SEO keywords"),
-    SimpleTerm(2, title="Global SEO keywords override Plone categories"),
-    SimpleTerm(3, title="Merge Plone categories and global SEO keywords"),
-))
-
-keywordsLGVocabulary = SimpleVocabulary((
-    SimpleTerm(1, title="Global SEO keywords override local SEO keywords"),
-    SimpleTerm(2, title="Merge global and local SEO keywords"),
-))
-
-
-# Custom Widgets
-class TypedRadioWidgetNoValue(RadioWidget):
-    _displayItemForMissingValue=False
-    type = u'radio'
-
-def SEORadioWidget(field, request):
-    return TypedRadioWidgetNoValue(field, field.vocabulary, request)
-
-
 # Configlet schema
 class ISEOConfigletSchema(Interface):
     
@@ -75,35 +53,6 @@ class ISEOConfigletSchema(Interface):
                     '"metaname accessor".'),
         required=False)
 
-    additional_keywords = List(
-        title=_("label_additional_keywords",
-                default='Additional keywords that should be added to the '
-                    'content types.'),
-        description=_("help_additional_keywords",
-                default='Use this field when you want that your content types '
-                    'receive additional keywords from the ones you manually '
-                    'specify. Enter one keyword per line.'),
-        required=False)
-    
-    settings_use_keywords_sg = Choice(
-        title=_("label_settings_use_keywords_sg",
-                default='Settings to control Plone categories and global SEO '
-                    'keywords behaviour.'),
-        description=_("help_settings_use_keywords_sg",
-                default='Controls Plone categories (also known as keywords or '
-                    'tags) and global SEO keywords behaviour.'),
-        required=False,
-        vocabulary=keywordsSGVocabulary)
-
-    settings_use_keywords_lg = Choice(
-        title=_("label_settings_use_keywords_lg",
-                default='Settings to control global SEO keywords vs local SEO '
-                    'keywords behaviour.'),
-        description=_("help_settings_use_keywords_lg",
-                default='Controls global and local SEO keywords behaviour.'),
-        required=False,
-        vocabulary=keywordsLGVocabulary)
-
     types_seo_enabled = Tuple(
         title=_("label_content_type_title", default='Content Types'),
         description=_("description_seo_content_types",
@@ -120,7 +69,6 @@ class SEOConfigletAdapter(SchemaAdapterBase):
 
     adapts(IPloneSiteRoot)
     implements(ISEOConfigletSchema)
-
 
     def __init__(self, context):
         super(SEOConfigletAdapter, self).__init__(context)
@@ -146,14 +94,10 @@ class SEOConfigletAdapter(SchemaAdapterBase):
 
 
     exposeDCMetaTags = property(getExposeDC, setExposeDC)
-    types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
-    metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
     default_custom_metatags = ProxyFieldProperty(ISEOConfigletSchema['default_custom_metatags'])
-    additional_keywords = ProxyFieldProperty(ISEOConfigletSchema['additional_keywords'])
+    metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
+    types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
     
-    settings_use_keywords_sg = ProxyFieldProperty(ISEOConfigletSchema['settings_use_keywords_sg'])
-    settings_use_keywords_lg = ProxyFieldProperty(ISEOConfigletSchema['settings_use_keywords_lg'])
-
 
 class SmallTextAreaWidget(TextAreaWidget):
     height = 5
@@ -170,10 +114,7 @@ class SEOConfiglet(ControlPanelForm):
 
     form_fields = FormFields(ISEOConfigletSchema)
     form_fields['default_custom_metatags'].custom_widget = SmallTextAreaWidget
-    form_fields['additional_keywords'].custom_widget = SmallTextAreaWidget
     form_fields['metatags_order'].custom_widget = SmallTextAreaWidget
-    form_fields['settings_use_keywords_sg'].custom_widget = SEORadioWidget
-    form_fields['settings_use_keywords_lg'].custom_widget = SEORadioWidget
     form_fields['types_seo_enabled'].custom_widget = MultiCheckBoxThreeColumnWidget
     form_fields['types_seo_enabled'].custom_widget.cssClass='label'
 
