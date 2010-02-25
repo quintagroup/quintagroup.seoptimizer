@@ -4,7 +4,7 @@ from quintagroup.seoptimizer.config import *
 
 FIELDS = ['seo_title', 'seo_description', 'seo_keywords']
 
-PROPS = {'stop_words':STOP_WORDS, 'fields':FIELDS, 'additional_keywords': []}
+PROPS = {'stop_words':STOP_WORDS, 'fields':FIELDS}
 
 CUSTOM_METATAGS = [{'meta_name'    : 'metatag1',
                     'meta_content' : 'metatag1value'},
