@@ -27,8 +27,9 @@ class SEOContext( BrowserView ):
 
     def __init__(self, *args, **kwargs):
         super(SEOContext, self).__init__(*args, **kwargs)
-        self.pcs = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
-        self.gseo = queryAdapter(self.pcs.portal(), ISEOConfigletSchema)
+        self.pps = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
+        self.pcs = queryMultiAdapter((self.context, self.request), name="plone_context_state")
+        self.gseo = queryAdapter(self.pps.portal(), ISEOConfigletSchema)
         self._seotags = self._getSEOTags()
 
     def __getitem__(self, key):
@@ -37,12 +38,11 @@ class SEOContext( BrowserView ):
     @view.memoize
     def _getSEOTags(self):
         seotags = {
-            "seo_title": self.getSEOProperty( 'qSEO_title', accessor='Title' ),
+            "seo_title": self.getSEOProperty( 'qSEO_title', default=self.pcs.object_title() ),
             "seo_robots": self.getSEOProperty( 'qSEO_robots', default='ALL'),
             "seo_description": self.getSEOProperty( 'qSEO_description', accessor='Description' ),
             "seo_distribution": self.getSEOProperty( 'qSEO_distribution', default="Global"),
             "seo_customMetaTags": self.seo_customMetaTags(),
-            "seo_globalWithoutLocalCustomMetaTags": self.seo_globalWithoutLocalCustomMetaTags(),
             "seo_localCustomMetaTags": self.seo_localCustomMetaTags(),
             "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
             "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
@@ -133,7 +133,7 @@ class SEOContext( BrowserView ):
         """ Generate canonical URL from SEO properties.
         """
         canpath = queryAdapter(self.context, interfaces.ISEOCanonicalPath)
-        return self.pcs.portal_url() + canpath.canonical_path()
+        return self.pps.portal_url() + canpath.canonical_path()
 
 
 class SEOContextPropertiesView( BrowserView ):
