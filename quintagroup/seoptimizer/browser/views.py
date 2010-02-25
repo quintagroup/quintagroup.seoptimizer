@@ -2,7 +2,7 @@ from sets import Set
 from DateTime import DateTime 
 from Acquisition import aq_inner
 from zope.component import queryAdapter
-from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from plone.memoize import view
 from plone.app.controlpanel.form import ControlPanelView
 
@@ -11,9 +11,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as pmf
 
-from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 from quintagroup.seoptimizer import interfaces
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
+from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 SEPERATOR = '|'
 SEO_PREFIX = 'seo_'
@@ -27,6 +27,8 @@ class SEOContext( BrowserView ):
 
     def __init__(self, *args, **kwargs):
         super(SEOContext, self).__init__(*args, **kwargs)
+        self.pcs = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
+        self.gseo = queryAdapter(self.pcs.portal(), ISEOConfigletSchema)
         self._seotags = self._getSEOTags()
 
     def __getitem__(self, key):
@@ -44,8 +46,8 @@ class SEOContext( BrowserView ):
             "seo_localCustomMetaTags": self.seo_localCustomMetaTags(),
             "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
             "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
-            "meta_keywords": self.meta_keywords(),
-            "seo_keywords": self.seo_keywords(),
+            "meta_keywords": self.getSEOProperty('qSEO_keywords', 'Subject', ()),
+            "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
             "seo_canonical": self.seo_canonical(),
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
@@ -79,37 +81,27 @@ class SEOContext( BrowserView ):
                 value = default
 
             return value
+        return default
 
     def seo_customMetaTags( self ):
         """Returned seo custom metatags from default_custom_metatags property in seo_properties
         (global seo custom metatags) with update from seo custom metatags properties in context (local seo custom metatags).
         """
-        tags = self.seo_globalCustomMetaTags()
-        loc = self.seo_localCustomMetaTags()
-        names = [i['meta_name'] for i in tags]
-        add_tags = []
-        for i in loc:
-            if i['meta_name'] in names:
-                for t in tags:
-                    if t['meta_name'] == i['meta_name']:
-                        t['meta_content'] = i['meta_content']
-            else:
-                add_tags.append(i)
-        tags.extend(add_tags)
-        return tags
+        glob, loc = self.seo_globalCustomMetaTags(), self.seo_localCustomMetaTags()
+        gnames = set(map(lambda x: x['meta_name'], glob))
+        lnames = set(map(lambda x: x['meta_name'], loc))
+        # Get untouch global, override global in custom and new custom meta tags
+        untouchglob = [t for t in glob if t['meta_name'] in list(gnames - lnames)]
+        return untouchglob + loc
 
     def seo_globalWithoutLocalCustomMetaTags( self ):
         """Returned seo custom metatags from default_custom_metatags property in seo_properties
         (global seo custom metatags) without seo custom metatags from properties in context (local seo custom metatags).
         """
-        glob = self.seo_globalCustomMetaTags()
-        loc = self.seo_localCustomMetaTags()
-        names = [i['meta_name'] for i in loc]
-        tags = []
-        for i in glob:
-            if i['meta_name'] not in names:
-                tags.append(i)
-        return tags
+        glob, loc = self.seo_globalCustomMetaTags(), self.seo_localCustomMetaTags()
+        gnames = set(map(lambda x: x['meta_name'], glob))
+        lnames = set(map(lambda x: x['meta_name'], loc))
+        return [t for t in glob if t['meta_name'] in list(gnames - lnames)]
 
     def seo_localCustomMetaTags( self ):
         """ Returned seo custom metatags from properties in context (local seo custom metatags).
@@ -128,9 +120,8 @@ class SEOContext( BrowserView ):
         """
         result = []
         context = aq_inner(self.context)
-        site_properties = getToolByName(context, 'portal_properties')
-        if hasattr(site_properties, 'seo_properties'):
-            custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
+        if self.gseo:
+            custom_meta_tags = self.gseo.default_custom_metatags.split('\n')
             for tag in custom_meta_tags:
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
@@ -138,81 +129,11 @@ class SEOContext( BrowserView ):
                                    'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
 
-    def meta_keywords( self ):
-        """ Generate Meta Keywords from SEO properties (global and local) with Subject,
-            depending on the options in configlet.
-        """
-        prop_name = 'qSEO_keywords'
-        accessor = 'Subject'
-        context = aq_inner(self.context)
-        keywords = Set([])
-        pprops = getToolByName(context, 'portal_properties')
-        sheet = getattr(pprops, 'seo_properties', None)
-        method = getattr(context, accessor, None)
-        if not callable(method):
-            return None
-
-        # Catch AttributeErrors raised by some AT applications
-        try:
-            subject = Set(method())
-        except AttributeError:
-            subject = keywords
-
-        if sheet:
-          settings_use_keywords_sg = sheet.getProperty('settings_use_keywords_sg')
-          settings_use_keywords_lg = sheet.getProperty('settings_use_keywords_lg')
-          global_keywords = Set(sheet.getProperty('additional_keywords', None))
-          local_keywords = Set(context.getProperty(prop_name, None))
-          # Subject overrides global seo keywords and global overrides local seo keywords
-          if [settings_use_keywords_sg, settings_use_keywords_lg] == [1, 1]:
-              keywords = subject
-          # Subject overrides global seo keywords and merge global and local seo keywords
-          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [1, 2]:
-              keywords = subject | local_keywords
-          # Global seo keywords overrides Subject and global overrides local seo keywords
-          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 1]:
-              keywords = global_keywords
-          # Global seo keywords overrides Subject and merge global and local seo keywords
-          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [2, 2]:
-              keywords = global_keywords | local_keywords
-          # Merge Subject and global seo keywords and global overrides local seo keywords
-          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [3, 1]:
-              keywords = subject | global_keywords
-          # Merge Subject and global seo keywords and merge global and local seo keywords
-          elif [settings_use_keywords_sg, settings_use_keywords_lg] == [3, 2]:
-              keywords = subject | global_keywords | local_keywords
-          else:
-              keywords = subject
-        else:
-            keywords = subject
-
-        return tuple(keywords)
-
-    def seo_keywords( self ):
-        """ Generate SEO Keywords from SEO properties (global merde local).
-        """
-        prop_name = 'qSEO_keywords'
-        context = aq_inner(self.context)
-        keywords = Set([])
-        pprops = getToolByName(context, 'portal_properties')
-        sheet = getattr(pprops, 'seo_properties', None)
-
-        if sheet:
-            settings_use_keywords_sg = sheet.getProperty('settings_use_keywords_sg')
-            settings_use_keywords_lg = sheet.getProperty('settings_use_keywords_lg')
-            global_keywords = Set(sheet.getProperty('additional_keywords', None))
-            local_keywords = Set(context.getProperty(prop_name, None))
-            keywords = global_keywords | local_keywords
-        else:
-            keywords = ''
-        return tuple(keywords)
-
     def seo_canonical( self ):
         """ Generate canonical URL from SEO properties.
         """
-        purl = getToolByName(self.context, 'portal_url')()
         canpath = queryAdapter(self.context, interfaces.ISEOCanonicalPath)
-        return purl + canpath.canonical_path()
+        return self.pcs.portal_url() + canpath.canonical_path()
 
 
 class SEOContextPropertiesView( BrowserView ):
@@ -364,6 +285,6 @@ class VisibilityCheckerView( BrowserView ):
         """ Checks visibility 'SEO Properties' action for content
         """
         context = aq_inner(self.context)
-        plone = getMultiAdapter((self, self.request),name="plone_portal_state").portal()
+        plone = queryMultiAdapter((self, self.request),name="plone_portal_state").portal()
         adapter = ISEOConfigletSchema(plone)
         return bool(self.context.portal_type in adapter.types_seo_enabled)
