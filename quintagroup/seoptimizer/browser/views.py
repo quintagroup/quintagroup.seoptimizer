@@ -121,7 +121,7 @@ class SEOContext( BrowserView ):
         result = []
         context = aq_inner(self.context)
         if self.gseo:
-            custom_meta_tags = self.gseo.default_custom_metatags.split('\n')
+            custom_meta_tags = self.gseo.default_custom_metatags
             for tag in custom_meta_tags:
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
