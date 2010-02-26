@@ -6,9 +6,11 @@ from base import getToolByName, FunctionalTestCase, TestCase, newSecurityManager
 from config import *
 
 
-class TestBeforeInstall(FunctionalTestCase):
+class TestBeforeInstallation(FunctionalTestCase):
 
     def afterSetUp(self):
+        self.qi = self.portal.portal_quickinstaller
+        self.qi.uninstallProducts([PROJECT_NAME])
         self.basic_auth = 'mgr:mgrpw'
         self.portal_path = '/%s' % self.portal.absolute_url(1)
 
@@ -25,7 +27,6 @@ class TestInstallation(TestCase):
 
     def afterSetUp(self):
         self.properties = getToolByName(self.portal, 'portal_properties')
-        self.qi = self.portal.portal_quickinstaller
 
     def testAddingPropertySheet(self):
         """ Test adding property sheet to portal_properties tool """
@@ -59,8 +60,15 @@ class TestInstallation(TestCase):
                 path = map( string.strip, string.split( path,',' ) )
                 self.assert_(PROJECT_NAME+'/%s' % plone_version in path, 'qSEOptimizer versioned layer not found in %s' %skin)
 
-    def test_skins_uninstall(self):
+
+
+class TestUninstallation(TestCase):
+
+    def afterSetUp(self):
+        self.qi = self.portal.portal_quickinstaller
         self.qi.uninstallProducts([PROJECT_NAME])
+
+    def test_skins_uninstall(self):
         self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
         skinstool=getToolByName(self.portal, 'portal_skins')
 
@@ -70,7 +78,6 @@ class TestInstallation(TestCase):
             self.assert_(not PROJECT_NAME in path, 'qSEOptimizer layer found in %s after uninstallation' %skin)
 
     def test_versionedskin_uninstall(self):
-        self.qi.uninstallProducts([PROJECT_NAME])
         self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
         skinstool=getToolByName(self.portal, 'portal_skins')
         mtool = getToolByName(self.portal, 'portal_migration')
@@ -82,15 +89,17 @@ class TestInstallation(TestCase):
             self.assert_(not PROJECT_NAME+'/%s' % plone_version in path, 'qSEOptimizer versioned layer found in %s after uninstallation' %skin)
 
     def test_configlet_uninstall(self):
-        self.qi.uninstallProducts([PROJECT_NAME])
         self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
 
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
         self.assert_(not PROJECT_NAME in [a.getId() for a in configTool.listActions()], 'Configlet found after uninstallation')
 
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestBeforeInstall))
+    suite.addTest(makeSuite(TestBeforeInstallation))
     suite.addTest(makeSuite(TestInstallation))
+    suite.addTest(makeSuite(TestUninstallation))
     return suite
