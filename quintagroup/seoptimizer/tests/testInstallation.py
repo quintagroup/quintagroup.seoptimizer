@@ -2,6 +2,12 @@
 # Test product's installation
 #
 import string
+from zope.interface import alsoProvides
+from zope.component import queryMultiAdapter
+from zope.publisher.browser import TestRequest
+from zope.viewlet.interfaces import IViewletManager
+from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
+
 from base import getToolByName, FunctionalTestCase, TestCase, newSecurityManager
 from config import *
 
@@ -50,18 +56,39 @@ class TestInstallation(TestCase):
             path = map( string.strip, string.split( path,',' ) )
             self.assert_(PROJECT_NAME in path, 'qSEOptimizer layer not found in %s' %skin)
 
-    def test_versionedskin_install(self):
-        skinstool=getToolByName(self.portal, 'portal_skins')
-        mtool = getToolByName(self.portal, 'portal_migration')
-        plone_version = mtool.getFileSystemVersion()
-        if plone_version < "3":
-            for skin in skinstool.getSkinSelections():
-                path = skinstool.getSkinPath(skin)
-                path = map( string.strip, string.split( path,',' ) )
-                self.assert_(PROJECT_NAME+'/%s' % plone_version in path, 'qSEOptimizer versioned layer not found in %s' %skin)
+    def test_viewlets_install(self):
+        VIEWLETS = ['plone.htmlhead.title',
+                    'plone.resourceregistries',
+                    'quintagroup.seoptimizer.seotags',
+                    'quintagroup.seoptimizer.customscript']
+        request = self.app.REQUEST
+        # mark request with our browser layer
+        alsoProvides(request, IPloneSEOLayer)
+        view = queryMultiAdapter((self.portal, request), name="plone")
+        manager = queryMultiAdapter( (self.portal['front-page'], request, view),
+                                     IViewletManager, name='plone.htmlhead')
+        for p in VIEWLETS:
+            self.assert_(manager.get(p) is not None, "Not registered '%s' viewlet" % p)
+        
+    def test_browser_layer(self):
+        from plone.browserlayer import utils
+        #from plone.browserlayer.tests.interfaces import IMyProductLayer
+        self.assert_(IPloneSEOLayer in utils.registered_layers(),
+                     "Not registered 'IPloneSEOLayer' browser layer")
+    
+    def test_jsregestry_install(self):
+        jstool=getToolByName(self.portal, 'portal_javascripts')
+        self.assert_(jstool.getResource("++resource++seo_custommetatags.js") is not None,
+                     "Not registered '++resource++seo_custommetatags.js' resource")
+
+    def test_action_install(self):
+        atool=getToolByName(self.portal, 'portal_actions')
+        action_ids = [a.id for a in atool.listActions()]
+        self.assert_("SEOProperties" in action_ids,
+                     "Not added 'SEOProperties' action")
 
 
-
+        
 class TestUninstallation(TestCase):
 
     def afterSetUp(self):
@@ -93,6 +120,7 @@ class TestUninstallation(TestCase):
 
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
         self.assert_(not PROJECT_NAME in [a.getId() for a in configTool.listActions()], 'Configlet found after uninstallation')
+
 
 
 
