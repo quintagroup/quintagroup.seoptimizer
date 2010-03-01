@@ -6,6 +6,7 @@ from zope.interface import alsoProvides
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import TestRequest
 from zope.viewlet.interfaces import IViewletManager
+from plone.browserlayer import utils
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 
 from base import getToolByName, FunctionalTestCase, TestCase, newSecurityManager
@@ -71,8 +72,6 @@ class TestInstallation(TestCase):
             self.assert_(manager.get(p) is not None, "Not registered '%s' viewlet" % p)
         
     def test_browser_layer(self):
-        from plone.browserlayer import utils
-        #from plone.browserlayer.tests.interfaces import IMyProductLayer
         self.assert_(IPloneSEOLayer in utils.registered_layers(),
                      "Not registered 'IPloneSEOLayer' browser layer")
     
@@ -87,41 +86,61 @@ class TestInstallation(TestCase):
         self.assert_("SEOProperties" in action_ids,
                      "Not added 'SEOProperties' action")
 
-
-        
 class TestUninstallation(TestCase):
 
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
         self.qi.uninstallProducts([PROJECT_NAME])
 
-    def test_skins_uninstall(self):
-        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
-        skinstool=getToolByName(self.portal, 'portal_skins')
-
-        for skin in skinstool.getSkinSelections():
-            path = skinstool.getSkinPath(skin)
-            path = map( string.strip, string.split( path,',' ) )
-            self.assert_(not PROJECT_NAME in path, 'qSEOptimizer layer found in %s after uninstallation' %skin)
-
-    def test_versionedskin_uninstall(self):
-        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
-        skinstool=getToolByName(self.portal, 'portal_skins')
-        mtool = getToolByName(self.portal, 'portal_migration')
-        plone_version = mtool.getFileSystemVersion()
-
-        for skin in skinstool.getSkinSelections():
-            path = skinstool.getSkinPath(skin)
-            path = map( string.strip, string.split( path,',' ) )
-            self.assert_(not PROJECT_NAME+'/%s' % plone_version in path, 'qSEOptimizer versioned layer found in %s after uninstallation' %skin)
+    def test_propertysheet_uninstall(self):
+        properties = getToolByName(self.portal, 'portal_properties')
+        self.assertEqual(hasattr(properties.aq_base, PROPERTY_SHEET), False,
+            "'%s' property sheet not uninstalled" % PROPERTY_SHEET)
 
     def test_configlet_uninstall(self):
-        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,'qSEOptimizer is already installed')
+        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,
+            'qSEOptimizer is already installed')
 
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
-        self.assert_(not PROJECT_NAME in [a.getId() for a in configTool.listActions()], 'Configlet found after uninstallation')
+        self.assertEqual(PROJECT_NAME in [a.getId() for a in configTool.listActions()], False,
+            'Configlet found after uninstallation')
 
+    def test_skins_uninstall(self):
+        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,
+            'qSEOptimizer is already installed')
+        skinstool=getToolByName(self.portal, 'portal_skins')
 
+        for skin in skinstool.getSkinSelections():
+            path = skinstool.getSkinPath(skin)
+            path = map( string.strip, string.split( path,',' ) )
+            self.assertEqual(PROJECT_NAME in path, False,
+                'qSEOptimizer layer found in %s after uninstallation' %skin)
+
+    def test_viewlets_uninstall(self):
+        VIEWLETS = ['quintagroup.seoptimizer.seotags',
+                    'quintagroup.seoptimizer.customscript']
+        request = self.app.REQUEST
+        view = queryMultiAdapter((self.portal, request), name="plone")
+        manager = queryMultiAdapter( (self.portal['front-page'], request, view),
+                                     IViewletManager, name='plone.htmlhead')
+        for p in VIEWLETS:
+            self.assertEqual(manager.get(p) is None, True,
+                "'%s' viewlet present after uninstallation" % p)
+
+    def test_browserlayer_uninstall(self):
+        self.assertEqual(IPloneSEOLayer in utils.registered_layers(), False,
+            "Not registered 'IPloneSEOLayer' browser layer")
+
+    def test_jsregestry_uninstall(self):
+        jstool=getToolByName(self.portal, 'portal_javascripts')
+        self.assertEqual(jstool.getResource("++resource++seo_custommetatags.js") is not None,
+            False, "Not registered '++resource++seo_custommetatags.js' resource")
+
+    def test_action_uninstall(self):
+        atool=getToolByName(self.portal, 'portal_actions')
+        action_ids = [a.id for a in atool.listActions()]
+        self.assertEqual("SEOProperties" in action_ids, False,
+            "Not added 'SEOProperties' action")
 
 
 def test_suite():
