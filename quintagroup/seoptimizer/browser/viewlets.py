@@ -6,7 +6,7 @@ from zope.component import queryMultiAdapter
 from zope.component import getMultiAdapter
 from plone.app.layout.viewlets.common import ViewletBase
 
-from Products.CMFPlone.utils import safe_unicode
+from Products.CMFPlone.utils import safe_unicode, getSiteEncoding
 from Products.CMFCore.utils import getToolByName
 
 from quintagroup.seoptimizer.util import SortedDict
@@ -21,9 +21,11 @@ class SEOTagsViewlet( ViewletBase ):
 
     def render(self):
         TEMPLATE = '<meta name="%s" content="%s"/>'
-        return '\n'.join([TEMPLATE % (k,v) \
-                          for k,v in self.listMetaTags().items()])
-    
+        enc = getSiteEncoding(self.context)
+        sfuncd = lambda x, enc=enc:safe_unicode(x, enc)
+        return u'\n'.join([TEMPLATE % tuple(map(sfuncd, (k,v))) \
+                           for k,v in self.listMetaTags().items()])
+
     def listMetaTags(self):
         """Calculate list metatags"""
 
