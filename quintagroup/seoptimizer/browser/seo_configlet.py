@@ -103,11 +103,17 @@ class SmallTextAreaWidget(TextAreaWidget):
     height = 5
     splitter = re.compile(u'\\r?\\n', re.S|re.U)
 
-    def _toFieldValue(self, value):
-        return filter(None, self.splitter.split(value))
+    def _toFieldValue(self, input):
+        if input == self._missing:
+            return self.context._type()
+        else:
+            return self.context._type(filter(None, self.splitter.split(input)))
 
     def _toFormValue(self, value):
-        return u'\r\n'.join(list(value))
+        if value == self.context.missing_value or value == self.context._type():
+            return self._missing
+        else:
+            return u'\r\n'.join(list(value))
 
 
 class SEOConfiglet(ControlPanelForm):
