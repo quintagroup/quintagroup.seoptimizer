@@ -142,6 +142,85 @@ class TestUninstallation(TestCase):
         self.assertEqual("SEOProperties" in action_ids, False,
             "Not added 'SEOProperties' action")
 
+class TestReinstallation(TestCase):
+
+    def afterSetUp(self):
+        self.qi = self.portal.portal_quickinstaller
+        self.types_tool = getToolByName(self.portal, 'portal_types')
+        self.setup_tool = getToolByName(self.portal, 'portal_setup')
+        self.pprops_tool = getToolByName(self.portal, 'portal_properties')
+        self.seoprops_tool = getToolByName(self.pprops_tool, 'seo_properties', None)
+        # Set earlier version profile (2.0.0) for using upgrade steps 
+        self.setup_tool.setLastVersionForProfile('%s:default' % PROJECT_NAME, '2.0.0')
+
+    def testChangeDomain(self):
+        # Test changed of content type's domain from 'quintagroup.seoptimizer' to 'plone'
+        for type in SEO_CONTENT:
+            self.types_tool.getTypeInfo(type).i18n_domain = 'quintagroup.seoptimizer'
+        self.qi.reinstallProducts([PROJECT_NAME])
+        for type in SEO_CONTENT:
+            self.assertEqual(self.types_tool.getTypeInfo(type).i18n_domain, 'plone',
+                "Not changed of %s content type's domain to 'plone'" % type)
+
+    def testCutItemsMetatagsOrderList(self):
+        # Test changed format metatags order list from "metaname accessor" to "metaname"
+        value, expect_mto = ['name1 accessor1', 'name2 accessor2'], ['name1','name2']
+        self.seoprops_tool.manage_changeProperties(metatags_order=value)
+        self.qi.reinstallProducts([PROJECT_NAME])
+        mto = list(self.seoprops_tool.getProperty('metatags_order'))
+        mto.sort()
+        self.assertEqual(mto, expect_mto,
+                    "Not changed format metatags order list from \"metaname accessor\" to"\
+                    " \"metaname\". %s != %s" %(mto, expect_mto))
+
+    def testAddMetatagsOrderList(self):
+        # Test added metatags order list if it was not there before
+        self.seoprops_tool.manage_delProperties(['metatags_order'])
+        self.qi.reinstallProducts([PROJECT_NAME])
+        mto = list(self.seoprops_tool.getProperty('metatags_order'))
+        mto.sort()
+        self.assertEqual(mto, DEFAULT_METATAGS_ORDER,
+                    "Not added metatags order list with default values."\
+                    "%s != %s" %(mto, DEFAULT_METATAGS_ORDER))
+
+    def testMigrationActions(self):
+        # Test migrated actions from portal_types action to seoproperties tool
+        self.seoprops_tool.content_types_with_seoproperties = ()
+
+        # Add seoaction to content type for testing
+        for type in CONTENTTYPES_WITH_SEOACTION:
+            self.types_tool.getTypeInfo(type).addAction(id='seo_properties',
+                                                   name='SEO Properties',
+                                                   action=None,
+                                                   condition=None,
+                                                   permission=(u'Modify portal content',),
+                                                   category='object',
+                                                   visible=True,
+                                                   icon_expr=None,
+                                                   link_target=None,
+                                                  )
+            # Check presence seoaction in content type
+            seoaction = [act.id for act in self.types_tool.getTypeInfo(type).listActions()
+                                          if act.id == 'seo_properties']
+            self.assertEqual(bool(seoaction), True,
+                    "Not added seoaction to content type %s for testing" % type)
+
+        self.qi.reinstallProducts([PROJECT_NAME])
+
+        # Check presence seoaction in content type
+        for type in CONTENTTYPES_WITH_SEOACTION:
+            seoaction = [act.id for act in self.types_tool.getTypeInfo(type).listActions()
+                                          if act.id == 'seo_properties']
+            self.assertEqual(bool(seoaction), False,
+                "Not removed seoaction in content type %s" % type)
+
+        # Check added content type names in seo properties tool if content types have seoaction
+        ctws = list(self.seoprops_tool.content_types_with_seoproperties)
+        ctws.sort()
+        self.assertEqual(ctws, CONTENTTYPES_WITH_SEOACTION,
+            "Not added content type names in seo properties tool if content types have seoaction."\
+            " %s != %s" %(ctws, CONTENTTYPES_WITH_SEOACTION))
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
@@ -149,4 +228,5 @@ def test_suite():
     suite.addTest(makeSuite(TestBeforeInstallation))
     suite.addTest(makeSuite(TestInstallation))
     suite.addTest(makeSuite(TestUninstallation))
+    suite.addTest(makeSuite(TestReinstallation))
     return suite

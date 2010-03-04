@@ -52,10 +52,14 @@ We have the login portlet, so let's use that.
 Test 'SEO Properties' action
 ===============================
 
+    >>> self.qi = self.portal.portal_quickinstaller
+    >>> self.sp = self.portal.portal_properties.seo_properties
+    >>> self.object_tabs = self.portal.portal_actions.object
+    >>> self.ps = self.portal.portal_setup
+
 First uninstall product, if it is already installed:
 
     >>> from quintagroup.seoptimizer.config import PROJECT_NAME
-    >>> self.qi = self.portal.portal_quickinstaller
     >>> if self.qi.isProductInstalled(PROJECT_NAME):
     ...     self.qi.uninstallProducts([PROJECT_NAME,])
 
@@ -67,8 +71,6 @@ Test installation 'SEO Properties' action
     False
     >>> self.qi.installProduct(PROJECT_NAME)
     'Ran all install steps.'
-    >>> self.sp = self.portal.portal_properties.seo_properties
-    >>> self.object_tabs = self.portal.portal_actions.object
     >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
     True
 
@@ -89,10 +91,12 @@ Test invisibility 'SEO Properties' action after installation
     False
 
 Test reinstallation 'SEO Properties' action
+For perform all upgrade steps on re-installation, earlier version of profile must be set.
 
     >>> browser.open('http://nohost/plone/front-page')
     >>> "SEO Properties" in browser.contents
     False
+    >>> self.ps.setLastVersionForProfile('quintagroup.seoptimizer:default', '2.0.0')
     >>> self.qi.reinstallProducts((PROJECT_NAME,))
     >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
     True
