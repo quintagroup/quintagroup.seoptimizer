@@ -1,9 +1,7 @@
 import logging
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.Expression import Expression
 
 logger = logging.getLogger('quintagroup.seoptimizer')
-FIX_PTYPES_DOMAIN = ['Document', 'File', 'News Item']
 
 def removeSkin(site, layer):
     """ Remove layers.
@@ -33,59 +31,11 @@ def removeConfiglet(site, conf_id):
         controlpanel_tool.unregisterConfiglet(conf_id)
         logger.log(logging.INFO, "Unregistered \"%s\" configlet." % conf_id)
 
-def changeDomain(site):
-    """ Fixes old versions bug: Change of content type's domain to 'plone'.
-    """
-    types_tool = getToolByName(site, 'portal_types')
-    for ptype in [ptypes for ptypes in types_tool.objectValues() if ptypes.id in FIX_PTYPES_DOMAIN]:
-        if ptype.i18n_domain == 'quintagroup.seoptimizer':
-            ptype.i18n_domain = 'plone'
-            logger.log(logging.INFO, "I18n Domain of the type \'%s\' changed to \'plone\'." % ptype.id)
-
-def changeMetatagsOrderList(site):
-    """ Change format metatags order list from "metaname accessor" to "metaname".
-    """
-    types_tool = getToolByName(site, 'portal_types')
-    pprops_tool = getToolByName(site, 'portal_properties')
-    seoprops_tool = getToolByName(pprops_tool, 'seo_properties')
-    mto = seoprops_tool.getProperty('metatags_order', [])
-    mto_new = [line.split(' ')[0].strip() for line in mto]
-    if not list(mto) == mto_new:
-        logger.log(logging.INFO, "Changed format metatags order list in configlet from \"metaname accessor\" to \"metaname\".")
-    seoprops_tool.manage_changeProperties(metatags_order=mto_new)
-
-def migrationActions(site):
-    """ Migration actions from portal_types action to portal_actions.
-    """
-    types_tool = getToolByName(site, 'portal_types')
-    pprops_tool = getToolByName(site, 'portal_properties')
-    seoprops_tool = getToolByName(pprops_tool, 'seo_properties')
-    ctws = list(seoprops_tool.getProperty('content_types_with_seoproperties', []))
-
-    for ptype in types_tool.objectValues():
-        idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions()) if idx_act[1].id == 'seo_properties']
-        if idxs:
-            if ptype.id not in ctws:
-                ctws.append(ptype.id)
-            ptype.deleteActions(idxs)
-            logger.log(logging.INFO, "Moved \"SEO Properties\" action from %s type in portal actions." % ptype.id)
-    seoprops_tool.manage_changeProperties(content_types_with_seoproperties=ctws)
-
 def importVarious(context):
     """ Do customized installation.
     """
     if context.readDataFile('seo_install.txt') is None:
         return
-
-def reinstall(context):
-    """ Do customized reinstallation.
-    """
-    if context.readDataFile('seo_reinstall.txt') is None:
-        return
-    site = context.getSite()
-    migrationActions(site)
-    changeDomain(site)
-    changeMetatagsOrderList(site)
 
 def uninstall(context):
     """ Do customized uninstallation.
