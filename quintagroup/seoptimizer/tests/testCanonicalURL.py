@@ -138,9 +138,9 @@ class TestCanonicalURL(FunctionalTestCase):
 
 
     def testSEOCanonicalAdapter4OFSFolder(self):
-        atct_tool = self.portal.atct_tool
+        atct_tool = self.portal.portal_atct
         seocan = queryAdapter(self.mydoc, ISEOCanonicalPath)
-        self.assertTrue(seocan is not None, True
+        self.assertTrue(seocan is not None,
             "seo canonical adapter not found for 'ATCT Tool'")
 
 
