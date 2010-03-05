@@ -60,15 +60,14 @@ def setup_product():
     # and results to QI can correctly use install/uninstall external
     # methods
     ztc.installPackage(PROJECT_NAME)
-    # Use products to force QI install method usage
-    ptc.setupPloneSite(products=[PROJECT_NAME,])
-
 
 # The order here is important: We first call the (deferred) function
 # which installs the products we need for this product. Then, we let
 # PloneTestCase set up this product on installation.
 
 setup_product()
+# Use products to force QI install method usage                                 
+ptc.setupPloneSite(products=[PROJECT_NAME,])                                    
 
 class MixinTestCase:
 
