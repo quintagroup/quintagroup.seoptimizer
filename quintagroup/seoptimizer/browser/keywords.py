@@ -48,9 +48,9 @@ class ValidateSEOKeywordsView(BrowserView):
                     finded[keyword] = 1
         # return list of missing and fount keywords
         if missing or finding:
-            msg = ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'number_keywords'),
+            msg = ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'number_keywords',
                                 default=u'Number of keywords at page:\n${found}\n${missing}',
-                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)},
+                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)}),
                                 context=self.context)
         else:
             msg = ''
