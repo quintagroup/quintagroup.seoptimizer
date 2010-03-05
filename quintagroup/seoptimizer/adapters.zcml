@@ -14,14 +14,19 @@
       factory=".adapters.MappingMetaTags"
       />
 
+  <!-- really adapter depends on both interfaces
+       *IPropertyManager* AND *ITreversable*
+       Actually only IFolder directly implements
+       both, but IItem not.
+  -->
   <adapter
-      for="Products.CMFCore.interfaces.IFolderish"
+      for="OFS.interfaces.IFolder"
       provides=".interfaces.ISEOCanonicalPath"
       factory=".adapters.canonicalPathAdapter"
       />
 
   <adapter
-      for="Products.CMFCore.interfaces.IContentish"
+      for="OFS.interfaces.IItem"
       provides=".interfaces.ISEOCanonicalPath"
       factory=".adapters.canonicalPathAdapter"
       />

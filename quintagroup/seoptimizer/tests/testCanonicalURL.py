@@ -137,6 +137,13 @@ class TestCanonicalURL(FunctionalTestCase):
              newcpath, mydoc_catalog_canonical))
 
 
+    def testSEOCanonicalAdapter4OFSFolder(self):
+        atct_tool = self.portal.atct_tool
+        seocan = queryAdapter(self.mydoc, ISEOCanonicalPath)
+        self.assertTrue(seocan is not None, True
+            "seo canonical adapter not found for 'ATCT Tool'")
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
