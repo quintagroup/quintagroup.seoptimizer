@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 from base import getToolByName, FunctionalTestCase, newSecurityManager
 from config import *
 
+KWSTMPL = '.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="%s"\s*)){2}/>)'
 
 class TestUsageKeywords(FunctionalTestCase):
 
@@ -22,43 +23,51 @@ class TestUsageKeywords(FunctionalTestCase):
         self.my_doc = self.portal.invokeFactory('Document', id='my_doc')
         self.my_doc = self.portal['my_doc']
 
-    def test_listMetaTags_empty(self):
+
+    def test_noDefaultKeywords(self):
+        """No keywords added for the content by default"""
         metatags = self.pu.listMetaTags(self.my_doc)
         self.assert_('keywords' not in metatags)
+        
 
-    def test_listMetaTags_one(self):
-        self.my_doc.setText('<p>foo</p>')
-        self.my_doc.manage_addProperty('qSEO_keywords', ('foo',), 'lines')
-        self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="foo"\s*)){2}/>)', self.html, re.S|re.M)
-        self.assert_(m, "No 'foo' keyword find")
-
-    def test_listMetaTags_two(self):
+    def testrender_SEOKeywords(self):
+        """ """
         self.my_doc.setText('<p>foo bar</p>')
-        self.my_doc.manage_addProperty('qSEO_keywords', ('foo', 'bar'), 'lines')
-        self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="(?:foo|bar),\s*(?:foo|bar)"\s*)){2}/>)',
-                     self.html, re.S|re.M)
-        self.assert_(m, "No 'foo, bar' keyword find")
+        self.my_doc.manage_addProperty('qSEO_keywords', [], 'lines')
 
-    def setup_testing_render_keywords(self, keywords=('local',),
-                                      html='<p>local subject</p>'):
-        self.my_doc.setText(html)
-        if len(keywords):
-            self.my_doc.manage_addProperty('qSEO_keywords', keywords, 'lines')
-        aq_inner(self.my_doc).aq_explicit.setSubject('subject')
+        for seokws in [('foo',), ('foo', 'bar')]:
+            self.my_doc._updateProperty('qSEO_keywords', seokws)
+            html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
+            expect = ',\s*'.join(seokws)
+            self.assert_(re.match(KWSTMPL % expect, html, re.S|re.M),
+                         "No '%s' keyword found" % str(seokws))
+
+
+    def testbehave_NoSEOKeywordsOnlySubject(self):
+        self.my_doc.setText('<p>local subject</p>')
+        self.my_doc.setSubject('subject')
         html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
-        return html
 
-    def test_render_only_subject(self):
-        self.html = self.setup_testing_render_keywords(keywords=())
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="subject"\s*)){2}/>)', self.html, re.S|re.M)
-        self.assert_(m, "No 'subject' keyword find")
+        expect = "subject"
+        self.assert_(re.match(KWSTMPL % expect, html, re.S|re.M),
+                     "No '%s' keyword find" % expect)
 
-    def test_render_only_local_seokeywords(self):
-        self.html = self.setup_testing_render_keywords()
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="local\s*"\s*)){2}/>)', self.html, re.S|re.M)
-        self.assert_(m, "No 'local' keywords find")
+    def testbehave_SEOKeywordsOverrideSubject(self):
+        SEOKWS = ('local',)
+        self.my_doc.setText('<p>local subject</p>')
+        self.my_doc.setSubject('subject')
+        self.my_doc.manage_addProperty('qSEO_keywords', SEOKWS, 'lines')
+        html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
+
+        expect = ',\s*'.join(SEOKWS)
+        self.assert_(re.match(KWSTMPL % expect, html, re.S|re.M),
+                     "No '%s' keywords find" % SEOKWS)
+
+    def testbehave_noSEOKeywordsNoSubject(self):
+        """Nor seo keywords not subject added"""
+        html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
+        self.assertFalse(re.match('.*(<meta\s[^\>]*name="keywords"[^\>]*>)',
+                                  html, re.S|re.M), "'keyword' meta tag found")
 
 
 def test_suite():
