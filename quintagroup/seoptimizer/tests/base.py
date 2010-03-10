@@ -13,11 +13,15 @@ from Products.Five import fiveconfigure
 
 from Testing import ZopeTestCase as ztc
 
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import onsetup
-
 from Products.CMFCore.utils import getToolByName
-from config import PROJECT_NAME
+
+from Products.PloneTestCase.layer import onsetup
+from Products.PloneTestCase import PloneTestCase as ptc
+from Products.PloneTestCase.PloneTestCase import portal_owner
+from Products.PloneTestCase.PloneTestCase import default_user
+from Products.PloneTestCase.PloneTestCase import default_password
+
+from quintagroup.seoptimizer.config import *
 
 # When ZopeTestCase configures Zope, it will *not* auto-load products
 # in Products/. Instead, we have to use a statement such as:

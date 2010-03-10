@@ -8,8 +8,7 @@ from Products.Archetypes.interfaces import IBaseContent
 
 from quintagroup.canonicalpath.interfaces import ICanonicalPath
 from quintagroup.seoptimizer.interfaces import ISEOCanonicalPath
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
 
 class TestCanonicalURL(FunctionalTestCase):
 

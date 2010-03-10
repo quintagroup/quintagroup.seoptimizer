@@ -1,6 +1,5 @@
 import re
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
 
 class TestMetaTagsDuplication(FunctionalTestCase):
 

@@ -1,7 +1,6 @@
 import urllib, re
 from Acquisition import aq_inner
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
 
 KWSTMPL = '.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="%s"\s*)){2}/>)'
 

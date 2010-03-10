@@ -9,8 +9,22 @@ from zope.viewlet.interfaces import IViewletManager
 from plone.browserlayer import utils
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 
-from base import getToolByName, FunctionalTestCase, TestCase, newSecurityManager
-from config import *
+from base import *
+
+PROPS = {'stop_words': STOP_WORDS,
+         'fields': ['seo_title', 'seo_description', 'seo_keywords']}
+
+DEFAULT_METATAGS_ORDER = [
+    'DC.contributors', 'DC.creator', 'DC.date.created',
+    'DC.date.modified','DC.description', 'DC.distribution',
+    'DC.format', 'DC.language', 'DC.publisher', 'DC.rights',
+    'DC.subject', 'DC.type', 'description', 'distribution',
+    'keywords', 'robots']
+DEFAULT_METATAGS_ORDER.sort()
+
+SEO_CONTENT = ['File', 'Document', 'News Item']
+CONTENTTYPES_WITH_SEOACTION = ['File', 'Document', 'News Item', 'Folder', 'Event']
+CONTENTTYPES_WITH_SEOACTION.sort()
 
 
 class TestBeforeInstallation(FunctionalTestCase):

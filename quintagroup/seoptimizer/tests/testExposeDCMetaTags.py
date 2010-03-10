@@ -1,7 +1,6 @@
 import re, string
 from DateTime import DateTime
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
 
 METATAG = '.*(<meta\s+(?:(?:name="%s"\s*)|(?:content="(?P<tagcontent>.*?)"\s*)){2}/>)'
 

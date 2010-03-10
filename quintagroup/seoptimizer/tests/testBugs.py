@@ -1,7 +1,6 @@
 import urllib, re
 from cStringIO import StringIO
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
 
 class TestBugs(FunctionalTestCase):
 

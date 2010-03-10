@@ -1,7 +1,21 @@
 import urllib, re
 from cStringIO import StringIO
-from base import getToolByName, FunctionalTestCase, newSecurityManager
-from config import *
+from base import *
+
+CUSTOM_METATAGS = [{'meta_name'    : 'metatag1',
+                    'meta_content' : 'metatag1value'},
+                   {'meta_name'    : 'metatag2',
+                    'meta_content' : 'metatag2value'},
+                   {'meta_name'    : 'metatag3',
+                    'meta_content' : ''}
+                  ]
+
+VIEW_METATAGS = ['DC.creator', 'DC.format', 'DC.date.modified',
+    'DC.date.created', 'DC.type', 'DC.distribution', 'description',
+    'keywords', 'robots', 'distribution']
+
+GLOBAL_CUSTOM_METATAGS = {
+    'default_custom_metatags':'metatag1|global_metatag1value\nmetatag4|global_metatag4value'}
 
 class TestResponse(FunctionalTestCase):
 
