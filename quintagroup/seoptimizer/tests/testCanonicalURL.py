@@ -3,6 +3,14 @@ from zope.component import queryAdapter
 from zope.component import provideAdapter
 from plone.indexer.decorator import indexer
 
+try:
+    from plone.indexer.decorator import indexer
+except ImportError:
+    IS_NEW = False
+    from Products.CMFPlone.CatalogTool import registerIndexableAttribute
+else:
+    IS_NEW = True
+
 from Products.CMFCore.interfaces import IContentish
 from Products.Archetypes.interfaces import IBaseContent
 
@@ -13,14 +21,9 @@ from base import *
 class TestCanonicalURL(FunctionalTestCase):
 
     def afterSetUp(self):
-        self.basic_auth = 'portal_manager:secret'
-        uf = self.app.acl_users
-        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
-        user = uf.getUserById('portal_manager')
-        if not hasattr(user, 'aq_base'):
-            user = user.__of__(uf)
-        newSecurityManager(None, user)
-
+        self.basic_auth = ':'.join((portal_owner,default_password))
+        self.loginAsPortalOwner()
+        # Preparation for functional testing
         self.portal.invokeFactory('Document', id='mydoc')
         self.mydoc = self.portal['mydoc']
         self.mydoc_path = "/%s" % self.mydoc.absolute_url(1)
@@ -95,8 +98,17 @@ class TestCanonicalURL(FunctionalTestCase):
              newcpath, mydoc_path_rel_new))
 
 
-    def addCanonicalPathCatalogColumn(self):
+    def addIndexerOld(self):
+        def canonical_path(obj, **kwargs):
+            """Return canonical_path property for the object.
+            """
+            cpath = queryAdapter(obj, interface=ISEOCanonicalPath)
+            if cpath:
+                return cpath.canonical_path()
+            return None
+        registerIndexableAttribute("canonical_path", test_column)
 
+    def addIndexerNew(self):
         @indexer(IContentish)
         def canonical_path(obj, **kwargs):
             """Return canonical_path property for the object.
@@ -107,14 +119,15 @@ class TestCanonicalURL(FunctionalTestCase):
             return None
 
         provideAdapter(canonical_path, name='canonical_path')
-        catalog = getToolByName(self.portal, 'portal_catalog')
-        catalog.addColumn(name='canonical_path')
-
 
     def testCatalogUpdated(self):
         purl = getToolByName(self.portal, 'portal_url')
         catalog = getToolByName(self.portal, 'portal_catalog')
-        self.addCanonicalPathCatalogColumn()
+        if IS_NEW:
+            self.addIndexerNew()
+        else:
+            self.addIndexerOld()
+        catalog.addColumn('canonical_path')
 
         canonical = queryAdapter(self.mydoc, ISEOCanonicalPath)
         cpath = canonical.canonical_path()
