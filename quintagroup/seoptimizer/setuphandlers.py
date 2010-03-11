@@ -1,4 +1,9 @@
 import logging
+
+from zope.component import getSiteManager
+from plone.browserlayer.utils import unregister_layer
+from plone.browserlayer.interfaces import ILocalBrowserLayerType
+
 from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('quintagroup.seoptimizer')
@@ -31,6 +36,17 @@ def removeConfiglet(site, conf_id):
         controlpanel_tool.unregisterConfiglet(conf_id)
         logger.log(logging.INFO, "Unregistered \"%s\" configlet." % conf_id)
 
+def removeBrowserLayer(site):
+    """ Remove configlet.
+    """
+    name="qSEOptimizer"
+    site = getSiteManager(site)
+    registeredLayers = [r.name for r in site.registeredUtilities()
+                        if r.provided == ILocalBrowserLayerType]
+    if name in registeredLayers:
+        unregister_layer(name, site_manager=site)
+        logger.log(logging.INFO, "Unregistered \"%s\" browser layer." % name)
+
 def importVarious(context):
     """ Do customized installation.
     """
@@ -46,3 +62,4 @@ def uninstall(context):
     removeSkin(site, 'quintagroup.seoptimizer' )
     removeActions(site)
     removeConfiglet(site, 'quintagroup.seoptimizer')
+    removeBrowserLayer(site)
