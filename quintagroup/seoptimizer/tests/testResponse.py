@@ -78,10 +78,6 @@ class TestResponse(FunctionalTestCase):
         m = re.match('.*(<meta\s+(?:(?:name="description"\s*)|(?:content="it is description, test keyword1"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Description not set in')
 
-    def testKeywords(self):
-        m = re.match('.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="keyword1"\s*)){2}/>)', self.html, re.S|re.M)
-        self.assert_(m, 'Keywords not set in')
-
     def testRobots(self):
         m = re.match('.*(<meta\s+(?:(?:name="robots"\s*)|(?:content="ALL"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, 'Robots not set in')
