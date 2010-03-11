@@ -1,7 +1,7 @@
 import re
 from base import *
 
-class TestSEOConfiglet(FunctionalTestCase):
+class TestConfiglet(FunctionalTestCase):
 
     def afterSetUp(self):
         self.sp = self.portal.portal_properties.site_properties
@@ -67,7 +67,7 @@ class TestSEOConfiglet(FunctionalTestCase):
         tse = self.seo.getProperty("content_types_with_seoproperties", ())
         self.assertTrue(tse == (expect,),
             '"content_types_with_seoproperties" property contains: ' \
-            '"%s", must: "%s"' % (tse_after, expect))
+            '"%s", must: "%s"' % (tse, expect))
 
     def test_typesSEOEnabled_Off(self):
         self.publish(self.save_url + '&form.types_seo_enabled-empty-marker=1',
@@ -81,5 +81,5 @@ class TestSEOConfiglet(FunctionalTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestSEOConfiglet))
+    suite.addTest(makeSuite(TestConfiglet))
     return suite
