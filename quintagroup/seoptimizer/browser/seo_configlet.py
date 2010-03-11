@@ -24,7 +24,7 @@ from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 # Configlet schema
 class ISEOConfigletSchema(Interface):
-    
+
     exposeDCMetaTags = Bool(
         title=_("label_exposeDCMetaTags",
                 default='Expose <abbr title="Dublin Core">DC</abbr> meta tags'),
@@ -34,14 +34,6 @@ class ISEOConfigletSchema(Interface):
                     'DC.description, DC.type, DC.format, DC.creator and '
                     'others.'),
         default=True,
-        required=False)
-
-    default_custom_metatags = List(
-        title=_("label_default_custom_metatags", default='Default custom metatags.'),
-        description=_("help_default_custom_metatags",
-                default='Fill in custom metatag names (one per line) which will'
-                    'appear on qseo_properties edit tab. Example: '
-                    '"metaname|metacontent" or "metaname".'),
         required=False)
 
     metatags_order = List(
@@ -63,6 +55,13 @@ class ISEOConfigletSchema(Interface):
         value_type=Choice(
             vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"))
 
+    default_custom_metatags = List(
+        title=_("label_default_custom_metatags", default='Default custom metatags.'),
+        description=_("help_default_custom_metatags",
+                default='Fill in custom metatag names (one per line) which will'
+                    'appear on qseo_properties edit tab. Example: '
+                    '"metaname|metacontent" or "metaname".'),
+        required=False)
 
 
 class SEOConfigletAdapter(SchemaAdapterBase):
@@ -87,7 +86,7 @@ class SEOConfigletAdapter(SchemaAdapterBase):
     def getTypesSEOEnabled(self):
         ct_with_seo = self.context.content_types_with_seoproperties
         return [t for t in self.ttool.listContentTypes() if t in ct_with_seo]
-    
+
     def setTypesSEOEnabled(self, value):
         value = [t for t in self.ttool.listContentTypes() if t in value]
         self.context._updateProperty('content_types_with_seoproperties', value)
@@ -97,7 +96,7 @@ class SEOConfigletAdapter(SchemaAdapterBase):
     default_custom_metatags = ProxyFieldProperty(ISEOConfigletSchema['default_custom_metatags'])
     metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
     types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
-    
+
 
 class SmallTextAreaWidget(TextAreaWidget):
     height = 5
