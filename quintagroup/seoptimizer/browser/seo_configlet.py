@@ -58,7 +58,7 @@ class ISEOConfigletSchema(Interface):
     default_custom_metatags = List(
         title=_("label_default_custom_metatags", default='Default custom metatags.'),
         description=_("help_default_custom_metatags",
-                default='Fill in custom metatag names (one per line) which will'
+                default='Fill in custom metatag names (one per line) which will '
                     'appear on qseo_properties edit tab. Example: '
                     '"metaname|metacontent" or "metaname".'),
         required=False)
