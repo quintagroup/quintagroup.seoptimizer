@@ -1,60 +1,49 @@
 import re
 from base import *
 
+GENERATOR = re.compile('.*(<meta\s+(?:(?:name="generator"\s*)|' \
+                       '(?:content=".*?"\s*)){2}/>)', re.S|re.M)
+DESCRIPTION = re.compile('.*(<meta\s+(?:(?:name="description"\s*)|' \
+                         '(?:content=".*?"\s*)){2}/>)', re.S|re.M)
+
 class TestMetaTagsDuplication(FunctionalTestCase):
 
     def afterSetUp(self):
         self.qi = self.portal.portal_quickinstaller
-        self.qi = self.qi.uninstallProducts([PROJECT_NAME])
-
-        self.basic_auth = 'portal_manager:secret'
-        uf = self.app.acl_users
-        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
-        user = uf.getUserById('portal_manager')
-        if not hasattr(user, 'aq_base'):
-            user = user.__of__(uf)
-        newSecurityManager(None, user)
-
-        '''Preparation for functional testing'''
+        # Preparation for functional testing
+        self.loginAsPortalOwner()
         self.my_doc = self.portal.invokeFactory('Document', id='my_doc')
         self.my_doc = self.portal['my_doc']
         self.my_doc.update(description="Document description")
-
-    def test_GeneratorMeta(self):
+        self.portal.portal_workflow.doActionFor(self.my_doc, 'publish')
+        self.logout()
         # Get document without customized canonical url
-        abs_path = "/%s" % self.my_doc.absolute_url(1)
+        self.abs_path = "/%s" % self.my_doc.absolute_url(1)
+        self.html = self.publish(self.abs_path).getBody()
 
-        # Before product installation
-        self.html = self.publish(abs_path, self.basic_auth).getBody()
-        f = re.findall('.*(<meta\s+(?:(?:name="generator"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
-        lengen = len(f)
+    def test_GeneratorMetaSEOInstalled(self):
+        lengen = len(GENERATOR.findall(self.html))
         self.assert_(lengen==1, "There is %d generator meta tag(s) " \
-           "before seoptimizer installation" % lengen)
+           "when seoptimizer installed" % lengen)
+ 
+    def test_GeneratorMetaSEOUninstalled(self):
+        self.qi.uninstallProducts([PROJECT_NAME,])
+        lengen = len(GENERATOR.findall(self.html))
+        self.assert_(lengen<=1, "There is %d generator meta tag(s) " \
+            "when seoptimizer uninstalled" % lengen)
 
-#         # After PROJECT_NAME installation
-#         self.qi.installProduct(PROJECT_NAME)
-#         html = self.publish(abs_path, self.basic_auth).getBody()
-#         lengen = len(regen.findall(html))
-#         self.assert_(lengen==1, "There is %d generator meta tag(s) " \
-#            "after seoptimizer installation" % lengen)
-
-    def test_DescriptionMeta(self):
-        # Get document without customized canonical url
-        abs_path = "/%s" % self.my_doc.absolute_url(1)
-
-        # Before product installation
-        self.html = self.publish(abs_path, self.basic_auth).getBody()
-        f = re.findall('.*(<meta\s+(?:(?:name="description"\s*)|(?:content=".*?"\s*)){2}/>)', self.html, re.S|re.M)
-        lendesc = len(f)
+    def test_DescriptionMetaSEOInstalled(self):
+        lendesc = len(DESCRIPTION.findall(self.html))
         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
-           "before seoptimizer installation" % lendesc)
+           "when seoptimizer installed" % lendesc)
 
-#         # After PROJECT_NAME installation
-#         self.qi.installProduct(PROJECT_NAME)
-#         html = self.publish(abs_path, self.basic_auth).getBody()
-#         lendesc = len(regen.findall(html))
-#         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
-#            "after seoptimizer installation" % lendesc)
+    def test_DescriptionMetaSEOUninstalled(self):
+        self.qi.uninstallProducts([PROJECT_NAME,])
+        lendesc = len(DESCRIPTION.findall(self.html))
+        self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
+           "when seoptimizer uninstalled" % lendesc)
+
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
