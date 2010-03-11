@@ -2,66 +2,66 @@ import urllib, re
 from cStringIO import StringIO
 from base import *
 
-CUSTOM_METATAGS = [{'meta_name'    : 'metatag1',
-                    'meta_content' : 'metatag1value'},
-                   {'meta_name'    : 'metatag2',
-                    'meta_content' : 'metatag2value'},
-                   {'meta_name'    : 'metatag3',
-                    'meta_content' : ''}
-                  ]
+CUSTOM_METATAGS = [
+   {'meta_name': 'metatag1', 'meta_content': 'metatag1value'},
+   {'meta_name': 'metatag2', 'meta_content': 'metatag2value'},
+   {'meta_name': 'metatag3', 'meta_content': ''}
+]
 
-VIEW_METATAGS = ['DC.creator', 'DC.format', 'DC.date.modified',
-    'DC.date.created', 'DC.type', 'DC.distribution', 'description',
-    'keywords', 'robots', 'distribution']
+VIEW_METATAGS = [
+    'DC.creator', 'DC.format', 'DC.date.modified',
+    'DC.date.created', 'DC.type', 'DC.distribution',
+    'description', 'keywords', 'robots', 'distribution'
+]
 
-GLOBAL_CUSTOM_METATAGS = {
-    'default_custom_metatags':'metatag1|global_metatag1value\nmetatag4|global_metatag4value'}
+FORM_DATA = {
+    'seo_robots': 'ALL',
+    'form.submitted:int': 1,
+    'seo_title': 'hello world',
+    'seo_title_override:int': 1,
+    'seo_robots_override:int': 1,
+    'seo_distribution': 'Global',
+    'seo_keywords_override:int': 1,
+    'seo_keywords:list': 'keyword1',
+    'seo_description_override:int': 1,
+    'seo_html_comment': 'no comments',
+    'seo_html_comment_override:int': 1,
+    'seo_distribution_override:int': 1,
+    'seo_custommetatags_override:int': 1,
+    'seo_description': 'it is description, test keyword1',
+}
 
 class TestResponse(FunctionalTestCase):
 
     def afterSetUp(self):
         self.sp = self.portal.portal_properties.seo_properties
         self.pu = self.portal.plone_utils
-        self.basic_auth = 'portal_manager:secret'
+        self.wf = self.portal.portal_workflow
 
-        uf = self.app.acl_users
-        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
-        user = uf.getUserById('portal_manager')
-        if not hasattr(user, 'aq_base'):
-            user = user.__of__(uf)
-        newSecurityManager(None, user)
+        self.basic_auth = ':'.join((portal_owner,default_password))
+        self.loginAsPortalOwner()
 
-        '''Preparation for functional testing'''
+        # Preparation for functional testing'
+        # create document for test
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
-        self.sp.manage_changeProperties(**GLOBAL_CUSTOM_METATAGS)
-        self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
-        abs_path = "/%s" % my_doc.absolute_url(1)
-        self.form_data = {'seo_description': 'it is description, test keyword1', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
-                        'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1,
-                        'seo_keywords:list': 'keyword1', 'seo_html_comment': 'no comments',
-                        'seo_title_override:int': 1, 'seo_title': 'hello world', 'seo_html_comment_override:int': 1,
-                        'seo_distribution_override:int': 1, 'seo_distribution': 'Global', 'form.submitted:int': 1}
+        self.abs_path = "/%s" % my_doc.absolute_url(1)
+        # prepare seo context form data
+        self.sp.manage_changeProperties(
+            default_custom_metatags = 'metatag1|global_metatag1value\n' \
+                                      'metatag4|global_metatag4value')
         st = ''
         for d in CUSTOM_METATAGS:
-            st += '&seo_custommetatags.meta_name:records=%s&seo_custommetatags.meta_content:records=%s' % (d['meta_name'],d['meta_content'])
-        self.publish(path=abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(self.form_data)+st))
-        #self.publish(abs_path+'/@@seo-context-properties?%s' % urllib.urlencode(self.form_data), self.basic_auth)
+            st += '&seo_custommetatags.meta_name:records=%s' % d['meta_name']
+            st += '&seo_custommetatags.meta_content:records=%s' % d['meta_content']
+        # update seo properties for the test document and publish it
+        self.publish(path=self.abs_path+'/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(FORM_DATA)+st))
+        self.wf.doActionFor(my_doc, 'publish')
+        # get html view of test document
+        self.html = self.publish(self.abs_path, self.basic_auth).getBody()
 
-        wf_tool = self.portal.portal_workflow
-        wf_tool.doActionFor(my_doc, 'publish')
-
-        self.abs_path = abs_path
-        self.my_doc = my_doc
-        self.html = self.publish(abs_path, self.basic_auth).getBody()
-
-        # now setup page with title equal to plone site's title
-        my_doc2 = self.portal.invokeFactory('Document', id='my_doc2')
-        my_doc2 = self.portal['my_doc2']
-        my_doc2.update(title=self.portal.Title())
-        wf_tool.doActionFor(my_doc2, 'publish')
-        abs_path2 = "/%s" % my_doc2.absolute_url(1)
-        self.html2 = self.publish(abs_path2, self.basic_auth).getBody()
 
     def testTitle(self):
         m = re.match('.*<title>\\s*hello world\\s*</title>', self.html, re.S|re.M)
@@ -71,7 +71,13 @@ class TestResponse(FunctionalTestCase):
         """If we are not overriding page title and current page title equals title of the plone site
         then there should be no concatenation of both titles. Only one should be displayed.
         """
-        m = re.match('.*<title>\\s*%s\\s*</title>' % self.portal.Title(), self.html2, re.S|re.M)
+        # setup page with title equal to plone site's title
+        my_doc2 = self.portal.invokeFactory('Document', id='my_doc2', title=self.portal.Title())
+        my_doc2 = self.portal['my_doc2']
+        self.wf.doActionFor(my_doc2, 'publish')
+        html2 = self.publish('/'+my_doc2.absolute_url(1), self.basic_auth).getBody()
+
+        m = re.match('.*<title>\\s*%s\\s*</title>' % self.portal.Title(), html2, re.S|re.M)
         self.assert_(m, 'Title is not set correctly, perhaps it is duplicated with plone site title')
 
     def testDescription(self):
@@ -120,9 +126,12 @@ class TestResponse(FunctionalTestCase):
 
     def testDeleteCustomMetaTags(self):
         self.sp.manage_changeProperties(**{'default_custom_metatags':'metatag1|global_metatag1value'})
-        my_doc = self.my_doc
-        self.form_data = {'seo_custommetatags': CUSTOM_METATAGS,  'seo_custommetatags_override:int': 0, 'form.submitted:int': 1}
-        self.publish(path=self.abs_path+'/@@seo-context-properties', basic=self.basic_auth, request_method='POST', stdin=StringIO(urllib.urlencode(self.form_data)))
+        form_data = {'seo_custommetatags': CUSTOM_METATAGS,
+                     'seo_custommetatags_override:int': 0,
+                     'form.submitted:int': 1}
+        self.publish(path=self.abs_path+'/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
         self.html = self.publish(self.abs_path, self.basic_auth).getBody()
         m = re.match('.*(<meta\s+(?:(?:name="metatag4"\s*)|(?:content="global_metatag4value"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(not m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
