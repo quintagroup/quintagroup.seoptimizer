@@ -34,15 +34,14 @@ class TestResponse(FunctionalTestCase):
         '''Preparation for functional testing'''
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
         my_doc = self.portal['my_doc']
-        self.canonurl = 'http://nohost/plone/test.html'
         self.sp.manage_changeProperties(**GLOBAL_CUSTOM_METATAGS)
         self.sp.manage_changeProperties(settings_use_keywords_sg=3, settings_use_keywords_lg=2)
         abs_path = "/%s" % my_doc.absolute_url(1)
         self.form_data = {'seo_description': 'it is description, test keyword1', 'seo_keywords_override:int': 1, 'seo_custommetatags_override:int': 1,
-                        'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1, 'seo_canonical_override:int': 1,
+                        'seo_robots_override:int': 1, 'seo_robots': 'ALL', 'seo_description_override:int': 1,
                         'seo_keywords:list': 'keyword1', 'seo_html_comment': 'no comments',
                         'seo_title_override:int': 1, 'seo_title': 'hello world', 'seo_html_comment_override:int': 1,
-                        'seo_distribution_override:int': 1, 'seo_distribution': 'Global', 'seo_canonical': self.canonurl, 'form.submitted:int': 1}
+                        'seo_distribution_override:int': 1, 'seo_distribution': 'Global', 'form.submitted:int': 1}
         st = ''
         for d in CUSTOM_METATAGS:
             st += '&seo_custommetatags.meta_name:records=%s&seo_custommetatags.meta_content:records=%s' % (d['meta_name'],d['meta_content'])
@@ -133,24 +132,6 @@ class TestResponse(FunctionalTestCase):
         self.assert_(not m, "Global custom meta tag %s is prosent in the page." % 'metatag4')
         m = re.match('.*(<meta\s+(?:(?:name="metatag1"\s*)|(?:content="global_metatag1value"\s*)){2}/>)', self.html, re.S|re.M)
         self.assert_(m, "Global custom meta tag %s not applied." % 'metatag1')
-
-    def testCanonical(self):
-        m = re.match('.*<link rel="canonical" href="%s" />' % self.canonurl, self.html, re.S|re.M)
-        self.assert_(m, self.canonurl)
-
-    def testDefaultCanonical(self):
-        """Default canonical url mast add document absolute_url
-        """
-        # Delete custom canonical url
-        my_doc = self.portal['my_doc']
-        my_doc._delProperty(id='qSEO_canonical')
-        # Get document without customized canonical url
-        abs_path = "/%s" % my_doc.absolute_url(1)
-        self.html = self.publish(abs_path, self.basic_auth).getBody()
-
-        my_url = my_doc.absolute_url()
-        m = re.match('.*<link rel="canonical" href="%s" />' % my_url, self.html, re.S|re.M)
-        self.assert_(m, my_url)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
