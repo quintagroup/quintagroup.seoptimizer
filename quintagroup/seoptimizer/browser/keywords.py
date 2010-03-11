@@ -4,6 +4,7 @@ from xml.dom import minidom, Node
 from zope.interface import implements
 from Products.Five.browser import BrowserView
 
+from Products.CMFPlone.utils import safe_unicode, getSiteEncoding
 from Products.CMFCore.utils import getToolByName
 
 from interfaces import IValidateSEOKeywordsView
@@ -17,44 +18,36 @@ class ValidateSEOKeywordsView(BrowserView):
         """ see interface """
         ts = getToolByName(self.context, 'translation_service')
         # extract keywords from text
+        enc = getSiteEncoding(self.context)
         if text.lower().strip():
-            keywords = map(lambda x: x.strip(), text.lower().strip().split('\n'))
+            keywords = filter(None, map(lambda x: safe_unicode(x.strip(), enc),
+                                         text.lower().strip().split('\n')))
         else:
-            return ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'Keywords list is empty!'), context=self.context)
+            return ts.utranslate(domain='quintagroup.seoptimizer',
+                                 msgid=_(u'Keywords list is empty!'),
+                                 context=self.context)
         # request html page of context object
         url = '%s?without_metatag_keywords=1' % self.context.absolute_url()
 
         # extract words from url page using lynx browser (test page by 'url' randered without metatag keywords)
         page_text = commands.getoutput('lynx --dump --nolist %s' % url).lower()
         if page_text and page_text != 'sh: lynx: command not found':
-            page_text = page_text.decode('utf8')
+            page_text = safe_unicode(page_text, 'utf-8')
         else:
-            return ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'Could not find lynx browser!'), context=self.context)
+            return ts.utranslate(domain='quintagroup.seoptimizer',
+                                 msgid=_(u'Could not find lynx browser!'),
+                                 context=self.context)
 
         # check every keyword on appearing in body of html page
-        missing = []
-        finding = []
-        added = {}
-        finded = {}
+        result = []
         for keyword in keywords:
-            keyword = keyword.decode('utf8')
-            if keyword:
-                keyword_on_page =  len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U))
-                if keyword not in added.keys() and not keyword_on_page:
-                    missing.append(keyword+u' - 0')
-                    added[keyword] = 1
-                if keyword not in finded.keys() and keyword_on_page:
-                    finding.append(keyword+u' - '+repr(keyword_on_page))
-                    finded[keyword] = 1
-        # return list of missing and fount keywords
-        if missing or finding:
-            msg = ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'number_keywords',
-                                default=u'Number of keywords at page:\n${found}\n${missing}',
-                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)}),
-                                context=self.context)
-        else:
-            msg = ''
-        return msg
+            keyword_on_page = unicode(len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U)))
+            result.append(' - '.join((keyword, keyword_on_page)))
+        return ts.utranslate(domain='quintagroup.seoptimizer',
+                             msgid=_(u'number_keywords',
+                               default=u'Number of keywords at page:\n${result}',
+                               mapping={'result':'\n'.join(result)}),
+                             context=self.context)
 
     def walkTextNodes(self, parent, page_words=[]):
         for node in parent.childNodes:
