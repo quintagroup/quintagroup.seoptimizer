@@ -33,7 +33,7 @@ FORM = {
 
 METATAG = '.*(<meta\s+(?:(?:name="%s"\s*)|(?:content="%s"\s*)){2}/>)'
 
-class TestResponse(FunctionalTestCase):
+class TestContextForm(FunctionalTestCase):
 
     def afterSetUp(self):
         self.sp = self.portal.portal_properties.seo_properties
@@ -150,5 +150,5 @@ class TestResponse(FunctionalTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestResponse))
+    suite.addTest(makeSuite(TestContextForm))
     return suite
