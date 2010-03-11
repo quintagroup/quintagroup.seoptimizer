@@ -6,7 +6,7 @@ from zope.interface import alsoProvides
 from zope.component import queryMultiAdapter
 from zope.publisher.browser import TestRequest
 from zope.viewlet.interfaces import IViewletManager
-from plone.browserlayer import utils
+
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 
 from base import *
@@ -27,11 +27,11 @@ CONTENTTYPES_WITH_SEOACTION = ['File', 'Document', 'News Item', 'Folder', 'Event
 CONTENTTYPES_WITH_SEOACTION.sort()
 
 
-class TestBeforeInstallation(FunctionalTestCase):
+class TestBeforeInstallation(FunctionalTestCaseNotInstalled):
 
     def afterSetUp(self):
-        self.qi = self.portal.portal_quickinstaller
-        self.qi.uninstallProducts([PROJECT_NAME])
+        #self.qi = self.portal.portal_quickinstaller
+        #self.qi.uninstallProducts([PROJECT_NAME])
         self.basic_auth = 'mgr:mgrpw'
         self.portal_path = '/%s' % self.portal.absolute_url(1)
 
@@ -86,6 +86,7 @@ class TestInstallation(TestCase):
             self.assert_(manager.get(p) is not None, "Not registered '%s' viewlet" % p)
         
     def test_browser_layer(self):
+        from plone.browserlayer import utils
         self.assert_(IPloneSEOLayer in utils.registered_layers(),
                      "Not registered 'IPloneSEOLayer' browser layer")
     
@@ -142,8 +143,9 @@ class TestUninstallation(TestCase):
                 "'%s' viewlet present after uninstallation" % p)
 
     def test_browserlayer_uninstall(self):
+        from plone.browserlayer import utils
         self.assertEqual(IPloneSEOLayer in utils.registered_layers(), False,
-            "Not registered 'IPloneSEOLayer' browser layer")
+            "Still registered 'IPloneSEOLayer' browser layer")
 
     def test_jsregestry_uninstall(self):
         jstool=getToolByName(self.portal, 'portal_javascripts')

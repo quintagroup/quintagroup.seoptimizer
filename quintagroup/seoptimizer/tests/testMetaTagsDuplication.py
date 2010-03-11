@@ -6,10 +6,9 @@ GENERATOR = re.compile('.*(<meta\s+(?:(?:name="generator"\s*)|' \
 DESCRIPTION = re.compile('.*(<meta\s+(?:(?:name="description"\s*)|' \
                          '(?:content=".*?"\s*)){2}/>)', re.S|re.M)
 
-class TestMetaTagsDuplication(FunctionalTestCase):
+class InstallMixin:
 
-    def afterSetUp(self):
-        self.qi = self.portal.portal_quickinstaller
+    def prepare(self):
         # Preparation for functional testing
         self.loginAsPortalOwner()
         self.my_doc = self.portal.invokeFactory('Document', id='my_doc')
@@ -21,24 +20,35 @@ class TestMetaTagsDuplication(FunctionalTestCase):
         self.abs_path = "/%s" % self.my_doc.absolute_url(1)
         self.html = self.publish(self.abs_path).getBody()
 
+
+class TestTagsDuplicationInstalled(InstallMixin, FunctionalTestCase):
+
+    def afterSetUp(self):
+        self.prepare()
+
     def test_GeneratorMetaSEOInstalled(self):
         lengen = len(GENERATOR.findall(self.html))
         self.assert_(lengen==1, "There is %d generator meta tag(s) " \
            "when seoptimizer installed" % lengen)
  
-    def test_GeneratorMetaSEOUninstalled(self):
-        self.qi.uninstallProducts([PROJECT_NAME,])
-        lengen = len(GENERATOR.findall(self.html))
-        self.assert_(lengen<=1, "There is %d generator meta tag(s) " \
-            "when seoptimizer uninstalled" % lengen)
-
     def test_DescriptionMetaSEOInstalled(self):
         lendesc = len(DESCRIPTION.findall(self.html))
         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
            "when seoptimizer installed" % lendesc)
 
+
+class TestTagsDuplicationNotInstalled(InstallMixin,
+                                      FunctionalTestCaseNotInstalled):
+
+    def afterSetUp(self):
+        self.prepare()
+
+    def test_GeneratorMetaSEOUninstalled(self):
+        lengen = len(GENERATOR.findall(self.html))
+        self.assert_(lengen<=1, "There is %d generator meta tag(s) " \
+            "when seoptimizer uninstalled" % lengen)
+
     def test_DescriptionMetaSEOUninstalled(self):
-        self.qi.uninstallProducts([PROJECT_NAME,])
         lendesc = len(DESCRIPTION.findall(self.html))
         self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
            "when seoptimizer uninstalled" % lendesc)
@@ -47,5 +57,6 @@ class TestMetaTagsDuplication(FunctionalTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestMetaTagsDuplication))
+    suite.addTest(makeSuite(TestTagsDuplicationInstalled))
+    suite.addTest(makeSuite(TestTagsDuplicationNotInstalled))
     return suite
