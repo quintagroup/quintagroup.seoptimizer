@@ -99,6 +99,8 @@ class SEOConfigletAdapter(SchemaAdapterBase):
         self.context = pprop.seo_properties
         self.siteprops = pprop.site_properties
         self.ttool = getToolByName(context, 'portal_types')
+        self.encoding = pprop.site_properties.default_charset
+
 
     def getExposeDC(self):
         return self.siteprops.getProperty('exposeDCMetaTags')
