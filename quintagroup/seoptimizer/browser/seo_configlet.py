@@ -5,6 +5,7 @@ from zope.component import adapts
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema import Bool, Text, Choice, Tuple, List
+from zope.schema import SourceText
 from zope.app.form.browser import RadioWidget
 
 from zope.formlib.form import FormFields
@@ -15,6 +16,7 @@ from plone.app.controlpanel.form import ControlPanelForm
 from plone.app.controlpanel.widgets import MultiCheckBoxThreeColumnWidget
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.CMFDefault.formlib.schema import ProxyFieldProperty
 from Products.CMFDefault.formlib.schema import SchemaAdapterBase
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -63,6 +65,27 @@ class ISEOConfigletSchema(Interface):
                     '"metaname|metacontent" or "metaname".'),
         required=False)
 
+    custom_script = SourceText(
+        title=_("label_custom_script", default=u'Header JavaScript'),
+        description=_("help_custom_script",
+                default=u"This JavaScript code will be included in "
+                         "the rendered HTML as entered in the page header."),
+        default=u'',
+        required=False)
+
+    fields = List(
+        title=_("label_fields", default='Fields for keywords statistic calculation.'),
+        description=_("help_fields",
+                default='Fill in filds (one per line) which statistics of keywords usage'
+                    'should be calculated for.'),
+        required=False)
+
+    stop_words = List(
+        title=_("label_stop_words", default='Stop words.'),
+        description=_("help_stop_words",
+                default='Fill in stop words (one per line) which will '
+                    'be excluded from kewords statistics calculation.'),
+        required=False)
 
 class SEOConfigletAdapter(SchemaAdapterBase):
 
@@ -91,14 +114,26 @@ class SEOConfigletAdapter(SchemaAdapterBase):
         value = [t for t in self.ttool.listContentTypes() if t in value]
         self.context._updateProperty('content_types_with_seoproperties', value)
 
+    def getCustomScript(self):
+        description = getattr(self.context, 'custom_script', u'')
+        return safe_unicode(description)
+
+    def setCustomScript(self, value):
+        if value is not None:
+            self.context.custom_script = value.encode(self.encoding)
+        else:
+            self.context.custom_script = ''
 
     exposeDCMetaTags = property(getExposeDC, setExposeDC)
     default_custom_metatags = ProxyFieldProperty(ISEOConfigletSchema['default_custom_metatags'])
     metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
     types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
+    custom_script = property(getCustomScript, setCustomScript)
+    fields = ProxyFieldProperty(ISEOConfigletSchema['fields'])
+    stop_words = ProxyFieldProperty(ISEOConfigletSchema['stop_words'])
 
 
-class SmallTextAreaWidget(TextAreaWidget):
+class Text2ListWidget(TextAreaWidget):
     height = 5
     splitter = re.compile(u'\\r?\\n', re.S|re.U)
 
@@ -118,10 +153,12 @@ class SmallTextAreaWidget(TextAreaWidget):
 class SEOConfiglet(ControlPanelForm):
 
     form_fields = FormFields(ISEOConfigletSchema)
-    form_fields['default_custom_metatags'].custom_widget = SmallTextAreaWidget
-    form_fields['metatags_order'].custom_widget = SmallTextAreaWidget
+    form_fields['default_custom_metatags'].custom_widget = Text2ListWidget
+    form_fields['metatags_order'].custom_widget = Text2ListWidget
     form_fields['types_seo_enabled'].custom_widget = MultiCheckBoxThreeColumnWidget
     form_fields['types_seo_enabled'].custom_widget.cssClass='label'
+    form_fields['fields'].custom_widget = Text2ListWidget
+    form_fields['stop_words'].custom_widget = Text2ListWidget
 
     label = _("Search Engine Optimizer configuration")
     description = _("seo_configlet_description", default="You can select what "
