@@ -12,6 +12,7 @@ from zope.formlib.form import FormFields
 from zope.app.component.hooks import getSite
 from zope.app.form.browser import TextAreaWidget
 
+from plone.fieldsets.fieldsets import FormFieldsets
 from plone.app.controlpanel.form import ControlPanelForm
 from plone.app.controlpanel.widgets import MultiCheckBoxThreeColumnWidget
 
@@ -24,8 +25,8 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
 
-# Configlet schema
-class ISEOConfigletSchema(Interface):
+# Configlet schemas
+class ISEOConfigletBaseSchema(Interface):
 
     exposeDCMetaTags = Bool(
         title=_("label_exposeDCMetaTags",
@@ -65,6 +66,9 @@ class ISEOConfigletSchema(Interface):
                     '"metaname|metacontent" or "metaname".'),
         required=False)
 
+
+
+class ISEOConfigletAdvancedSchema(Interface):
     custom_script = SourceText(
         title=_("label_custom_script", default=u'Header JavaScript'),
         description=_("help_custom_script",
@@ -86,6 +90,14 @@ class ISEOConfigletSchema(Interface):
                 default='Fill in stop words (one per line) which will '
                     'be excluded from kewords statistics calculation.'),
         required=False)
+
+
+
+class ISEOConfigletSchema(ISEOConfigletBaseSchema,
+                          ISEOConfigletAdvancedSchema):
+    """Combined schema for the adapter lookup.
+    """
+
 
 class SEOConfigletAdapter(SchemaAdapterBase):
 
@@ -152,9 +164,19 @@ class Text2ListWidget(TextAreaWidget):
             return u'\r\n'.join(list(value))
 
 
+# Fieldset configurations
+baseset = FormFieldsets(ISEOConfigletBaseSchema)
+baseset.id = 'seobase'
+baseset.label = _(u'label_seobase', default=u'Base')
+
+advancedset = FormFieldsets(ISEOConfigletAdvancedSchema)
+advancedset.id = 'seoadvanced'
+advancedset.label = _(u'label_seoadvanced', default=u'Advanced')
+
 class SEOConfiglet(ControlPanelForm):
 
-    form_fields = FormFields(ISEOConfigletSchema)
+    form_fields = FormFieldsets(baseset, advancedset)
+
     form_fields['default_custom_metatags'].custom_widget = Text2ListWidget
     form_fields['metatags_order'].custom_widget = Text2ListWidget
     form_fields['types_seo_enabled'].custom_widget = MultiCheckBoxThreeColumnWidget
