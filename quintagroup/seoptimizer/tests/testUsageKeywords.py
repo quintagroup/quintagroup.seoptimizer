@@ -9,16 +9,9 @@ class TestUsageKeywords(FunctionalTestCase):
     def afterSetUp(self):
         self.sp = self.portal.portal_properties.seo_properties
         self.pu = self.portal.plone_utils
-
-        self.basic_auth = 'portal_manager:secret'
-        uf = self.app.acl_users
-        uf.userFolderAddUser('portal_manager', 'secret', ['Manager'], [])
-        user = uf.getUserById('portal_manager')
-        if not hasattr(user, 'aq_base'):
-            user = user.__of__(uf)
-        newSecurityManager(None, user)
-
-        '''Preparation for functional testing'''
+        self.basic_auth = ':'.join((portal_owner,default_password))
+        self.loginAsPortalOwner()
+        #Preparation for functional testing
         self.my_doc = self.portal.invokeFactory('Document', id='my_doc')
         self.my_doc = self.portal['my_doc']
 
@@ -38,6 +31,7 @@ class TestUsageKeywords(FunctionalTestCase):
             self.my_doc._updateProperty('qSEO_keywords', seokws)
             html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
             expect = ',\s*'.join(seokws)
+            open('/tmp/testrender_SEOKeywords','w').write(html)
             self.assert_(re.match(KWSTMPL % expect, html, re.S|re.M),
                          "No '%s' keyword found" % str(seokws))
 
