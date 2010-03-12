@@ -119,10 +119,8 @@ class SEOContext( BrowserView ):
         """ Returned seo custom metatags from default_custom_metatags property in seo_properties.
         """
         result = []
-        context = aq_inner(self.context)
         if self.gseo:
-            custom_meta_tags = self.gseo.default_custom_metatags
-            for tag in custom_meta_tags:
+            for tag in self.gseo.default_custom_metatags:
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
                     result.append({'meta_name'    : name_value[0],
@@ -140,6 +138,13 @@ class SEOContextPropertiesView( BrowserView ):
     """ This class contains methods that allows to manage seo properties.
     """
     template = ViewPageTemplateFile('templates/seo_context_properties.pt')
+
+    def __init__(self, *args, **kwargs):
+        super(SEOContextPropertiesView, self).__init__(*args, **kwargs)
+        self.pps = queryMultiAdapter((self.context, self.request),
+                                     name="plone_portal_state")
+        self.gseo = queryAdapter(self.pps.portal(), ISEOConfigletSchema)
+
 
     def test( self, condition, first, second ):
         """
@@ -230,20 +235,20 @@ class SEOContextPropertiesView( BrowserView ):
     def updateSEOCustomMetaTagsProperties(self, custommetatags):
         """ Update seo custom metatags properties.
         """
-        context = aq_inner(self.context)
-        site_properties = getToolByName(context, 'portal_properties')
         globalCustomMetaTags = []
-        if hasattr(site_properties, 'seo_properties'):
-            custom_meta_tags = getattr(site_properties.seo_properties, 'default_custom_metatags', [])
+        if self.gseo:
+            custom_meta_tags = self.gseo.default_custom_metatags
             for tag in custom_meta_tags:
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
-                    globalCustomMetaTags.append({'meta_name'    : name_value[0],
-                                                 'meta_content' : len(name_value) == 1 and '' or name_value[1]})
+                    globalCustomMetaTags.append(
+                        {'meta_name' : name_value[0],
+                         'meta_content' : len(name_value) == 1 and '' or name_value[1]})
         for tag in custommetatags:
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:
-                if not [gmt for gmt in globalCustomMetaTags if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
+                if not [gmt for gmt in globalCustomMetaTags \
+                        if (gmt['meta_name']==meta_name and gmt['meta_content']==meta_content)]:
                     self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name), meta_content)
 
     def manageSEOCustomMetaTagsProperties(self, **kw):

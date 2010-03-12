@@ -2,6 +2,7 @@ import re, commands
 
 from zope.component import adapts
 from zope.interface import implements
+from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 
 from Acquisition import aq_inner
@@ -10,6 +11,7 @@ from Products.CMFCore.utils import getToolByName
 
 from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 METADATA_MAPS = dict([
     ("DC.publisher", "Publisher"),
@@ -41,8 +43,6 @@ class MetaKeywordsAdapter(object):
         request = self.context.REQUEST
         meta_keywords = []
         filtered_keywords = []
-        portal_props = getToolByName(self.context, 'portal_properties')
-        seo_props = getToolByName(portal_props, 'seo_properties', None)
         seo_context = queryMultiAdapter((self.context, request), name='seo_context')
         if seo_context:
             meta_keywords = list(seo_context['meta_keywords'])
@@ -54,16 +54,16 @@ class MappingMetaTags(object):
 
     def __init__(self, context):
         self.context = context
-        self.portal_props = getToolByName(self.context, 'portal_properties')
-        self.seo_props = getToolByName(self.portal_props, 'seo_properties', None)
+        pps = queryMultiAdapter((self.context, self.context.REQUEST),
+                                name="plone_portal_state")
+        self.gseo = queryAdapter(pps.portal(), ISEOConfigletSchema)
 
     def getMappingMetaTags(self):
         """ See interface.
         """
         metadata_name = SortedDict()
-        if self.seo_props:
-            pmn = self.seo_props.getProperty('metatags_order', ())
-            for mt in pmn:
+        if self.gseo:
+            for mt in self.gseo.metatags_order:
                 if METADATA_MAPS.has_key(mt):
                     metadata_name[mt] = METADATA_MAPS[mt]
         return metadata_name
