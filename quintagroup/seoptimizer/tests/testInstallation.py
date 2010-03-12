@@ -211,9 +211,6 @@ class TestReinstallation(TestCase):
                                                    condition=None,
                                                    permission=(u'Modify portal content',),
                                                    category='object',
-                                                   visible=True,
-                                                   icon_expr=None,
-                                                   link_target=None,
                                                   )
             # Check presence seoaction in content type
             seoaction = [act.id for act in self.types_tool.getTypeInfo(type).listActions()
