@@ -15,17 +15,15 @@
           }
       </style>
   </metal:style_head>
+
   <metal:javascript_head fill-slot="javascript_head_slot"
       tal:define="portal context/@@plone_portal_state/portal;">
-      <script type="text/javascript"
-              tal:condition="python:exists('portal/statistics.js')"
-              tal:attributes="src string:${here/absolute_url}/statistics.js">
-      </script>
-      <script type="text/javascript"
-              tal:condition="python:exists('portal/checkkeywords.js')"
-              tal:attributes="src string:${here/absolute_url}/checkkeywords.js">
-      </script>
+    <!-- // Define variables used by seo_context_properties.js -->
+    <script type="text/javascript" tal:content="string:var stop_words = ${view/getPropertyStopWords}"></script>
+    <script type="text/javascript" tal:content="string:var ids = ${view/getPropertyFields}"></script>
+    <script tal:attributes="src string:${here/absolute_url}/++resource++quintagroup.seoptimizer/seo_context_properties.js"></script>
   </metal:javascript_head>
+
   <body>
     <div metal:fill-slot="main"
         tal:define="errors python:request.get('errors', {});

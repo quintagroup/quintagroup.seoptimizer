@@ -8,6 +8,7 @@ from plone.memoize import view, ram
 from plone.app.controlpanel.form import ControlPanelView
 
 from Products.Five.browser import BrowserView
+from Products.CMFPlone.utils import getSiteEncoding
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as pmf
@@ -268,6 +269,24 @@ class SEOContextPropertiesView( BrowserView ):
         if kw.get('seo_custommetatags_override'):
             custommetatags = kw.get('seo_custommetatags', {})
             self.updateSEOCustomMetaTagsProperties(custommetatags)
+
+    def getPropertyStopWords(self):
+        """ Get property 'stop_words' from SEO Properties tool.
+        """
+        enc = getSiteEncoding(self.context)
+        # self.gseo.stop_words return list of unicode objects,
+        # and may contains stop words in different languages.
+        # So we must return encoded strings.
+        sw = map(lambda x:unicode.encode(x, enc), self.gseo.stop_words)
+        return str(sw)
+
+    def getPropertyFields(self):
+        """ Get property 'fields' from SEO Properties tool.
+        """
+        # self.gseo.fields return list of unicode objects,
+        # so *str* use as encoding function from unicode to latin-1 string.
+        fields_id = map(str, self.gseo.fields)
+        return str(fields_id)
 
     def __call__( self ):
         """ Perform the update seo properties and redirect if necessary, or render the page Call method.

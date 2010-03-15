@@ -1,5 +1,4 @@
 /******************************************************************
-<dtml-with portal_properties>
 
 Word Wrapping Rules:
 
@@ -19,20 +18,10 @@ HTML code for text statistics: // for else fields than title in html code title 
 
 *******************************************************************/
 
-<dtml-try>
-var stop_words = <dtml-var expr="list(seo_properties.stop_words)">;
-<dtml-except>
-var stop_words = [];
-</dtml-try>
-
-<dtml-try>
-var ids = <dtml-var expr="list(seo_properties.fields)">;
-<dtml-except>
-var ids = [];
-</dtml-try>
+// stop_words and ids defined in the browser/templates/seo_context_properties.pt
+// page template and here we use already calculated variables
 
 var template = '<span class="total-words">Total Words: <span class="value">total_row</span></span> <span class="stop-words">Stop Words: <span class="value">stop_row</span></span> <span class="used-words">Used Words: <span class="value">used_row</span></span> <span class="length-words">Length: <span class="value">length_row</span></span>';
-
 var stop_dict = {};
 
 for (var j=0; word=stop_words[j]; j++) {stop_dict[word] = 1;};
@@ -102,84 +91,17 @@ function loadStatistics(event){
 };
 
 registerPloneFunction(loadStatistics);
-/*</dtml-with> Register onload function */
 
-/******************************************************************/
 
-var seo_keywords_url = '&dtml-absolute_url;/checkSEOKeywords';
+/******************************************************************
+
+Adding 'Check Keywords' button to check whether words you entered in
+this block as SEO keywords are present in content.
+
+*******************************************************************/
+
+var seo_keywords_url = document.baseURI + '/@@checkSEOKeywords';
 var KEYWORDS_IDS = ['seo_keywords',];
-// var KEYWORDS_REPORT = {};
-
-// function extractWords(data) {
-//     data = data // replace all non-word character with space
-//                 .replace(/[^a-zA-Z0-9\-\'\u2019\"\`]+/g, ' ')
-//                 // replace "-" and "'" symbols if it create groups event inside of token
-//                 .replace(/[\-\'\u2019\"\`]{2,}/g, ' ')
-//                 // replace all non-word characters and "-", "'" if it stay at word edge
-//                 .replace(/(?:^|\s+)[^a-zA-Z0-9]+|[^a-zA-Z0-9]+(?:\s+|$)/g, ' ')
-//                 // strip whitespaces
-//                 .replace(/^\s*(.*?)\s*$/, '$1');
-//     return data.split(/[^a-zA-Z0-9\-\'\u2019\"\`]+/);
-// }
-// 
-// function countTerm(node, word, id) {
-//     var contents = extractWords(node.nodeValue.toLowerCase());
-//     var term = word.toLowerCase();
-//     for (var i = 0, w; w = contents[i]; i++) {
-//         if (w == term) {
-//             KEYWORDS_REPORT[id][word] = 1;
-//             return 'found';
-//         }
-//     }
-//     return false;
-// }
-// 
-// function keywordsWalkTextNodes(node, func, data, id) {
-//     if (!node) return false;
-//     if (KEYWORDS_REPORT[id][data] == 1) return 'found';
-//     if (node.hasChildNodes) {
-//         if (node.nodeType == 3) {
-//             if (func(node, data, id) == 'found') {
-//                 return 'found';
-//             }
-//         }
-//         for (var i = 0; i < node.childNodes.length; i++) {
-//             if (keywordsWalkTextNodes(node.childNodes[i], func, data, id) == 'found') {
-//                 return 'found';
-//             }
-//         }
-//     }
-// }
-
-// function checkPageKeywords(event) {
-//     var event = event ? event:window.event;
-//     var target = event.target ? event.target : event.srcElement;
-//     if (!target) {return false;};
-//     var id = target.id.replace('_check_keywords', '')
-//     KEYWORDS_REPORT[id] = {};
-//     var area = document.getElementById(id);
-//     if (area && typeof(area.value) != 'undefined') {
-//         var terms = extractWords(area.value);
-//         for (var i = 0, term; term = terms[i]; i++) {
-//             if (KEYWORDS_REPORT[id][term] == 1) continue;
-//             KEYWORDS_REPORT[id][term] = 0;
-//             keywordsWalkTextNodes(document.body, countTerm, term, id);
-//         }
-//     }
-//     var report = '';
-//     for (var term in KEYWORDS_REPORT[id]) {
-//         if (KEYWORDS_REPORT[id][term] != 1)
-//             report += term + ' ';
-//     }
-//     KEYWORDS_REPORT[id] = {};
-//     if (report != '') {
-//         report = 'Next keywords did not appear on the page:\n' + report;
-//     } else {
-//         report = 'All keywords found on the page!';
-//     }
-//     alert(report);
-//     return false;
-// }
 
 function checkPageKeywords(event) {
     var event = event ? event:window.event;
@@ -217,12 +139,16 @@ function addSeoKeywordsButton(event) {
         button.className = 'check-keywords-button';
         area.parentNode.insertBefore(button, area.nextSibling.nextSiblin);
         registerEventListener(button, 'click', checkPageKeywords);
-//         KEYWORDS_REPORT[id] = {};
     }
 }
 
 registerPloneFunction(addSeoKeywordsButton);
 
+/******************************************************************
+
+Using for manage your custom meta tags, to be added to the global Meta Tags.
+
+*******************************************************************/
 
 customMetaTagsFunctions = new Object()
 

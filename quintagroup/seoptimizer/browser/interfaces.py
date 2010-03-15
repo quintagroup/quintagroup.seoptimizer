@@ -9,6 +9,7 @@ class IPloneSEOLayer(IDefaultPloneLayer):
 class IValidateSEOKeywordsView(Interface):
     """ View for validating keywords on qSEO_properties_edit_form """
 
-    def validateKeywords(text):
-        """ Parse text and validate each keyword (extracted from text)
-        for appearing on the context page """
+    def validateKeywords():
+        """ 1. Get *text* parameter from request
+            2. Parse *text* and validate each extracted keyword
+               for appearing on the context page """

@@ -14,8 +14,9 @@ class ValidateSEOKeywordsView(BrowserView):
 
     implements(IValidateSEOKeywordsView)
 
-    def validateKeywords(self, text):
+    def validateKeywords(self):
         """ see interface """
+        text = self.request.get('text')
         ts = getToolByName(self.context, 'translation_service')
         # extract keywords from text
         enc = getSiteEncoding(self.context)
