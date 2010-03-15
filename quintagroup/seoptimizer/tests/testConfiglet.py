@@ -77,6 +77,64 @@ class TestConfiglet(FunctionalTestCase):
         self.assertTrue(tse == (), '"content_types_with_seoproperties" property ' \
             'contains: "%s", must be empty"' % str(tse))
 
+    def test_CustomScriptAdd(self):
+        expect = "<script>\n<!-- Test custom script -->\n</script>"
+
+        self.publish(self.save_url + '&form.custom_script=%s' % expect,
+             self.basic_auth)
+
+        cs = self.seo.getProperty("custom_script", "")
+        self.assertTrue(cs == expect, '"custom_script" property ' \
+            'contains: "%s", but "%s" must be"' % (cs, expect))
+
+    def test_CustomScriptDel(self):
+        self.publish(self.save_url + '&form.custom_script=',
+             self.basic_auth)
+
+        cs = self.seo.getProperty("custom_script", "")
+        self.assertTrue(cs == "", '"custom_script" property ' \
+            'contains: "%s", must be empty"' % cs)
+
+    def test_fieldsAdd(self):
+        expect = ('field1', 'field2')
+        formdata = "\n".join(expect)
+        self.publish(self.save_url + '&form.fields=%s'%formdata,
+             self.basic_auth)
+
+        f = self.seo.getProperty("fields", ())
+        self.assertTrue(f == expect, '"fields" property ' \
+            'contains: "%s", must: "%s"' % (f, expect))
+
+    def test_fieldsDel(self):
+        data = ('field1', 'field2')
+        self.seo._updateProperty("fields", data)
+        self.publish(self.save_url + '&form.fields=',
+             self.basic_auth)
+
+        f = self.seo.getProperty("fields", ())
+        self.assertTrue(f == (), '"fields" property ' \
+            'contains: "%s", must be empty"' % str(f))
+
+    def test_stopWordsAdd(self):
+        expect = ('sw1', 'sw2', 'sw3')
+        formdata = "\n".join(expect)
+        self.publish(self.save_url + '&form.stop_words=%s'%formdata,
+             self.basic_auth)
+
+        f = self.seo.getProperty("stop_words", ())
+        self.assertTrue(f == expect, '"stop_words" property ' \
+            'contains: "%s", must: "%s"' % (f, expect))
+
+    def test_stopWordsDel(self):
+        data = ('sw1', 'sw2', 'sw3')
+        self.seo._updateProperty("stop_words", data)
+        self.publish(self.save_url + '&form.stop_words=',
+             self.basic_auth)
+
+        f = self.seo.getProperty("stop_words", ())
+        self.assertTrue(f == (), '"stop_words" property ' \
+            'contains: "%s", must be empty"' % str(f))
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
