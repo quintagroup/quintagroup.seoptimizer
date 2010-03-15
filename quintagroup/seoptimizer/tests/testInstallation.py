@@ -89,11 +89,6 @@ class TestInstallation(TestCase):
         from plone.browserlayer import utils
         self.assert_(IPloneSEOLayer in utils.registered_layers(),
                      "Not registered 'IPloneSEOLayer' browser layer")
-    
-    def test_jsregestry_install(self):
-        jstool=getToolByName(self.portal, 'portal_javascripts')
-        self.assert_(jstool.getResource("++resource++seo_custommetatags.js") is not None,
-                     "Not registered '++resource++seo_custommetatags.js' resource")
 
     def test_action_install(self):
         atool=getToolByName(self.portal, 'portal_actions')
@@ -146,11 +141,6 @@ class TestUninstallation(TestCase):
         from plone.browserlayer import utils
         self.assertEqual(IPloneSEOLayer in utils.registered_layers(), False,
             "Still registered 'IPloneSEOLayer' browser layer")
-
-    def test_jsregestry_uninstall(self):
-        jstool=getToolByName(self.portal, 'portal_javascripts')
-        self.assertEqual(jstool.getResource("++resource++seo_custommetatags.js") is not None,
-            False, "Not registered '++resource++seo_custommetatags.js' resource")
 
     def test_action_uninstall(self):
         atool=getToolByName(self.portal, 'portal_actions')
