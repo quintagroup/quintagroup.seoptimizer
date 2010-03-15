@@ -2,6 +2,7 @@ from cgi import escape
 from DateTime import DateTime
 from Acquisition import aq_inner
 
+from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.component import getMultiAdapter
 from plone.app.layout.viewlets.common import ViewletBase
@@ -12,6 +13,7 @@ from Products.CMFCore.utils import getToolByName
 from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords
 from quintagroup.seoptimizer.interfaces import IMappingMetaTags
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 from Products.CMFPlone.PloneTool import *
 
@@ -189,12 +191,12 @@ class CustomScriptViewlet( ViewletBase ):
     """ Simple viewlet for custom script rendering.
     """
     def getCustomScript( self ):
-        context = self.context.aq_inner
-        portal_props = getToolByName(context, 'portal_properties')
-        seo_props = getToolByName(portal_props, 'seo_properties', None)
-        if seo_props is None:
-            return '' 
-        return seo_props.getProperty('custom_script', '')
+        pps = queryMultiAdapter((self.context, self.request),
+                                name="plone_portal_state")
+        gseo = queryAdapter(pps.portal(), ISEOConfigletSchema)
+        if gseo:
+            return gseo.custom_script
+        return ''
 
     def render( self ):
         return safe_unicode("""%s"""% self.getCustomScript())
