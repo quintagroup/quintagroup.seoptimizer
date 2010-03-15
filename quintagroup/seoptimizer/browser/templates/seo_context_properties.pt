@@ -261,8 +261,7 @@
                    />
           </div>
           <div class="field"
-               tal:define="fieldName string:seo_custommetatags;
-                           nonEmptylocalMetaTags seo_context/seo_nonEmptylocalMetaTags;">
+               tal:define="fieldName string:seo_custommetatags;">
             <label i18n:translate="label_custom_metatags" for="seo_custom_metatags">
               Custom Meta Tags
             </label>
@@ -274,7 +273,7 @@
                    id="seo_custommetatags_override"
                    name="seo_custommetatags_override"
                    tabindex=""
-                   tal:attributes="checked python:view.test(nonEmptylocalMetaTags, 'on', None);
+                   tal:attributes="checked python:view.test(seo_context.seo_localCustomMetaTags(), 'on', None);
                                    tabindex tabindex/next;"
                    />
             <label i18n:translate="label_override" for="seo_custommetatags_override">
