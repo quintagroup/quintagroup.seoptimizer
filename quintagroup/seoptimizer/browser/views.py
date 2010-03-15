@@ -1,9 +1,10 @@
 from sets import Set
+from time import time
 from DateTime import DateTime 
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
-from plone.memoize import view
+from plone.memoize import view, ram
 from plone.app.controlpanel.form import ControlPanelView
 
 from Products.Five.browser import BrowserView
@@ -20,6 +21,10 @@ SEO_PREFIX = 'seo_'
 PROP_PREFIX = 'qSEO_'
 SUFFIX = '_override'
 PROP_CUSTOM_PREFIX = 'qSEO_custom_'
+
+# Ram cache function, which depends on plone instance and time
+def plone_instance_time(method, self, *args, **kwargs):
+    return (self.pps.portal(), time() // (60 * 60))
 
 class SEOContext( BrowserView ):
     """ This class contains methods that allows to edit html header meta tags.
@@ -43,8 +48,8 @@ class SEOContext( BrowserView ):
             "seo_description": self.getSEOProperty( 'qSEO_description', accessor='Description' ),
             "seo_distribution": self.getSEOProperty( 'qSEO_distribution', default="Global"),
             "seo_customMetaTags": self.seo_customMetaTags(),
-            "seo_localCustomMetaTags": self.seo_localCustomMetaTags(),
-            "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
+            # "seo_localCustomMetaTags": self.seo_localCustomMetaTags(),
+            # "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
             "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
             "meta_keywords": self.getSEOProperty('qSEO_keywords', 'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
@@ -58,7 +63,7 @@ class SEOContext( BrowserView ):
             "has_seo_keywords": self.context.hasProperty('qSEO_keywords'),
             "has_seo_canonical": self.context.hasProperty('qSEO_canonical'),
             }
-        seotags["seo_nonEmptylocalMetaTags"] = bool(seotags["seo_localCustomMetaTags"])
+        #seotags["seo_nonEmptylocalMetaTags"] = bool(seotags["seo_localCustomMetaTags"])
         return seotags
 
     def getSEOProperty( self, property_name, accessor='', default=None ):
@@ -115,6 +120,7 @@ class SEOContext( BrowserView ):
                                'meta_content' : value})
         return result
 
+    @ram.cache(plone_instance_time)
     def seo_globalCustomMetaTags( self ):
         """ Returned seo custom metatags from default_custom_metatags property in seo_properties.
         """

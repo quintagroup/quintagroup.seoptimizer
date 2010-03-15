@@ -7,6 +7,9 @@ slows down test runner startup.
 """
 import re
 import transaction
+from zope.component import getUtility
+from zope.app.cache.interfaces.ram import IRAMCache
+
 from AccessControl.SecurityManagement import newSecurityManager
 
 from Products.Five import zcml
@@ -64,6 +67,9 @@ class MixinTestCase:
         html = authenticator.authenticator()
         handle = re.search('value="(.*)"', html).groups()[0]
         return handle
+
+    def beforeTearDown(self):
+        getUtility(IRAMCache).invalidateAll()
 
 
 class TestCase(MixinTestCase, ptc.PloneTestCase):

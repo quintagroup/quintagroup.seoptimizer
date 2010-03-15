@@ -136,6 +136,10 @@ class TestContextForm(FunctionalTestCase):
         form_data = {'seo_custommetatags': CUSTOM_METATAGS,
                      'seo_custommetatags_override:int': 0,
                      'form.submitted:int': 1}
+
+        # Clean-up ram cache
+        getUtility(IRAMCache).invalidateAll()
+
         self.publish(path=self.abs_path+'/@@seo-context-properties',
                      basic=self.basic_auth, request_method='POST',
                      stdin=StringIO(urllib.urlencode(form_data)))
