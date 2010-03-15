@@ -40,10 +40,9 @@ class MetaKeywordsAdapter(object):
     def getMetaKeywords(self):
         """ See interface.
         """
-        request = self.context.REQUEST
         meta_keywords = []
-        filtered_keywords = []
-        seo_context = queryMultiAdapter((self.context, request), name='seo_context')
+        seo_context = queryMultiAdapter((self.context, self.context.REQUEST),
+                                        name='seo_context')
         if seo_context:
             meta_keywords = list(seo_context['meta_keywords'])
         return ', '.join(meta_keywords)
@@ -78,7 +77,7 @@ class canonicalPathAdapter(object):
         self.context = aq_inner(context)
 
     def canonical_path(self):
-        purl = getToolByName(self.context,'portal_url')
+        purl = getToolByName(self.context, 'portal_url')
 
         # Calculate canonical path from qSEO_canonical property
         if IPropertyManager.providedBy(self.context):

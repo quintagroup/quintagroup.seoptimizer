@@ -29,7 +29,8 @@ class ValidateSEOKeywordsView(BrowserView):
         # request html page of context object
         url = '%s?without_metatag_keywords=1' % self.context.absolute_url()
 
-        # extract words from url page using lynx browser (test page by 'url' randered without metatag keywords)
+        # extract words from url page using lynx browser (test page by 'url'
+        # randered without metatag keywords)
         page_text = commands.getoutput('lynx --dump --nolist %s' % url).lower()
         if page_text and page_text != 'sh: lynx: command not found':
             page_text = safe_unicode(page_text, 'utf-8')
