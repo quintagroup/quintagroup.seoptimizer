@@ -87,14 +87,6 @@
         permission="cmf.ManagePortal"
         />
 
-    <browser:resource
-        file="./seo_custommetatags.js"
-        name="seo_custommetatags.js"
-        />
-
-    <browser:resource
-        file="seo_icon.gif"
-        name="seo_icon.gif"
-        />
+    <browser:resourceDirectory name="quintagroup.seoptimizer" directory="./resources" />
 
 </configure>
