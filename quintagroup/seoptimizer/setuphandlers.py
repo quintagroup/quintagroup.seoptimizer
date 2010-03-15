@@ -48,12 +48,6 @@ def removeBrowserLayer(site):
         unregister_layer(name, site_manager=site)
         logger.log(logging.INFO, "Unregistered \"%s\" browser layer." % name)
 
-def importVarious(context):
-    """ Do customized installation.
-    """
-    if context.readDataFile('seo_install.txt') is None:
-        return
-
 def uninstall(context):
     """ Do customized uninstallation.
     """
