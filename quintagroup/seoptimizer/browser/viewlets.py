@@ -32,11 +32,11 @@ class SEOTagsViewlet( ViewletBase ):
         """Calculate list metatags"""
 
         result = SortedDict()
-
-        site_props = getToolByName(self, 'portal_properties').site_properties
-        use_all = site_props.getProperty('exposeDCMetaTags', None)
-
+        pps = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
+        seo_global = queryAdapter(pps.portal(), ISEOConfigletSchema)
         seo_context = queryMultiAdapter((self.context, self.request), name='seo_context')
+
+        use_all = seo_global.exposeDCMetaTags
         adapter = IMappingMetaTags(self.context, None)
         mapping_metadata = adapter and adapter.getMappingMetaTags() or SortedDict()
 
