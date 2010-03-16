@@ -1,5 +1,4 @@
 PROJECT_NAME = 'quintagroup.seoptimizer'
-SKINS_DIR = 'skins'
 
 GLOBALS = globals()
 
