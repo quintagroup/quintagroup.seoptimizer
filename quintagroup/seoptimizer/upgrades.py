@@ -71,6 +71,17 @@ def removeNonUseSeoProperties(plone_tools):
     if not remove_properties:
         seoprops_tool.manage_delProperties(remove_properties)
 
+def removeSkin(plone_tools):
+    """ Remove layers.
+    """
+    layer = 'quintagroup.seoptimizer'
+    skins_tool = plone_tools.url().getPortalObject().portal_skins
+    for skinName in skins_tool.getSkinSelections():
+        skin_paths = skins_tool.getSkinPath(skinName).split(',') 
+        paths = [l.strip() for l in skin_paths if not (l == layer or l.startswith(layer+'/'))]
+        logger.log(logging.INFO, "Removed layers from %s skin." % skinName)
+        skins_tool.addSkinSelection(skinName, ','.join(paths))
+
 def upgrade_2_to_3(setuptool):
     """ Upgrade quintagroup.seoptimizer from version 2.x.x to 3.0.0.
     """
@@ -80,3 +91,4 @@ def upgrade_2_to_3(setuptool):
     changeDomain(plone_tools)
     changeMetatagsOrderList(plone_tools)
     removeNonUseSeoProperties(plone_tools)
+    removeSkin(plone_tools)

@@ -8,16 +8,6 @@ from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('quintagroup.seoptimizer')
 
-def removeSkin(site, layer):
-    """ Remove layers.
-    """
-    skins_tool = getToolByName(site, 'portal_skins')
-    for skinName in skins_tool.getSkinSelections():
-        skin_paths = skins_tool.getSkinPath(skinName).split(',') 
-        paths = [l.strip() for l in skin_paths if not (l == layer or l.startswith(layer+'/'))]
-        logger.log(logging.INFO, "Removed layers from %s skin." % skinName)
-        skins_tool.addSkinSelection(skinName, ','.join(paths))
-
 def removeActions(site):
     """ Remove actions.
     """
@@ -54,7 +44,6 @@ def uninstall(context):
     if context.readDataFile('seo_uninstall.txt') is None:
         return
     site = context.getSite()
-    removeSkin(site, 'quintagroup.seoptimizer' )
     removeActions(site)
     removeConfiglet(site, 'quintagroup.seoptimizer')
     removeBrowserLayer(site)
