@@ -63,14 +63,6 @@ class TestInstallation(TestCase):
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
         self.assert_(PROJECT_NAME in [a.getId() for a in configTool.listActions()], 'Configlet not found')
 
-    def test_skins_install(self):
-        skinstool=getToolByName(self.portal, 'portal_skins')
-
-        for skin in skinstool.getSkinSelections():
-            path = skinstool.getSkinPath(skin)
-            path = map( string.strip, string.split( path,',' ) )
-            self.assert_(PROJECT_NAME in path, 'qSEOptimizer layer not found in %s' %skin)
-
     def test_viewlets_install(self):
         VIEWLETS = ['plone.htmlhead.title',
                     'plone.resourceregistries',
@@ -114,17 +106,6 @@ class TestUninstallation(TestCase):
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
         self.assertEqual(PROJECT_NAME in [a.getId() for a in configTool.listActions()], False,
             'Configlet found after uninstallation')
-
-    def test_skins_uninstall(self):
-        self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,
-            'qSEOptimizer is already installed')
-        skinstool=getToolByName(self.portal, 'portal_skins')
-
-        for skin in skinstool.getSkinSelections():
-            path = skinstool.getSkinPath(skin)
-            path = map( string.strip, string.split( path,',' ) )
-            self.assertEqual(PROJECT_NAME in path, False,
-                'qSEOptimizer layer found in %s after uninstallation' %skin)
 
     def test_viewlets_uninstall(self):
         VIEWLETS = ['quintagroup.seoptimizer.seotags',
@@ -223,6 +204,20 @@ class TestReinstallation(TestCase):
         self.assertEqual(ctws, CONTENTTYPES_WITH_SEOACTION,
             "Not added content type names in seo properties tool if content types have seoaction."\
             " %s != %s" %(ctws, CONTENTTYPES_WITH_SEOACTION))
+
+    def testRemoveSkin(self):
+        # Test remove layers
+        layer = 'quintagroup.seoptimizer'
+        skinstool = getToolByName(self.portal, 'portal_skins')
+        for skin in skinstool.getSkinSelections():
+            paths  = ','.join((skinstool.getSkinPath(skin), layer))
+            skinstool.addSkinSelection(skin, paths)
+        self.qi.reinstallProducts([PROJECT_NAME])
+        for skin in skinstool.getSkinSelections():
+            path = skinstool.getSkinPath(skin)
+            path = map(string.strip, string.split(path, ','))
+            self.assertEqual(layer in path, False,
+                '%s layer found in %s after uninstallation' %(layer, skin))
 
 
 def test_suite():
