@@ -13,6 +13,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as pmf
 
+from quintagroup.canonicalpath.interfaces import ICanonicalLink
+from quintagroup.canonicalpath.adapters import PROPERTY_LINK as CANONICAL_PROPERTY
+
 from quintagroup.seoptimizer import interfaces
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
@@ -54,7 +57,7 @@ class SEOContext( BrowserView ):
             "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
             "meta_keywords": self.getSEOProperty('qSEO_keywords', 'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
-            "seo_canonical": self.seo_canonical(),
+            "seo_canonical": ICanonicalLink(self.context).canonical_link,
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
             "has_seo_robots": self.context.hasProperty('qSEO_robots'),
@@ -62,7 +65,7 @@ class SEOContext( BrowserView ):
             "has_seo_distribution": self.context.hasProperty( 'qSEO_distribution'),
             "has_html_comment": self.context.hasProperty('qSEO_html_comment'),
             "has_seo_keywords": self.context.hasProperty('qSEO_keywords'),
-            "has_seo_canonical": self.context.hasProperty('qSEO_canonical'),
+            "has_seo_canonical": self.context.hasProperty(CANONICAL_PROPERTY),
             }
         #seotags["seo_nonEmptylocalMetaTags"] = bool(seotags["seo_localCustomMetaTags"])
         return seotags
@@ -134,12 +137,6 @@ class SEOContext( BrowserView ):
                                    'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
 
-    def seo_canonical( self ):
-        """ Generate canonical URL from SEO properties.
-        """
-        canpath = queryAdapter(self.context, interfaces.ISEOCanonicalPath)
-        return self.pps.portal_url() + canpath.canonical_path()
-
 
 class SEOContextPropertiesView( BrowserView ):
     """ This class contains methods that allows to manage seo properties.
@@ -158,25 +155,10 @@ class SEOContextPropertiesView( BrowserView ):
         """
         return condition and first or second 
 
-    def getMainDomain(self, url):
-        """ Get a main domain.
-        """
-        url = url.split('//')[-1]
-        dompath = url.split(':')[0]
-        dom = dompath.split('/')[0]
-        return '.'.join(dom.split('.')[-2:])
-
     def validateSEOProperty(self, property, value):
         """ Validate a seo property.
         """
-        purl = getToolByName(self.context, 'portal_url')()
-        state = ''
-        if property == PROP_PREFIX+'canonical':
-            # validate seo canonical url property
-            pdomain = self.getMainDomain(purl)
-            if not pdomain == self.getMainDomain(value):
-                state = _('canonical_msg', default=u'Canonical URL mast be in ${pdomain} domain.', mapping={'pdomain': pdomain})
-        return state
+        return ''
 
     def setProperty(self, property, value, type='string'):
         """ Add a new property.
@@ -207,6 +189,12 @@ class SEOContextPropertiesView( BrowserView ):
         for seo_key in seo_keys:
             if seo_key == 'custommetatags':
                 self.manageSEOCustomMetaTagsProperties(**kw)
+            elif seo_key == 'canonical':
+                canonical = seo_items[seo_key]
+                try:
+                    ICanonicalLink(self.context).canonical_link = canonical
+                except InvalidValue, e:
+                    return str(e)
             else:
                 if seo_key in seo_overrides_keys and seo_items.get(seo_key+SUFFIX):
                     seo_value = seo_items[seo_key]

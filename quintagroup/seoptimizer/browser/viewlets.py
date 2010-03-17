@@ -205,7 +205,6 @@ class CustomScriptViewlet( ViewletBase ):
 class CanonicalUrlViewlet( ViewletBase ):
     """ Simple viewlet for canonical url link rendering.
     """
-
     def render( self ):
-        seo_context = getMultiAdapter((self.context, self.request), name='seo_context')
-        return """<link rel="canonical" href="%s" />""" % seo_context['seo_canonical']
+        seoc = getMultiAdapter((self.context, self.request), name=u'seo_context')
+        return """<link rel="canonical" href="%s" />""" % seoc['seo_canonical']
