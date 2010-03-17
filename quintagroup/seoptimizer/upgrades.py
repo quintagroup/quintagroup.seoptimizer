@@ -2,6 +2,9 @@ import logging
 from zope.component import queryMultiAdapter
 from Products.CMFCore.utils import getToolByName
 
+from quintagroup.canonicalpath.interfaces  import ICanonicalLink
+from quintagroup.canonicalpath.adapters import PROPERTY_LINK
+
 logger = logging.getLogger('quintagroup.seoptimizer')
 FIX_PTYPES_DOMAIN = ['Document', 'File', 'News Item']
 REMOVE_SEOPROPERTIES = ['additional_keywords', 'settings_use_keywords_sg',
@@ -82,6 +85,39 @@ def removeSkin(plone_tools):
         logger.log(logging.INFO, "Removed layers from %s skin." % skinName)
         skins_tool.addSkinSelection(skinName, ','.join(paths))
 
+def migrateCanonical(plone_tools):
+    """ Rename qSEO_canonical property into PROPERTY_LINK
+        for all portal objects, which use SEO
+    """
+    types = plone_tools.types()
+    portal = plone_tools.url().getPortalObject()
+    allCTTypes = types.listContentTypes()
+    obj_metatypes =  [m.content_meta_type for m in types.objectValues() \
+                      if m.getId() in allCTTypes]
+    portal.ZopeFindAndApply(
+                            portal,
+                            obj_metatypes=','.join(obj_metatypes),
+                            apply_func=renameProperty
+                            )
+
+def renameProperty(obj, path):
+    """ Rename qSEO_canonical property into PROPERTY_LINK
+        for obj, which use SEO
+    """
+    if obj.hasProperty('qSEO_canonical'):
+        value = obj.getProperty('qSEO_canonical')
+
+        level, msg = logging.INFO, "For %(url)s object 'qSEO_canonical' "\
+                     "property renamed to '%(name)s'."
+        try:
+            ICanonicalLink(obj).canonical_link = value
+        except e:
+            level, msg = logging.ERROR, "%s on renaming 'qSEO_canonical' " \
+                         "property for %%(url)s object" % str(e)
+
+        logger.log(level, msg % {'url':obj.absolute_url(), 'name':PROPERTY_LINK} )
+        obj.manage_delProperties(['qSEO_canonical'])
+
 def upgrade_2_to_3(setuptool):
     """ Upgrade quintagroup.seoptimizer from version 2.x.x to 3.0.0.
     """
@@ -92,3 +128,4 @@ def upgrade_2_to_3(setuptool):
     changeMetatagsOrderList(plone_tools)
     removeNonUseSeoProperties(plone_tools)
     removeSkin(plone_tools)
+    migrateCanonical(plone_tools)

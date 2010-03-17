@@ -7,8 +7,8 @@ from zope.component import queryMultiAdapter
 from zope.publisher.browser import TestRequest
 from zope.viewlet.interfaces import IViewletManager
 
+from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
-
 from base import *
 
 PROPS = {'stop_words': STOP_WORDS,
@@ -219,6 +219,21 @@ class TestReinstallation(TestCase):
             self.assertEqual(layer in path, False,
                 '%s layer found in %s after uninstallation' %(layer, skin))
 
+    def testMigrateCanonical(self):
+        """ Test Migrate qSEO_canonical property into PROPERTY_LINK
+            for all portal objects, which use SEO
+        """
+        doc = self.portal.get('front-page')
+        doc.manage_addProperty('qSEO_canonical', 'val', 'string')
+        value = doc.getProperty('qSEO_canonical')
+        assert doc.getProperty('qSEO_canonical') == 'val' 
+
+        self.qi.reinstallProducts([PROJECT_NAME])
+        value = doc.getProperty(PROPERTY_LINK)
+        has_prop = bool(doc.hasProperty('qSEO_canonical'))
+        self.assertEqual(has_prop, False, "Property 'qSEO_canonical' is not deleted.")
+        self.assertEqual(value == 'val', True,
+                "Property not migrated from 'qSEO_canonical' to '%s'." % PROPERTY_LINK)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
