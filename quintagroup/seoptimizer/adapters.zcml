@@ -14,11 +14,4 @@
       factory=".adapters.MappingMetaTags"
       />
 
-
-  <adapter
-      for="OFS.interfaces.ITraversable"
-      provides=".interfaces.ISEOCanonicalPath"
-      factory=".adapters.canonicalPathAdapter"
-      />
-
 </configure>

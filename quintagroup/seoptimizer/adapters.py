@@ -67,23 +67,3 @@ class MappingMetaTags(object):
                     metadata_name[mt] = METADATA_MAPS[mt]
         return metadata_name
 
-
-class canonicalPathAdapter(object):
-    """Adapts base content to canonical path, with taking into consideration
-       SEO canonical path value.
-    """
-
-    def __init__(self, context):
-        self.context = aq_inner(context)
-
-    def canonical_path(self):
-        purl = getToolByName(self.context, 'portal_url')
-
-        # Calculate canonical path from qSEO_canonical property
-        if IPropertyManager.providedBy(self.context):
-            prop = self.context.getProperty('qSEO_canonical', None)
-            if prop is not None:
-                return prop[len(purl()):]
-
-        # Fallback for canonical path calculation
-        return '/'+'/'.join(purl.getRelativeContentPath(self.context))
