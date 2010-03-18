@@ -52,10 +52,18 @@ class Installed(NotInstalled):
     def setUp(cls):
         app = ztc.app()
         portal = app[ptc_setup.portal_name]
+
+        # Sets the local site/manager
+        ptc_setup._placefulSetUp(portal)
+        # Install PROJECT
         qi = getattr(portal, 'portal_quickinstaller', None)
         qi.installProduct(PROJECT_NAME)
         transaction.commit()
 
+    @classmethod
+    def tearDown(cls):
+        ptc_setup._placefulTearDown()
+        
 
 class MixinTestCase:
 
