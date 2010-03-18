@@ -8,7 +8,15 @@ slows down test runner startup.
 import re
 import transaction
 from zope.component import getUtility
-from zope.app.cache.interfaces.ram import IRAMCache
+
+# Starting from plone.memoize v1.1a4 (used in plone4), global ram cache
+# utility provides other IRAMCache interface, than before
+try:
+    # In plone4 provides
+    from zope.ramcache.interfaces.ram import IRAMCache
+except ImportError:
+    # In plone3 provides
+    from zope.app.cache.interfaces.ram import IRAMCache
 
 from AccessControl.SecurityManagement import newSecurityManager
 
