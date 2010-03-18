@@ -4,6 +4,8 @@ from DateTime import DateTime
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
+from zope.schema.interfaces import InvalidValue
+
 from plone.memoize import view, ram
 from plone.app.controlpanel.form import ControlPanelView
 
@@ -165,7 +167,7 @@ class SEOContextPropertiesView( BrowserView ):
 
         Sets a new property with the given id, value and type or changes it.
         """
-        context = aq_inner(self.context)
+        context = aq_inner(self.context) 
         state = self.validateSEOProperty(property, value)
         if not state:
             if context.hasProperty(property):
@@ -189,20 +191,22 @@ class SEOContextPropertiesView( BrowserView ):
         for seo_key in seo_keys:
             if seo_key == 'custommetatags':
                 self.manageSEOCustomMetaTagsProperties(**kw)
-            elif seo_key == 'canonical':
-                canonical = seo_items[seo_key]
-                try:
-                    ICanonicalLink(self.context).canonical_link = canonical
-                except InvalidValue, e:
-                    return str(e)
             else:
                 if seo_key in seo_overrides_keys and seo_items.get(seo_key+SUFFIX):
                     seo_value = seo_items[seo_key]
-                    t_value = 'string'
-                    if type(seo_value)==type([]) or type(seo_value)==type(()): t_value = 'lines'
-                    state = self.setProperty(PROP_PREFIX+seo_key, seo_value, type=t_value)
+                    if seo_key == 'canonical':
+                        try:
+                            ICanonicalLink(self.context).canonical_link = seo_value
+                        except InvalidValue, e:
+                            state = "'%s' - wrong canonical url" % str(e)
+                    else:
+                        t_value = 'string'
+                        if type(seo_value)==type([]) or type(seo_value)==type(()): t_value = 'lines'
+                        state = self.setProperty(PROP_PREFIX+seo_key, seo_value, type=t_value)
                     if state:
                         return state
+                elif seo_key == 'canonical':
+                    del ICanonicalLink(self.context).canonical_link
                 elif context.hasProperty(PROP_PREFIX+seo_key):
                     delete_list.append(PROP_PREFIX+seo_key)
         if delete_list:
