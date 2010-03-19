@@ -1,4 +1,4 @@
-import urllib, re
+import urllib
 from cStringIO import StringIO
 from base import *
 

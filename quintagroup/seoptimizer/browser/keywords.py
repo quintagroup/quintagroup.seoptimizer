@@ -1,5 +1,5 @@
-import urllib, re, os, commands
-from xml.dom import minidom, Node
+import re, commands
+from xml.dom import Node
 
 from zope.interface import implements
 from Products.Five.browser import BrowserView
@@ -50,31 +50,3 @@ class ValidateSEOKeywordsView(BrowserView):
                                default=u'Number of keywords at page:\n${result}',
                                mapping={'result':'\n'.join(result)}),
                              context=self.context)
-
-    def walkTextNodes(self, parent, page_words=[]):
-        for node in parent.childNodes:
-            if node.nodeType == Node.ELEMENT_NODE:
-                self.walkTextNodes(node, page_words)
-            elif node.nodeType == Node.TEXT_NODE:
-                value = node.nodeValue
-                if value is not None:
-                    page_words.extend(map(lambda x: x.lower(), value.split()))
-
-    def strip_tags(self, in_text):
-        s_list = list(in_text)
-        i,j = 0,0
-
-        while i < len(s_list):
-            if s_list[i] == '<':
-                while s_list[i] != '>':
-                    # pop everything from the the left-angle bracket until the right-angle bracket
-                    s_list.pop(i)
-
-                # pops the right-angle bracket, too
-                s_list.pop(i)
-            else:
-                i=i+1
-
-        # convert the list back into text
-        join_char=''
-        return join_char.join(s_list)

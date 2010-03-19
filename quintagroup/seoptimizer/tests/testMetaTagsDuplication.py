@@ -1,4 +1,3 @@
-import re
 from base import *
 
 GENERATOR = re.compile('.*(<meta\s+(?:(?:name="generator"\s*)|' \

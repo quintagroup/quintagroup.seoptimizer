@@ -1,5 +1,3 @@
-import urllib, re
-from Acquisition import aq_inner
 from base import *
 
 KWSTMPL = '.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="%s"\s*)){2}/>)'
@@ -15,12 +13,10 @@ class TestUsageKeywords(FunctionalTestCase):
         self.my_doc = self.portal.invokeFactory('Document', id='my_doc')
         self.my_doc = self.portal['my_doc']
 
-
     def test_noDefaultKeywords(self):
         """No keywords added for the content by default"""
         metatags = self.pu.listMetaTags(self.my_doc)
         self.assert_('keywords' not in metatags)
-        
 
     def testrender_SEOKeywords(self):
         """ """
@@ -34,7 +30,6 @@ class TestUsageKeywords(FunctionalTestCase):
             open('/tmp/testrender_SEOKeywords','w').write(html)
             self.assert_(re.match(KWSTMPL % expect, html, re.S|re.M),
                          "No '%s' keyword found" % str(seokws))
-
 
     def testbehave_NoSEOKeywordsOnlySubject(self):
         self.my_doc.setText('<p>local subject</p>')

@@ -1,5 +1,4 @@
 from zope.interface import Interface
-from quintagroup.canonicalpath.interfaces import ICanonicalPath
 
 class IMetaKeywords(Interface):
     """Handle the available keywords.

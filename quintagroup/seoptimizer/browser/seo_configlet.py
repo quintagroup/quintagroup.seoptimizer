@@ -2,13 +2,9 @@ import re
 from zope.interface import Interface
 from zope.interface import implements
 from zope.component import adapts
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema import Bool, Text, Choice, Tuple, List
+from zope.schema import Bool, Choice, Tuple, List
 from zope.schema import SourceText
-from zope.app.form.browser import RadioWidget
 
-from zope.formlib.form import FormFields
 from zope.app.component.hooks import getSite
 from zope.app.form.browser import TextAreaWidget
 

@@ -1,6 +1,5 @@
 import logging
 from zope.component import queryMultiAdapter
-from Products.CMFCore.utils import getToolByName
 
 from quintagroup.canonicalpath.interfaces  import ICanonicalLink
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK
@@ -13,7 +12,7 @@ REMOVE_SEOPROPERTIES = ['additional_keywords', 'settings_use_keywords_sg',
 
 def changeDomain(plone_tools):
     """ Fix i18n_domain bug for some portal_types,
-    which present in earlier versions of the package.
+        which present in earlier versions of the package.
     """
     types_tool = plone_tools.types()
     for ptype in [ptypes for ptypes in types_tool.objectValues()
@@ -43,7 +42,7 @@ def changeMetatagsOrderList(plone_tools):
 
 def migrationActions(plone_tools):
     """ Migration actions from portal_types action to seoproperties tool
-    (for seoaction in portal_actions).
+        (for seoaction in portal_actions).
     """
     types_tool = plone_tools.types()
     seoprops_tool = plone_tools.properties().seo_properties
@@ -75,7 +74,7 @@ def removeNonUseSeoProperties(plone_tools):
         seoprops_tool.manage_delProperties(remove_properties)
 
 def removeSkin(plone_tools):
-    """ Remove layers.
+    """ Remove skin layers.
     """
     layer = 'quintagroup.seoptimizer'
     skins_tool = plone_tools.url().getPortalObject().portal_skins

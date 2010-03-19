@@ -1,4 +1,4 @@
-import re, string
+import string
 from DateTime import DateTime
 from base import *
 
@@ -34,14 +34,14 @@ class TestExposeDCMetaTags(FunctionalTestCase):
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m = re.match(METATAG % "description", self.html, re.S|re.M)
         self.assert_(m, 'No "description" meta tag when expose DC meta tags is Off')
-        
+
     def test_descriptionInPropertyOn(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = True)
         self.my_doc.setDescription("My document description")
         self.html = str(self.publish(self.portal.id+'/my_doc', self.basic_auth))
         m = re.match(METATAG % "description", self.html, re.S|re.M)
         self.assert_(m, 'No "description" meta tag when expose DC meta tags is On')
-        
+
     def test_dateValidRange(self):
         self.sp.manage_changeProperties(exposeDCMetaTags = True)
         EFFDSTR, EXPDSTR =  "2009/12/23", "2010/03/10"

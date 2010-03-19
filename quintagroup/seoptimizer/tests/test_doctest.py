@@ -1,9 +1,6 @@
 import unittest
 import doctest
 
-from zope.testing import doctestunit
-from zope.component import testing, eventtesting
-
 from base import *
 
 def test_suite():

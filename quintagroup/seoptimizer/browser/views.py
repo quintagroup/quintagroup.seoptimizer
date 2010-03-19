@@ -1,24 +1,19 @@
-from sets import Set
 from time import time
-from DateTime import DateTime 
+from DateTime import DateTime
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.schema.interfaces import InvalidValue
 
 from plone.memoize import view, ram
-from plone.app.controlpanel.form import ControlPanelView
 
 from Products.Five.browser import BrowserView
-from Products.CMFPlone.utils import getSiteEncoding
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFPlone import PloneMessageFactory as pmf
+from Products.CMFPlone.utils import getSiteEncoding
 
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK as CANONICAL_PROPERTY
 
-from quintagroup.seoptimizer import interfaces
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
@@ -96,7 +91,8 @@ class SEOContext( BrowserView ):
 
     def seo_customMetaTags( self ):
         """Returned seo custom metatags from default_custom_metatags property in seo_properties
-        (global seo custom metatags) with update from seo custom metatags properties in context (local seo custom metatags).
+           (global seo custom metatags) with update from seo custom metatags properties
+           in context (local seo custom metatags).
         """
         glob, loc = self.seo_globalCustomMetaTags(), self.seo_localCustomMetaTags()
         gnames = set(map(lambda x: x['meta_name'], glob))
@@ -107,7 +103,8 @@ class SEOContext( BrowserView ):
 
     def seo_globalWithoutLocalCustomMetaTags( self ):
         """Returned seo custom metatags from default_custom_metatags property in seo_properties
-        (global seo custom metatags) without seo custom metatags from properties in context (local seo custom metatags).
+           (global seo custom metatags) without seo custom metatags from properties
+           in context (local seo custom metatags).
         """
         glob, loc = self.seo_globalCustomMetaTags(), self.seo_localCustomMetaTags()
         gnames = set(map(lambda x: x['meta_name'], glob))
@@ -155,7 +152,7 @@ class SEOContextPropertiesView( BrowserView ):
     def test( self, condition, first, second ):
         """
         """
-        return condition and first or second 
+        return condition and first or second
 
     def validateSEOProperty(self, property, value):
         """ Validate a seo property.
@@ -165,9 +162,9 @@ class SEOContextPropertiesView( BrowserView ):
     def setProperty(self, property, value, type='string'):
         """ Add a new property.
 
-        Sets a new property with the given id, value and type or changes it.
+            Sets a new property with the given id, value and type or changes it.
         """
-        context = aq_inner(self.context) 
+        context = aq_inner(self.context)
         state = self.validateSEOProperty(property, value)
         if not state:
             if context.hasProperty(property):
@@ -253,8 +250,8 @@ class SEOContextPropertiesView( BrowserView ):
     def manageSEOCustomMetaTagsProperties(self, **kw):
         """ Update seo custom metatags properties, if enabled checkbox override or delete properties.
 
-        Change object properties by passing either a mapping object
-        of name:value pairs {'foo':6} or passing name=value parameters.
+            Change object properties by passing either a mapping object
+            of name:value pairs {'foo':6} or passing name=value parameters.
         """
         context = aq_inner(self.context)
         self.delAllSEOCustomMetaTagsProperties()
@@ -281,7 +278,8 @@ class SEOContextPropertiesView( BrowserView ):
         return str(fields_id)
 
     def __call__( self ):
-        """ Perform the update seo properties and redirect if necessary, or render the page Call method.
+        """ Perform the update seo properties and redirect if necessary,
+            or render the page Call method.
         """
         context = aq_inner(self.context)
         request = self.request

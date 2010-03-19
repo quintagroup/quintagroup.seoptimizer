@@ -8,7 +8,6 @@ def qsListMetaTags(self, context):
     from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
     if not IPloneSEOLayer.providedBy(self.REQUEST):
         return originalListMetaTags(self, context)
-    
     return {}
 
 def qsListMetaTagsOriginal(self, context):

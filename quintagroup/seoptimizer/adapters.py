@@ -1,13 +1,8 @@
-import re, commands
+import re
 
-from zope.component import adapts
 from zope.interface import implements
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
-
-from Acquisition import aq_inner
-from OFS.interfaces import IPropertyManager
-from Products.CMFCore.utils import getToolByName
 
 from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
@@ -66,4 +61,3 @@ class MappingMetaTags(object):
                 if METADATA_MAPS.has_key(mt):
                     metadata_name[mt] = METADATA_MAPS[mt]
         return metadata_name
-

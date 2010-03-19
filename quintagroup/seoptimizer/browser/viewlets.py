@@ -8,7 +8,6 @@ from zope.component import getMultiAdapter
 from plone.app.layout.viewlets.common import ViewletBase
 
 from Products.CMFPlone.utils import safe_unicode, getSiteEncoding
-from Products.CMFCore.utils import getToolByName
 
 from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords

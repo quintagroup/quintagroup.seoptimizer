@@ -19,16 +19,17 @@ def removeActions(site):
             ptype.deleteActions(idxs)
             logger.log(logging.INFO, "Deleted \"SEO Properties\" action for %s type." % ptype.id)
 
-def removeConfiglet(site, conf_id):
+def removeConfiglet(site):
     """ Remove configlet.
     """
+    conf_id = 'quintagroup.seoptimizer'
     controlpanel_tool = getToolByName(site, 'portal_controlpanel')
     if controlpanel_tool:
         controlpanel_tool.unregisterConfiglet(conf_id)
         logger.log(logging.INFO, "Unregistered \"%s\" configlet." % conf_id)
 
 def removeBrowserLayer(site):
-    """ Remove configlet.
+    """ Remove browser layer.
     """
     name="qSEOptimizer"
     site = getSiteManager(site)
@@ -45,5 +46,5 @@ def uninstall(context):
         return
     site = context.getSite()
     removeActions(site)
-    removeConfiglet(site, 'quintagroup.seoptimizer')
+    removeConfiglet(site)
     removeBrowserLayer(site)

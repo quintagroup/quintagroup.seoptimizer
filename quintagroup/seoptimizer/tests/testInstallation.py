@@ -4,12 +4,19 @@
 import string
 from zope.interface import alsoProvides
 from zope.component import queryMultiAdapter
-from zope.publisher.browser import TestRequest
 from zope.viewlet.interfaces import IViewletManager
 
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 from base import *
+
+PROPERTY_SHEET = 'seo_properties'
+STOP_WORDS = ['a', 'an', 'amp', 'and', 'are', 'arial', 'as', 'at', 'be', 'but',
+    'by', 'can', 'com', 'do', 'font', 'for', 'from', 'gif', 'had', 'has',
+    'have', 'he', 'helvetica', 'her', 'his', 'how', 'href', 'i', 'if', 'in',
+    'is', 'it', 'javascript', 'jpg', 'made', 'net', 'of', 'on', 'or', 'org',
+    'our', 'sans', 'see', 'serif', 'she', 'that', 'the', 'this', 'to', 'us',
+    'we', 'with', 'you', 'your']
 
 PROPS = {'stop_words': STOP_WORDS,
          'fields': ['seo_title', 'seo_description', 'seo_keywords']}
@@ -30,8 +37,6 @@ CONTENTTYPES_WITH_SEOACTION.sort()
 class TestBeforeInstallation(FunctionalTestCaseNotInstalled):
 
     def afterSetUp(self):
-        #self.qi = self.portal.portal_quickinstaller
-        #self.qi.uninstallProducts([PROJECT_NAME])
         self.basic_auth = 'mgr:mgrpw'
         self.portal_path = '/%s' % self.portal.absolute_url(1)
 
@@ -76,7 +81,7 @@ class TestInstallation(TestCase):
                                      IViewletManager, name='plone.htmlhead')
         for p in VIEWLETS:
             self.assert_(manager.get(p) is not None, "Not registered '%s' viewlet" % p)
-        
+
     def test_browser_layer(self):
         from plone.browserlayer import utils
         self.assert_(IPloneSEOLayer in utils.registered_layers(),

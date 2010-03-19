@@ -1,17 +1,4 @@
-import re
-from zope.interface import alsoProvides
-from zope.component import queryAdapter
-from zope.component import provideAdapter
-from zope.component import queryMultiAdapter
-from plone.indexer.decorator import indexer
-
-from Products.CMFCore.interfaces import IContentish
-from Products.Archetypes.interfaces import IBaseContent
-
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
-from quintagroup.canonicalpath.adapters import PROPERTY_LINK as CANONICAL_PROPERTY
-from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
-# from quintagroup.seoptimizer.interfaces import ISEOCanonicalPath
 from base import *
 
 class TestCanonicalURL(FunctionalTestCase):
@@ -25,7 +12,6 @@ class TestCanonicalURL(FunctionalTestCase):
         self.mydoc_path = "/%s" % self.mydoc.absolute_url(1)
         self.curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
             '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S|re.M)
-
 
     def test_CanonicalURL(self):
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
@@ -89,7 +75,7 @@ class TestCanonicalURL(FunctionalTestCase):
                'form.submitted=1' % wrong_canonical, self.basic_auth).getBody()
         self.assertTrue("wrong canonical url" in html,
                         "Canonical url not validated")
-        
+
     def test_delCanonical(self):
         newcanonical = '/new_canonical'
         ICanonicalLink(self.mydoc).canonical_link = newcanonical
@@ -103,8 +89,8 @@ class TestCanonicalURL(FunctionalTestCase):
 
         mydoc_canonical = ICanonicalLink(self.mydoc).canonical_link
         self.assertTrue(mydoc_canonical == self.mydoc.absolute_url(),
-            "Steel customized canonical url after remove customization") 
-        
+            "Steel customized canonical url after remove customization")
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite

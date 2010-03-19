@@ -18,8 +18,6 @@ except ImportError:
     # In plone3 provides
     from zope.app.cache.interfaces.ram import IRAMCache
 
-from AccessControl.SecurityManagement import newSecurityManager
-
 from Products.Five import zcml
 from Products.Five import fiveconfigure
 
@@ -27,15 +25,14 @@ from Testing import ZopeTestCase as ztc
 
 from Products.CMFCore.utils import getToolByName
 
-from Products.PloneTestCase.layer import onsetup, PloneSite
+from Products.PloneTestCase.layer import PloneSite
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase import setup as ptc_setup
 
 from Products.PloneTestCase.PloneTestCase import portal_owner
-from Products.PloneTestCase.PloneTestCase import default_user
 from Products.PloneTestCase.PloneTestCase import default_password
 
-from quintagroup.seoptimizer.config import *
+from quintagroup.seoptimizer.config import PROJECT_NAME
 
 ptc.setupPloneSite()
 
@@ -48,7 +45,6 @@ class NotInstalled(PloneSite):
         fiveconfigure.debug_mode = True
         import quintagroup.seoptimizer
         zcml.load_config('configure.zcml', quintagroup.seoptimizer)
-        #zcml.load_config('overrides.zcml', quintagroup.seoptimizer)
         fiveconfigure.debug_mode = False
         ztc.installPackage(PROJECT_NAME)
 
