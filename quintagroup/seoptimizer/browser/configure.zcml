@@ -58,10 +58,6 @@
         file="./seo_custommetatags.js"
         name="seo_custommetatags.js"
         />
-   <browser:resource 
-        file="seo_icon.gif" 
-        name="seo_icon.gif" 
-        />
 
     <!--browser:resource
         file="./checkkeywords.js.dtml"
