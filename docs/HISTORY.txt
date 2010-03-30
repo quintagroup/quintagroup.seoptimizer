@@ -4,6 +4,11 @@ Changelog
 2.3.3 (2010-03-30)
 ------------------
 
+- added missing icon
+
+2.3.3 (2010-03-30)
+------------------
+
 - fixed content types translation
 
 2.3.1 (2010-02-16)
