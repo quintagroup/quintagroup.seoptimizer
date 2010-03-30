@@ -20,7 +20,7 @@ class ValidateSEOKeywordsView(BrowserView):
         if text.lower().strip():
             keywords = map(lambda x: x.strip(), text.lower().strip().split('\n'))
         else:
-            return ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'Keywords list is empty!'), context=self.context)
+            return ts.utranslate(None, _(u'Keywords list is empty!'), context=self.context)
         # request html page of context object
         url = '%s?without_metatag_keywords=1' % self.context.absolute_url()
 
@@ -29,7 +29,7 @@ class ValidateSEOKeywordsView(BrowserView):
         if page_text and page_text != 'sh: lynx: command not found':
             page_text = page_text.decode('utf8')
         else:
-            return ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'Could not find lynx browser!'), context=self.context)
+            return _(u'Could not find lynx browser!')
 
         # check every keyword on appearing in body of html page
         missing = []
@@ -48,10 +48,8 @@ class ValidateSEOKeywordsView(BrowserView):
                     finded[keyword] = 1
         # return list of missing and fount keywords
         if missing or finding:
-            msg = ts.utranslate(domain='quintagroup.seoptimizer', msgid=_(u'number_keywords'),
-                                default=u'Number of keywords at page:\n${found}\n${missing}',
-                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)},
-                                context=self.context)
+            msg = ts.utranslate(None, _('number_keywords', default=u'Number of keywords at page:\n${found}\n${missing}',
+                                mapping={'missing':'\n'.join(missing), 'found': '\n'.join(finding)}), context=self.context)
         else:
             msg = ''
         return msg

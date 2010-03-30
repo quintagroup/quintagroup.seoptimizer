@@ -1,6 +1,5 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
@@ -8,11 +7,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="quintagroup.seoptimizer">
 
-  <!-- include dependent packages -->
-  <include package="quintagroup.canonicalpath" />
 
   <five:registerPackage package="." />
-  <cmf:registerDirectory name="quintagroup.seoptimizer" />
   <i18n:registerTranslations directory="locales" />
 
   <genericsetup:registerProfile
@@ -59,17 +55,6 @@
       factory=".adapters.MappingMetaTags"
       />
 
-  <adapter
-      for="Products.CMFCore.interfaces.IFolderish"
-      provides=".interfaces.ISEOCanonicalPath"
-      factory=".adapters.canonicalPathAdapter"
-      />
-
-  <adapter
-      for="Products.CMFCore.interfaces.IContentish"
-      provides=".interfaces.ISEOCanonicalPath"
-      factory=".adapters.canonicalPathAdapter"
-      />
-
+  <cmf:registerDirectory name="quintagroup.seoptimizer" />
 
 </configure>

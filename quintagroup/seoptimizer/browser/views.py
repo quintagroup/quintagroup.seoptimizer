@@ -10,13 +10,18 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone import PloneMessageFactory as pmf
 
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
-from quintagroup.seoptimizer import interfaces
 
 SEPERATOR = '|'
+HAS_CANONICAL_PATH = True
 SEO_PREFIX = 'seo_'
 PROP_PREFIX = 'qSEO_'
 SUFFIX = '_override'
 PROP_CUSTOM_PREFIX = 'qSEO_custom_'
+
+try:
+    from quintagroup.canonicalpath.interfaces import ICanonicalPath
+except ImportError:
+    HAS_CANONICAL_PATH = False
 
 class SEOContext( BrowserView ):
     """ This class contains methods that allows to edit html header meta tags.
@@ -207,9 +212,16 @@ class SEOContext( BrowserView ):
     def seo_canonical( self ):
         """ Generate canonical URL from SEO properties.
         """
-        purl = getToolByName(self.context, 'portal_url')()
-        canpath = queryAdapter(self.context, interfaces.ISEOCanonicalPath)
-        return purl + canpath.canonical_path()
+        canonical = self.getSEOProperty( 'qSEO_canonical' )
+
+        if not canonical and HAS_CANONICAL_PATH:
+            canpath = queryAdapter(self.context, ICanonicalPath)
+            if canpath:
+                purl = getToolByName(self.context, 'portal_url')()
+                cpath = canpath.canonical_path()
+                canonical = purl + cpath
+
+        return canonical and canonical or self.context.absolute_url()
 
 
 class SEOControlPanel( ControlPanelView ):
@@ -265,6 +277,12 @@ class SEOControlPanel( ControlPanelView ):
         seo = self.portal_properties.seo_properties
         return seo.getProperty('additional_keywords')
 
+    def getFilterKeywordsByContent( self ):
+        """ Get values from filter_keywords_by_content property in seo_properties.
+        """
+        seo = self.portal_properties.seo_properties
+        return seo.getProperty('filter_keywords_by_content')
+
     def createMultiColumnList( self ):
         """
         """
@@ -286,6 +304,7 @@ class SEOControlPanel( ControlPanelView ):
         additionalKeywords = request.get('additionalKeywords', [])
         default_custom_metatags = request.get('default_custom_metatags', [])
         metatags_order = request.get('metatags_order', [])
+        filterKeywordsByContent = request.get('filterKeywordsByContent', None)
         settingsUseKeywordsSG = int(request.get('settingsUseKeywordsSG', 1))
         settingsUseKeywordsLG = int(request.get('settingsUseKeywordsLG', 1))
 
@@ -301,6 +320,7 @@ class SEOControlPanel( ControlPanelView ):
             seo_props.manage_changeProperties(default_custom_metatags=default_custom_metatags)
             seo_props.manage_changeProperties(metatags_order=metatags_order)
             seo_props.manage_changeProperties(content_types_seoprops_enabled=content_types_seoprops_enabled)
+            seo_props.manage_changeProperties(filter_keywords_by_content=filterKeywordsByContent)
             seo_props.manage_changeProperties(settings_use_keywords_sg=settingsUseKeywordsSG)
             seo_props.manage_changeProperties(settings_use_keywords_lg=settingsUseKeywordsLG)
 
@@ -480,7 +500,7 @@ class SEOContextPropertiesView( BrowserView ):
                 state = _('seoproperties_saved', default=u'Content SEO properties have been saved.')
                 context.plone_utils.addPortalMessage(state)
                 kwargs = {'modification_date' : DateTime()} 
-                context.plone_utils.contentEdit(context, **kwargs)
+                context.plone_utils.contentEdit(context, **kwargs) 
                 return request.response.redirect(self.context.absolute_url())
             context.plone_utils.addPortalMessage(state, 'error')
         return self.template()

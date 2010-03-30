@@ -63,7 +63,7 @@ def setup_product():
 # PloneTestCase set up this product on installation.
 
 setup_product()
-ptc.setupPloneSite()
+ptc.setupPloneSite(products=[PROJECT_NAME])
 
 
 class TestCase(ptc.PloneTestCase):

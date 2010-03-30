@@ -24,7 +24,7 @@ setup(name='quintagroup.seoptimizer',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, Vitaliy Stepanov, Andriy Mylenkyy',
+      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, Vitaliy Stepanov',
       author_email='support@quintagroup.com',
       url='http://quintagroup.com/services/plone-development/products/qSEOptimizer/',
       license='GPL',
@@ -34,12 +34,9 @@ setup(name='quintagroup.seoptimizer',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'quintagroup.canonicalpath>=0.4',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
       # -*- Entry points: -*-
-      [z3c.autoinclude.plugin]
-      target = plone
       """,
       )
