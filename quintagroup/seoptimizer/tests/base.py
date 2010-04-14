@@ -75,10 +75,13 @@ class MixinTestCase:
     def _getauth(self):
         # Fix authenticator for the form
         import re
-
-        authenticator = self.portal.restrictedTraverse("@@authenticator")
-        html = authenticator.authenticator()
-        handle = re.search('value="(.*)"', html).groups()[0]
+        try:
+            authenticator = self.portal.restrictedTraverse("@@authenticator")
+        except:
+            handle  = ""
+        else:
+            html = authenticator.authenticator()
+            handle = re.search('value="(.*)"', html).groups()[0]
         return handle
 
     def beforeTearDown(self):
