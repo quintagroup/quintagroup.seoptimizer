@@ -1,9 +1,9 @@
 import logging
 
 from zope.component import getSiteManager
-from plone.browserlayer.utils import unregister_layer
-from plone.browserlayer.interfaces import ILocalBrowserLayerType
 
+from config import SUPPORT_BLAYER
+    
 from Products.CMFCore.utils import getToolByName
 
 logger = logging.getLogger('quintagroup.seoptimizer')
@@ -31,6 +31,12 @@ def removeConfiglet(site):
 def removeBrowserLayer(site):
     """ Remove browser layer.
     """
+    if not SUPPORT_BLAYER:
+        return
+
+    from plone.browserlayer.utils import unregister_layer
+    from plone.browserlayer.interfaces import ILocalBrowserLayerType
+
     name="qSEOptimizer"
     site = getSiteManager(site)
     registeredLayers = [r.name for r in site.registeredUtilities()

@@ -33,6 +33,7 @@ from Products.PloneTestCase.PloneTestCase import portal_owner
 from Products.PloneTestCase.PloneTestCase import default_password
 
 from quintagroup.seoptimizer.config import PROJECT_NAME
+from quintagroup.seoptimizer.config import SUPPORT_BLAYER
 
 ptc.setupPloneSite()
 

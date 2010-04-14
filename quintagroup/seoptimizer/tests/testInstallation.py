@@ -83,6 +83,9 @@ class TestInstallation(TestCase):
             self.assert_(manager.get(p) is not None, "Not registered '%s' viewlet" % p)
 
     def test_browser_layer(self):
+        if not SUPPORT_BLAYER:
+            return
+
         from plone.browserlayer import utils
         self.assert_(IPloneSEOLayer in utils.registered_layers(),
                      "Not registered 'IPloneSEOLayer' browser layer")
@@ -124,6 +127,9 @@ class TestUninstallation(TestCase):
                 "'%s' viewlet present after uninstallation" % p)
 
     def test_browserlayer_uninstall(self):
+        if not SUPPORT_BLAYER:
+            return
+
         from plone.browserlayer import utils
         self.assertEqual(IPloneSEOLayer in utils.registered_layers(), False,
             "Still registered 'IPloneSEOLayer' browser layer")
