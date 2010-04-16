@@ -1,77 +1,49 @@
 import logging
+
+from zope.component import getSiteManager
+
+from config import SUPPORT_BLAYER
+    
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.Expression import Expression
 
 logger = logging.getLogger('quintagroup.seoptimizer')
 
-def migrationActions(site):
-    old = 'qseo_properties_edit_form'
-    new = '@@seo-context-properties'
-    condition = "python:exists('portal/@@seo-context-properties')"
-    for ptype in site.portal_types.objectValues():
-        acts = filter(lambda x: x.id == 'seo_properties' , ptype.listActions())
-        for act in acts:
-            log = 0
-            if not act.condition:
-                act.condition = Expression(condition)
-                log = 1
-            ac_exp = act.getActionExpression()
-            if old in ac_exp:
-                act.setActionExpression(ac_exp.replace(old, new))
-                log = 1
-            if log:
-                logger.log(logging.INFO, "Updated \"SEO Properties\" action in %s type." % ptype.id)
-
-def removeSkin(self, layer):
-    """ Remove layers.
-    """
-    skinstool = getToolByName(self, 'portal_skins')
-    for skinName in skinstool.getSkinSelections():
-        original_path = skinstool.getSkinPath(skinName)
-        original_path = [l.strip() for l in original_path.split(',')]
-        new_path= []
-        for l in original_path:
-            if (l == layer) or (l.startswith(layer+'/')):
-                logger.log(logging.INFO, "Removed %s layer from %s skin." % (l, skinName))
-                continue
-            new_path.append(l)
-        skinstool.addSkinSelection(skinName, ','.join(new_path))
-
-def removeActions(self):
+def removeActions(site):
     """ Remove actions.
     """
-    tool = getToolByName(self, 'portal_types')
-    for ptype in tool.objectValues():
-        if ptype.getId() in ['File','Document','News Item']:
-            acts = filter(lambda x: x.id == 'seo_properties', ptype.listActions())
-            action = acts and acts[0] or None
-            if action != None:
-                acts = list(ptype.listActions())
-                ptype.deleteActions([acts.index(a) for a in acts if a.getId()=='seo_properties'])
-                logger.log(logging.INFO, "Deleted \"SEO Properties\" action for %s type." % ptype.id)
+    types_tool = getToolByName(site, 'portal_types')
+    for ptype in types_tool.objectValues():
+        idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions()) \
+                           if idx_act[1].id == 'seo_properties']
+        if idxs:
+            ptype.deleteActions(idxs)
+            logger.log(logging.INFO, "Deleted \"SEO Properties\" action for %s type." % ptype.id)
 
-def remove_configlets(context, conf_ids):
-    """ Remove configlets.
+def removeConfiglet(site):
+    """ Remove configlet.
     """
-    configTool = getToolByName(context, 'portal_controlpanel', None)
-    if configTool:
-        for id in conf_ids:
-            configTool.unregisterConfiglet(id)
-            logger.log(logging.INFO, "Unregistered \"%s\" configlet." % id)
+    conf_id = 'quintagroup.seoptimizer'
+    controlpanel_tool = getToolByName(site, 'portal_controlpanel')
+    if controlpanel_tool:
+        controlpanel_tool.unregisterConfiglet(conf_id)
+        logger.log(logging.INFO, "Unregistered \"%s\" configlet." % conf_id)
 
-def importVarious(context):
-    """ Do customized installation.
+def removeBrowserLayer(site):
+    """ Remove browser layer.
     """
-    if context.readDataFile('seo_install.txt') is None:
+    if not SUPPORT_BLAYER:
         return
 
-def reinstall(context):
-    """ Do customized reinstallation.
-    """
-    if context.readDataFile('seo_reinstall.txt') is None:
-        return
-    site = context.getSite()
-    migrationActions(site)
+    from plone.browserlayer.utils import unregister_layer
+    from plone.browserlayer.interfaces import ILocalBrowserLayerType
+
+    name="qSEOptimizer"
+    site = getSiteManager(site)
+    registeredLayers = [r.name for r in site.registeredUtilities()
+                        if r.provided == ILocalBrowserLayerType]
+    if name in registeredLayers:
+        unregister_layer(name, site_manager=site)
+        logger.log(logging.INFO, "Unregistered \"%s\" browser layer." % name)
 
 def uninstall(context):
     """ Do customized uninstallation.
@@ -79,6 +51,6 @@ def uninstall(context):
     if context.readDataFile('seo_uninstall.txt') is None:
         return
     site = context.getSite()
-    removeSkin(site, 'quintagroup.seoptimizer' )
     removeActions(site)
-    remove_configlets(site, ('quintagroup.seoptimizer',))
+    removeConfiglet(site)
+    removeBrowserLayer(site)

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<layers
-   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-   i18n:domain="quintagroup.seoptimizer">
+<!-- Register the package-specific browser layer, so that it will be activated
+when this product is installed. -->
+<layers>
    <layer name="qSEOptimizer"
           interface="quintagroup.seoptimizer.browser.interfaces.IPloneSEOLayer" />
 </layers>

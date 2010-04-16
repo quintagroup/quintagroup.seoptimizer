@@ -5,12 +5,6 @@ try:
 except ImportError:
     from Globals import InitializeClass
 
-def createMultiColumnList(self,slist, numCols, sort_on='title_or_id'):
-    try:
-        mcl = self.createMultiColumnList(slist, numCols, sort_on=sort_on)
-        return mcl
-    except AttributeError:
-        return [slist]
 
 class SortedDict(dict):
     """ A sorted dictionary.

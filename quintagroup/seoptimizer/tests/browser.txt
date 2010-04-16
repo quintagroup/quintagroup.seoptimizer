@@ -49,6 +49,89 @@ We have the login portlet, so let's use that.
 
 
 -*- extra stuff goes here -*-
-The my tests
+Test 'SEO Properties' action
 ===============================
 
+Define some general objects:
+
+    >>> qi = self.portal.portal_quickinstaller
+    >>> object_tabs = self.portal.portal_actions.object
+    >>> ps = self.portal.portal_setup
+
+Test is 'SEO Properties' action present for a Page before
+seoptimizer installed
+
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+
+Now install the product for following testing, and add
+
+    >>> qi.installProduct(PROJECT_NAME)
+    'Ran all install steps.'
+    >>> sp = self.portal.portal_properties.seo_properties
+
+And check is SEOProperties added to object tabs
+ 
+   >>> object_tabs.get('SEOProperties', None) is not None
+    True
+
+Test visibility 'SEO Properties' action after installation
+
+    >>> sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> browser.getLink('SEO Properties').url
+    'http://nohost/plone/front-page/@@seo-context-properties'
+
+Test invisibility 'SEO Properties' action after installation
+
+    >>> sp.content_types_with_seoproperties = ('File',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+
+Test reinstallation 'SEO Properties' action
+For perform all upgrade steps on re-installation, earlier version of profile must be set.
+
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+    >>> ps.setLastVersionForProfile('quintagroup.seoptimizer:default', '2.0.0')
+    >>> qi.reinstallProducts((PROJECT_NAME,))
+    >>> self.portal.portal_actions.object.get('SEOProperties', None) is not None
+    True
+
+Test visibility 'SEO Properties' action after reinstallation
+
+    >>> sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> browser.getLink('SEO Properties').url
+    'http://nohost/plone/front-page/@@seo-context-properties'
+
+Test invisibility 'SEO Properties' action after reinstallation
+
+    >>> sp.content_types_with_seoproperties = ('File',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False
+
+Test uninstallation 'SEO Properties' action
+
+    >>> sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    True
+    >>> qi.uninstallProducts((PROJECT_NAME,))
+    >>> object_tabs.get('SEOProperties', None) is not None
+    False
+
+Test visibility 'SEO Properties' action after uninstallation
+
+    >>> sp.content_types_with_seoproperties = ('Document',)
+    >>> browser.open('http://nohost/plone/front-page')
+    >>> "SEO Properties" in browser.contents
+    False

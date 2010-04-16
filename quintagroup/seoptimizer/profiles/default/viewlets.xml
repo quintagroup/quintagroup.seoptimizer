@@ -4,5 +4,6 @@
     <viewlet name="plone.htmlhead.title" />
     <viewlet name="quintagroup.seoptimizer.customscript" />
     <viewlet name="plone.resourceregistries" />
+    <viewlet name="quintagroup.seoptimizer.seotags" />
   </order>
 </object>

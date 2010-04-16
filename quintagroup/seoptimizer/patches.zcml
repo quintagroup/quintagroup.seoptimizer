@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    i18n_domain="quintagroup.seoptimizer">
+
+    <include package="collective.monkeypatcher" file="meta.zcml" />
+
+    <monkey:patch
+        description="listMetaTags method is now available as listMetaTagsOriginal"
+        class="Products.CMFPlone.PloneTool.PloneTool"
+        original="listMetaTagsOriginal"
+        ignoreOriginal="True"
+        replacement=".listMetaTags.qsListMetaTagsOriginal"
+        docstringWarning="true"
+        />
+
+    <monkey:patch
+        description="listMetaTags method now support advanced features"
+        class="Products.CMFPlone.PloneTool.PloneTool"
+        original="listMetaTags"
+        replacement=".listMetaTags.qsListMetaTags"
+        docstringWarning="true"
+        />
+
+</configure>

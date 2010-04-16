@@ -64,27 +64,29 @@
    <element value="seo_keywords"/>
   </property>
   <property name="custom_script" type="text" purge='False'/>
-  <property name="additional_keywords" type="lines" purge='False'/>
-  <property name="settings_use_keywords_sg" type="int">3</property>
-  <property name="settings_use_keywords_lg" type="int">2</property>
   <property name="default_custom_metatags" type="lines" purge='False'/>
   <property name="metatags_order" type="lines" purge='False'>
-   <element value="DC.publisher Publisher"/>
-   <element value="DC.description Description"/>
-   <element value="DC.contributors Contributors"/>
-   <element value="DC.creator Creator"/>
-   <element value="DC.format Format"/>
-   <element value="DC.rights Rights"/>
-   <element value="DC.language Language"/>
-   <element value="DC.date.modified ModificationDate"/>
-   <element value="DC.date.created CreationDate"/>
-   <element value="DC.type Type"/>
-   <element value="DC.subject Subject"/>
-   <element value="DC.distribution seo_distribution"/>
-   <element value="description seo_description"/>
-   <element value="keywords meta_keywords"/>
-   <element value="robots seo_robots"/>
-   <element value="distribution seo_distribution"/>
+   <element value="DC.publisher"/>
+   <element value="DC.description"/>
+   <element value="DC.contributors"/>
+   <element value="DC.creator"/>
+   <element value="DC.format"/>
+   <element value="DC.rights"/>
+   <element value="DC.language"/>
+   <element value="DC.date.modified"/>
+   <element value="DC.date.created"/>
+   <element value="DC.type"/>
+   <element value="DC.subject"/>
+   <element value="DC.distribution"/>
+   <element value="description"/>
+   <element value="keywords"/>
+   <element value="robots"/>
+   <element value="distribution"/>
+  </property>
+  <property name="content_types_with_seoproperties" type="lines">
+   <element value="Document"/>
+   <element value="File"/>
+   <element value="News Item"/>
   </property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">

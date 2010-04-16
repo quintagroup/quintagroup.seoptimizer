@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<import-steps>
- <import-step id="seo_install" version="20081125-01"
-              handler="quintagroup.seoptimizer.setuphandlers.importVarious"
-              title="SEO installation">
-  SEO installation
- </import-step>
-</import-steps>

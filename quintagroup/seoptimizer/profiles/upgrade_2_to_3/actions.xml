@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <object name="object" meta_type="CMF Action Category">
+  <property name="title"></property>
+  <object name="SEOProperties" meta_type="CMF Action" i18n:domain="quintagroup.seoptimizer">
+   <property name="title" i18n:translate="">SEO Properties</property>
+   <property name="description" i18n:translate=""></property>
+   <property
+      name="url_expr">string:${object_url}/@@seo-context-properties</property>
+   <property name="icon_expr"></property>
+   <property name="available_expr">object/@@seotab-visibility</property>
+   <property name="permissions">
+    <element value="Modify portal content"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+ </object>
+</object>

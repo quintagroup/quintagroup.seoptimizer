@@ -35,6 +35,7 @@ setup(name='quintagroup.seoptimizer',
       install_requires=[
           'setuptools',
           'quintagroup.canonicalpath>=0.4',
+          'collective.monkeypatcher',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

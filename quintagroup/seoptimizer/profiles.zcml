@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="quintagroup.seoptimizer">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="quintagroup.seoptimizer"
+      directory="profiles/default"
+      description="Install quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="quintagroup.seoptimizer uninstall"
+      directory="profiles/uninstall"
+      description="Uninstall quintagroup.seoptimizer"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="upgrade_2_to_3"
+      title="Upgrade quintagroup.seoptimizer 2.x.x to 3.0.0"
+      directory="profiles/upgrade_2_to_3"
+      description="Upgrades the quintagroup.seoptimizer from version 2.x.x to 3.0.0."
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:upgradeStep
+      title="Upgrade quintagroup.seoptimizer"
+      description="Upgrade quintagroup.seoptimizer 2.x.x to 3.0.0"
+      source="*"
+      destination="3.0.0"
+      handler=".upgrades.upgrade_2_to_3"
+      sortkey="1"
+      profile="quintagroup.seoptimizer:default" />
+
+</configure>

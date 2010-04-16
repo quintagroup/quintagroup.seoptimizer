@@ -1,8 +1,31 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="quintagroup.seoptimizer">
+
+    <browser:page
+        for="Products.Archetypes.interfaces.IBaseObject"
+        attribute="validateKeywords"
+        class=".keywords.ValidateSEOKeywordsView"
+        name="checkSEOKeywords"
+        permission="cmf.ModifyPortalContent"
+        />
+
+
+    <!-- MOVED from overrides.zcml :
+         BECAUSE all views, viewlets registered for
+         own, .interfaces.IPloneSEOLayer layer      -->
+
+    <!-- Registries for configlet -->
+    <adapter factory=".seo_configlet.SEOConfigletAdapter" />
+
+    <browser:page
+        name="seo-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".seo_configlet.SEOConfiglet"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="cmf.ManagePortal"
+        />
 
     <!-- The customized title -->
     <browser:viewlet
@@ -29,14 +52,15 @@
         permission="zope2.View"
         />
 
-    <!--Views-->
-    <browser:page
-        name="seo-controlpanel"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        class=".views.SEOControlPanel"
+    <browser:viewlet
+        name="quintagroup.seoptimizer.seotags"
+        manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+        class=".viewlets.SEOTagsViewlet"
         layer=".interfaces.IPloneSEOLayer"
-        permission="cmf.ManagePortal"
+        permission="zope2.View"
         />
+
+    <!--Views-->
 
     <browser:page
         name="seo_context"
@@ -54,24 +78,15 @@
         permission="zope2.View"
         />
 
-    <browser:resource
-        file="./seo_custommetatags.js"
-        name="seo_custommetatags.js"
+    <browser:page
+        name="seotab-visibility"
+        for="*"
+        class=".views.VisibilityCheckerView"
+        attribute="checkVisibilitySEOAction"
+        layer=".interfaces.IPloneSEOLayer"
+        permission="cmf.ManagePortal"
         />
 
-    <browser:resource
-        file="seo_icon.gif"
-        name="seo_icon.gif"
-        />
-
-    <!--browser:resource
-        file="./checkkeywords.js.dtml"
-        name="checkkeywords.js.dtml"
-        />
-
-    <browser:resource
-        file="./statistics.js.dtml"
-        name="statistics.js"
-        /-->
+    <browser:resourceDirectory name="quintagroup.seoptimizer" directory="./resources" />
 
 </configure>

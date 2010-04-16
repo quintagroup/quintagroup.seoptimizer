@@ -3,6 +3,7 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="quintagroup.seoptimizer">
  <configlet title="Search Engine Optimizer" action_id="quintagroup.seoptimizer"
     appId="quintagroup.seoptimizer" category="Products" condition_expr=""
+    icon_expr="string:${portal_url}/++resource++quintagroup.seoptimizer/seo_icon.gif"
     url_expr="string:${portal_url}/@@seo-controlpanel"
     visible="True" i18n:attributes="title">
   <permission>ManagePortal</permission>

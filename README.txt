@@ -71,6 +71,14 @@ Note
 * For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
 
 
+* Start from quintagroup.seoptimizer > 2.0.2 version dropped global keywords support feature - from SEO Configlet removed following fields:
+    * additional_keywords,
+    * settings_use_keywords_lg,
+    * settings_use_keywords_lg.
+  As result removed global keywords mixing with local ones from seo_context view.
+
+
+
 Authors
 -------
 
@@ -87,6 +95,8 @@ Authors
 * Taras Melnychuk
 
 * Vitaliy Stepanov
+
+* Andriy Myelnkyy
 
 
 Links

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object name="portal_properties" meta_type="Plone Properties Tool">
+ <object name="seo_properties" meta_type="Plone Property Sheet">
+  <property name="content_types_with_seoproperties" type="lines" purge='False'/>
+ </object>
+</object>
