@@ -76,7 +76,7 @@ class ISEOConfigletAdvancedSchema(Interface):
     fields = List(
         title=_("label_fields", default='Fields for keywords statistic calculation.'),
         description=_("help_fields",
-                default='Fill in filds (one per line) which statistics of keywords usage'
+                default='Fill in filds (one per line) which statistics of keywords usage '
                     'should be calculated for.'),
         required=False)
 

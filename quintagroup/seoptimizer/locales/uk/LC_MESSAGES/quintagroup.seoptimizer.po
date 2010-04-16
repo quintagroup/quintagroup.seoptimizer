@@ -71,7 +71,7 @@ msgstr ""
 msgid "help_default_custom_metatags"
 msgstr "Введіть назви додаткових мета теґів (по 1 в кожному рядку), які з'являться при редагуванні  SEO властивостей об'єктів сайту. Наприклад: \ \"metaname | metacontent \" або \ \"metaname \"."
 
-#. Default: "Fill in filds (one per line) which statistics of keywords usageshould be calculated for."
+#. Default: "Fill in filds (one per line) which statistics of keywords usage should be calculated for."
 #: ./browser/seo_configlet.py:78
 msgid "help_fields"
 msgstr ""

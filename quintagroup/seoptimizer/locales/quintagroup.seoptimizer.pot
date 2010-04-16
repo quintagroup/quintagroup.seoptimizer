@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-16 10:07+0000\n"
+"POT-Creation-Date: 2010-04-16 10:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "help_default_custom_metatags"
 msgstr ""
 
-#. Default: "Fill in filds (one per line) which statistics of keywords usageshould be calculated for."
+#. Default: "Fill in filds (one per line) which statistics of keywords usage should be calculated for."
 #: ./browser/seo_configlet.py:78
 msgid "help_fields"
 msgstr ""
