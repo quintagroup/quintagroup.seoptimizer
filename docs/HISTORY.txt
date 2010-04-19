@@ -4,6 +4,18 @@ Changelog
 3.0 (2010-04-19)
 ----------------
 
+* Drop global keywords functionality [mylan]
+* Fix performance issues [mylan]
+* Reviewed, updated tests [mylan]
+* Moved all metatags list into htmlhead viewletmanager [mylan]
+* Added advanced tab to seo configlet [mylan]
+* Rewrite seo configlet - use standard plone configlet approach [mylan]
+* Use collective.monkeypatcher package for listMetatags patch [liebster]
+* Killed accessors usage in 'metatags order' property [liebster]
+* Changed management of 'SEO' tab visiblity for different portal types [liebster]
+* Implemented migration to new version [liebster]
+* Cleanup code [mylan]
+* Extend package's requirements, register in z3c.autoinclude entry-point [mylan]
 * Translations rebuilt [mylan]
 * Typo in fields description of seo_configlet fixed [mylan]
 * Ukrainian translations updated [mylan]
