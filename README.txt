@@ -52,7 +52,7 @@ Usage
 
 * Type-in your SEO values
 
-* Save
+* Save changes
 
 * Do this for all documents that need enhanced SEO properties
 
@@ -60,8 +60,9 @@ Usage
 Requirements
 ------------
 
-* Plone 3.0+ 
+* Plone 3.1.1+ 
 
+quintagroup.seoptimizer 3.0 was tested with Plone 3.1, 3.2 and 3.3.
 
 Note
 ----
@@ -70,14 +71,11 @@ Note
 
 * For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
 
-
-* Start from quintagroup.seoptimizer > 2.0.2 version dropped global keywords support feature - from SEO Configlet removed following fields:
+* Starting from quintagroup.seoptimizer > 2.0.2 version global keywords support feature dropped - the following fields were removed from SEO Configlet:
     * additional_keywords,
     * settings_use_keywords_lg,
     * settings_use_keywords_lg.
-  As result removed global keywords mixing with local ones from seo_context view.
-
-
+  As a result, removed global keywords are now mixing with local ones from seo_context view.
 
 Authors
 -------
