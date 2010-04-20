@@ -6,7 +6,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '2.3.4dev'
+version = '3.0'
 
 setup(name='quintagroup.seoptimizer',
       version=version,

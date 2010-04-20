@@ -3,18 +3,6 @@ Quintagroup Search Engine Optimization Tool
 
 This product was created to enhance SE visibility of Plone sites.
 
-Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
-  
-Product sponsored by "4webresults, SEO and Internet Marketing
-Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra
-configuration features sponsored by:
-
-* "Eogogics Inc.": http://eogogics.com
- 
-* "4webresults": http://4webresults.com
-
-* "eLawSoftware": http://www.elawsoftware.com
-
 
 Features
 --------
@@ -77,6 +65,12 @@ Note
     * settings_use_keywords_lg.
   As a result, removed global keywords are now mixing with local ones from seo_context view.
 
+Links
+-----
+
+Watch Plone SEO screencast (http://quintagroup.com/cms/screencasts/plone-seo) to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
+
+
 Authors
 -------
 
@@ -96,8 +90,15 @@ Authors
 
 * Andriy Myelnkyy
 
+Product was sponsored by "4webresults, SEO and Internet Marketing
+Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra
+configuration features sponsored by:
 
-Links
------
+* "Eogogics Inc.": http://eogogics.com
+ 
+* "4webresults": http://4webresults.com
 
-Watch Plone SEO screencast (http://quintagroup.com/cms/screencasts/plone-seo) to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
+* "eLawSoftware": http://www.elawsoftware.com
+
+Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
+
