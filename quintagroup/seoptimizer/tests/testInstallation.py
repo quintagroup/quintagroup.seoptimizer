@@ -104,7 +104,7 @@ class TestUninstallation(TestCase):
 
     def test_propertysheet_uninstall(self):
         properties = getToolByName(self.portal, 'portal_properties')
-        self.assertEqual(hasattr(properties.aq_base, PROPERTY_SHEET), False,
+        self.assert_(hasattr(properties.aq_base, PROPERTY_SHEET),
             "'%s' property sheet not uninstalled" % PROPERTY_SHEET)
 
     def test_configlet_uninstall(self):
