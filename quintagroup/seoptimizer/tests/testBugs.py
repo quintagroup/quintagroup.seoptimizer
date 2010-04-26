@@ -1,6 +1,15 @@
 import urllib
 from cStringIO import StringIO
+
+from zope.component import getMultiAdapter
+from zope.component import providedBy
+from zope.interface import directlyProvides
+from zope.viewlet.interfaces import IViewlet, IViewletManager
+from zope.publisher.browser import TestRequest
+
+from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 from base import *
+
 
 class TestBugs(FunctionalTestCase):
 
@@ -25,6 +34,30 @@ class TestBugs(FunctionalTestCase):
         md_after = self.my_doc.modification_date
 
         self.assertNotEqual(md_before, md_after)
+
+    def test_bug_20_at_plone_org(self):
+        portal = self.portal
+        fp = portal['front-page']
+        request = portal.REQUEST
+        view = portal.restrictedTraverse('@@plone')
+
+        manager = getMultiAdapter((fp, request, view), IViewletManager,
+                        name=u'plone.htmlhead')
+        viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
+                        name=u'plone.htmlhead.title')
+        viewlet.update()
+        old_title = viewlet.render()
+
+        # add IPloneSEOLayer
+        directlyProvides(request, IPloneSEOLayer)
+
+        viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
+                        name=u'plone.htmlhead.title')
+        viewlet.update()
+        new_title = viewlet.render()
+
+        self.assertEqual(old_title, new_title)
+
 
 
 def test_suite():

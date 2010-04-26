@@ -157,8 +157,8 @@ class TitleCommentViewlet(ViewletBase):
         self.override_comments = self.seo_context['has_html_comment']
 
     def std_title(self):
-        portal_title = safe_unicode(self.context_state.object_title())
-        page_title = safe_unicode(self.portal_state.portal_title())
+        page_title = safe_unicode(self.context_state.object_title())
+        portal_title = safe_unicode(self.portal_state.portal_title())
         if page_title == portal_title:
             return u"<title>%s</title>" % (escape(portal_title))
         else:
