@@ -1,6 +1,11 @@
 Changelog
 =========
 
+3.0.1 (2010-04-27)
+----------------
+
+* Fix bad file tag definition http://plone.org/products/plone-seo/issues/20 [crchemist]
+
 3.0 (2010-04-20)
 ----------------
 
