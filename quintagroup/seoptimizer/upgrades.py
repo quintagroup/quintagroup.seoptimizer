@@ -110,7 +110,7 @@ def renameProperty(obj, path):
                      "property renamed to '%(name)s'."
         try:
             ICanonicalLink(obj).canonical_link = value
-        except e:
+        except Exception, e:
             level, msg = logging.ERROR, "%s on renaming 'qSEO_canonical' " \
                          "property for %%(url)s object" % str(e)
 
