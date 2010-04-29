@@ -206,4 +206,6 @@ class CanonicalUrlViewlet( ViewletBase ):
     """
     def render( self ):
         seoc = getMultiAdapter((self.context, self.request), name=u'seo_context')
-        return """<link rel="canonical" href="%s" />""" % seoc['seo_canonical']
+        if seoc['seo_canonical']:
+            return """<link rel="canonical" href="%s" />""" % seoc['seo_canonical']
+        return ""

@@ -54,7 +54,7 @@ class SEOContext( BrowserView ):
             "seo_html_comment": self.getSEOProperty( 'qSEO_html_comment', default='' ),
             "meta_keywords": self.getSEOProperty('qSEO_keywords', 'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
-            "seo_canonical": ICanonicalLink(self.context).canonical_link,
+            "seo_canonical": self.getCanonical(),
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
             "has_seo_robots": self.context.hasProperty('qSEO_robots'),
@@ -135,6 +135,10 @@ class SEOContext( BrowserView ):
                     result.append({'meta_name'    : name_value[0],
                                    'meta_content' : len(name_value) == 2 and name_value[1] or ''})
         return result
+
+    def getCanonical(self):
+        canonical = queryAdapter(self.context, ICanonicalLink)
+        return canonical and canonical.canonical_link or ""
 
 
 class SEOContextPropertiesView( BrowserView ):
