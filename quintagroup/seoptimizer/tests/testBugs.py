@@ -65,7 +65,7 @@ class TestBugs(FunctionalTestCase):
 
     def test_bug_22_at_plone_org(self):
         """If ICanonicalLink adapter is not found for the context object
-           page rendering should not break, but only canonical link
+           - page rendering should not break, but only canonical link
            should disappear.
         """
         curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
@@ -90,6 +90,16 @@ class TestBugs(FunctionalTestCase):
         # register adapter back in the global site manager
         gsm.registerAdapter(DefaultCanonicalLinkAdapter, [ITraversable,],
                             ICanonicalLink)
+
+
+    def test_bug_19_23_at_plone_org(self):
+        """overrides.zcml should present in the root of the package"""
+        import quintagroup.seoptimizer
+        try:
+            zcml.load_config('overrides.zcml', quintagroup.seoptimizer)
+        except IOError:
+            self.fail("overrides.zcml removed from the package root")
+
         
 
 def test_suite():

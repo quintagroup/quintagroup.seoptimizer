@@ -1,0 +1,6 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+  <!-- BBB:  Not needed any more.
+       Present Only for prevent instance breakage after
+       upgrading to quintagroup.seoptimizer >= v.3.0
+  -->
+</configure>
