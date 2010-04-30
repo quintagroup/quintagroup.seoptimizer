@@ -100,10 +100,32 @@ class TestBugs(FunctionalTestCase):
         except IOError:
             self.fail("overrides.zcml removed from the package root")
 
+
+    def test_bug_24_at_plone_org(self):
+        member_id = 'test_member'
+        editor_id = 'test_editor'
+        test_pswd = 'pswd'
+        uf = self.portal.acl_users
+        uf.userFolderAddUser(member_id, test_pswd,
+                        ['Member'], [])
+        uf.userFolderAddUser(editor_id, test_pswd,
+                        ['Member','Editor'], [])
+
+        member_auth = '%s:%s'%(member_id, test_pswd)
+        editor_auth = '%s:%s'%(editor_id, test_pswd)
+
+        portal_url = '/'.join(self.portal.getPhysicalPath())
+
+        resp = self.publish(path=portal_url, basic=member_auth)
+        self.assertEqual(resp.getStatus(), 200)
         
+        # This fails, althought must pass
+        resp = self.publish(path=portal_url, basic=editor_auth)
+        self.assertEqual(resp.getStatus(), 200)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestBugs))
     return suite
+

@@ -312,3 +312,4 @@ class VisibilityCheckerView( BrowserView ):
         plone = queryMultiAdapter((self, self.request),name="plone_portal_state").portal()
         adapter = ISEOConfigletSchema(plone)
         return bool(self.context.portal_type in adapter.types_seo_enabled)
+
