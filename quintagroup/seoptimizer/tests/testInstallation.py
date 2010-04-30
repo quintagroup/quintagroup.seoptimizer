@@ -138,7 +138,8 @@ class TestUninstallation(TestCase):
         atool=getToolByName(self.portal, 'portal_actions')
         action_ids = [a.id for a in atool.listActions()]
         self.assertEqual("SEOProperties" in action_ids, False,
-            "Not added 'SEOProperties' action")
+            "'SEOProperties' action not removed from portal_actions " \
+            "on uninstallation")
 
 class TestReinstallation(TestCase):
 
