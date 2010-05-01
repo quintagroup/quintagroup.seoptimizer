@@ -75,7 +75,7 @@
         for="*"
         class=".views.SEOContextPropertiesView"
         layer=".interfaces.IPloneSEOLayer"
-        permission="zope2.View"
+        permission="cmf.ModifyPortalContent"
         />
 
     <browser:page

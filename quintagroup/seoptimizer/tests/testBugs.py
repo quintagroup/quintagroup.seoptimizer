@@ -118,10 +118,17 @@ class TestBugs(FunctionalTestCase):
 
         resp = self.publish(path=portal_url, basic=member_auth)
         self.assertEqual(resp.getStatus(), 200)
-        
+
         # This fails, althought must pass
         resp = self.publish(path=portal_url, basic=editor_auth)
         self.assertEqual(resp.getStatus(), 200)
+
+    def test_seo_context_properties_perms(self):
+        # Anonymous are not allowed to access to @@seo-context-properties
+        self.portal.portal_workflow.doActionFor(self.my_doc, 'publish')
+        resp = self.publish(path=self.mydoc_path+'/@@seo-context-properties')
+        self.assertNotEqual(resp.getStatus(), 200)
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
