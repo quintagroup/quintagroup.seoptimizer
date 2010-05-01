@@ -128,3 +128,9 @@ def upgrade_2_to_3(setuptool):
     removeNonUseSeoProperties(plone_tools)
     removeSkin(plone_tools)
     migrateCanonical(plone_tools)
+
+def upgrade_301_to_305(setuptool):
+    """ Upgrade quintagroup.seoptimizer from version 3.0.0 to 3.0.5.
+    """
+    plone_tools = queryMultiAdapter((setuptool, setuptool.REQUEST), name="plone_tools")
+    setuptool.runAllImportStepsFromProfile('profile-quintagroup.seoptimizer:upgrade_301_to_305')

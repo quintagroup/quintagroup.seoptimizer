@@ -78,14 +78,6 @@
         permission="cmf.ModifyPortalContent"
         />
 
-    <browser:page
-        name="seotab-visibility"
-        for="*"
-        class=".views.VisibilityCheckerView"
-        attribute="checkVisibilitySEOAction"
-        layer=".interfaces.IPloneSEOLayer"
-        permission="zope2.Public"
-        />
 
     <browser:resourceDirectory name="quintagroup.seoptimizer" directory="./resources" />
 

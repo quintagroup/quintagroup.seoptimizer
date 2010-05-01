@@ -28,6 +28,15 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="upgrade_301_to_305"
+      title="Upgrade quintagroup.seoptimizer 3.0.1 to 3.0.5"
+      directory="profiles/upgrade_301_to_305"
+      description="Upgrades the quintagroup.seoptimizer from version 3.0.1 to 3.0.5."
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <genericsetup:upgradeStep
       title="Upgrade quintagroup.seoptimizer"
       description="Upgrade quintagroup.seoptimizer 2.x.x to 3.0.0"
@@ -37,4 +46,14 @@
       sortkey="1"
       profile="quintagroup.seoptimizer:default" />
 
+  <genericsetup:upgradeStep
+      title="Upgrade quintagroup.seoptimizer"
+      description="Upgrade quintagroup.seoptimizer 3.0.1 to 3.0.5"
+      source="3.0.0"
+      destination="3.0.5"
+      handler=".upgrades.upgrade_301_to_305"
+      sortkey="1"
+      profile="quintagroup.seoptimizer:default" />
+
 </configure>
+

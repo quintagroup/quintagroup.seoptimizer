@@ -158,6 +158,14 @@ class SEOContextPropertiesView( BrowserView ):
         """
         return condition and first or second
 
+    def isAvailable(self):
+        """ Checks visibility 'SEO Properties' action for content
+        """
+        context = aq_inner(self.context)
+        plone = queryMultiAdapter((self, self.request),name="plone_portal_state").portal()
+        adapter = ISEOConfigletSchema(plone)
+        return self.context.portal_type in adapter.types_seo_enabled
+
     def validateSEOProperty(self, property, value):
         """ Validate a seo property.
         """
@@ -299,17 +307,4 @@ class SEOContextPropertiesView( BrowserView ):
                 return request.response.redirect(self.context.absolute_url())
             context.plone_utils.addPortalMessage(state, 'error')
         return self.template()
-
-
-class VisibilityCheckerView( BrowserView ):
-    """ This class contains methods that visibility checker.
-    """
-
-    def checkVisibilitySEOAction(self):
-        """ Checks visibility 'SEO Properties' action for content
-        """
-        context = aq_inner(self.context)
-        plone = queryMultiAdapter((self, self.request),name="plone_portal_state").portal()
-        adapter = ISEOConfigletSchema(plone)
-        return bool(self.context.portal_type in adapter.types_seo_enabled)
 
