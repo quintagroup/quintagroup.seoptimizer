@@ -101,7 +101,10 @@ class TestBugs(FunctionalTestCase):
             self.fail("overrides.zcml removed from the package root")
 
 
-    def test_bug_24_at_plone_org(self):
+class TestBug24AtPloneOrg(FunctionalTestCase):
+
+    def afterSetUp(self):
+        # Add test users: member, editor
         member_id = 'test_member'
         editor_id = 'test_editor'
         test_pswd = 'pswd'
@@ -111,28 +114,70 @@ class TestBugs(FunctionalTestCase):
         uf.userFolderAddUser(editor_id, test_pswd,
                         ['Member','Editor'], [])
 
-        member_auth = '%s:%s'%(member_id, test_pswd)
-        editor_auth = '%s:%s'%(editor_id, test_pswd)
+        self.member_auth = '%s:%s'%(member_id, test_pswd)
+        self.editor_auth = '%s:%s'%(editor_id, test_pswd)
 
-        portal_url = '/'.join(self.portal.getPhysicalPath())
+        self.portal_url = '/'.join(self.portal.getPhysicalPath())
 
-        resp = self.publish(path=portal_url, basic=member_auth)
+
+    def test_not_break(self):
+        """Default portal page should not breaks for any user"""
+        # Anonymous
+        resp = self.publish(path=self.portal_url)
+        self.assertEqual(resp.getStatus(), 200)
+        # Member
+        resp = self.publish(path=self.portal_url, basic=self.member_auth)
+        self.assertEqual(resp.getStatus(), 200)
+        # Editor: this fails, althought must pass
+        resp = self.publish(path=self.portal_url, basic=self.editor_auth)
         self.assertEqual(resp.getStatus(), 200)
 
-        # This fails, althought must pass
-        resp = self.publish(path=portal_url, basic=editor_auth)
-        self.assertEqual(resp.getStatus(), 200)
+    def test_tab_visibility(self):
+        """Only Editor can view seo tab"""
+        rexp = re.compile('<a\s+[^>]*' \
+               'href="[a-zA-Z0-9\:\/_-]*/@@seo-context-properties"[^>]*>'\
+               '\s*SEO Properties\s*</a>', re.I|re.S)
+        # Anonymous: NO SEO Properties link
+        res = self.publish(path=self.portal_url).getBody()
+        self.assertEqual(rexp.search(res), None)
+        # Member: NO 'SEO Properties' link
+        res = self.publish(path=self.portal_url, basic=self.member_auth).getBody()
+        self.assertEqual(rexp.search(res), None)
+        # Editor: PRESENT 'SEO Properties' link
+        res = self.publish(path=self.portal_url, basic=self.editor_auth).getBody()
+        self.assertNotEqual(rexp.search(res), None)
 
-    def test_seo_context_properties_perms(self):
-        # Anonymous are not allowed to access to @@seo-context-properties
-        self.portal.portal_workflow.doActionFor(self.my_doc, 'publish')
-        resp = self.publish(path=self.mydoc_path+'/@@seo-context-properties')
-        self.assertNotEqual(resp.getStatus(), 200)
+    def test_tab_access(self):
+        """Only Editor can access 'SEO Properties' tab"""
+        test_url = self.portal_url + '/front-page/@@seo-context-properties'
+        # Anonymous: can NOT ACCESS
+        headers = self.publish(path=test_url).headers
+        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
+            "No 'Unauthorized' exception rised for Anonymous on '@@seo-context-properties' view")
+        # Member: can NOT ACCESS
+        status = self.publish(path=test_url, basic=self.member_auth).headers
+        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
+            "No 'Unauthorized' exception rised for Member on '@@seo-context-properties' view")
+        # Editor: CAN Access
+        res = self.publish(path=test_url, basic=self.editor_auth)
+        self.assertEqual(res.status, 200)
+
+
+    def test_tab_edit(self):
+        """Editor can change SEO Properties"""
+        test_url = self.portal_url + '/front-page/@@seo-context-properties'
+        form_data = {'seo_title': 'New Title',
+                     'seo_title_override:int': 1,
+                     'form.submitted:int': 1}
+        res = self.publish(path=test_url, basic=self.editor_auth,
+                  request_method='POST', stdin=StringIO(urllib.urlencode(form_data)))
+        self.assertNotEqual(res.status, 200)
 
 
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestBugs))
+    suite.addTest(makeSuite(TestBug24AtPloneOrg))
     return suite
 
