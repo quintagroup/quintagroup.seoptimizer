@@ -1,6 +1,18 @@
 Changelog
 =========
 
+3.0.4 (2010-05-05)
+------------------
+
+* Added overrides.zcml for BBB http://plone.org/products/plone-seo/issues/19,
+  http://plone.org/products/plone-seo/issues/23 [mylan]
+* Prevent view breakage for context, which canonical url can't be calculated for
+  http://plone.org/products/plone-seo/issues/22 [mylan]
+* Fixed security issue for SEO Property action and view
+  http://plone.org/products/plone-seo/issues/23
+  [crchemist, mylan]
+
+
 3.0.1 (2010-04-29)
 ------------------
 
