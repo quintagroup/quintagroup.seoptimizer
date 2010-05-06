@@ -16,6 +16,8 @@ from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 from Products.CMFPlone.PloneTool import *
 
+from interfaces import ISEOContext
+
 class SEOTagsViewlet( ViewletBase ):
     """ Simple viewlet for custom title rendering.
     """
@@ -33,7 +35,7 @@ class SEOTagsViewlet( ViewletBase ):
         result = SortedDict()
         pps = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
         seo_global = queryAdapter(pps.portal(), ISEOConfigletSchema)
-        seo_context = queryMultiAdapter((self.context, self.request), name='seo_context')
+        seo_context = queryMultiAdapter((self.context, self.request), ISEOContext)
 
         use_all = seo_global.exposeDCMetaTags
         adapter = IMappingMetaTags(self.context, None)
@@ -150,8 +152,7 @@ class TitleCommentViewlet(ViewletBase):
                                             name=u'plone_portal_state')
         self.context_state = getMultiAdapter((self.context, self.request),
                                              name=u'plone_context_state')
-        self.seo_context = getMultiAdapter((self.context, self.request),
-                                             name=u'seo_context')
+        self.seo_context = getMultiAdapter((self.context, self.request), ISEOContext)
 
         self.override_title = self.seo_context['has_seo_title']
         self.override_comments = self.seo_context['has_html_comment']
@@ -205,7 +206,7 @@ class CanonicalUrlViewlet( ViewletBase ):
     """ Simple viewlet for canonical url link rendering.
     """
     def render( self ):
-        seoc = getMultiAdapter((self.context, self.request), name=u'seo_context')
+        seoc = getMultiAdapter((self.context, self.request), ISEOContext)
         if seoc['seo_canonical']:
             return """<link rel="canonical" href="%s" />""" % seoc['seo_canonical']
         return ""

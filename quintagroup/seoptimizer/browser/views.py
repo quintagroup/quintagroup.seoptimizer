@@ -1,10 +1,12 @@
 from time import time
+
 from DateTime import DateTime
 from Acquisition import aq_inner
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
+from zope.component import adapts
+from zope.interface import implements
 from zope.schema.interfaces import InvalidValue
-
 from plone.memoize import view, ram
 
 from Products.Five.browser import BrowserView
@@ -17,6 +19,8 @@ from quintagroup.canonicalpath.adapters import PROPERTY_LINK as CANONICAL_PROPER
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
+from interfaces import ISEOContext
+
 SEPERATOR = '|'
 SEO_PREFIX = 'seo_'
 PROP_PREFIX = 'qSEO_'
@@ -27,14 +31,15 @@ PROP_CUSTOM_PREFIX = 'qSEO_custom_'
 def plone_instance_time(method, self, *args, **kwargs):
     return (self.pps.portal(), time() // (60 * 60))
 
-class SEOContext( BrowserView ):
+class SEOContext(object):
     """ This class contains methods that allows to edit html header meta tags.
     """
+    implements(ISEOContext)
 
-    def __init__(self, *args, **kwargs):
-        super(SEOContext, self).__init__(*args, **kwargs)
-        self.pps = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
-        self.pcs = queryMultiAdapter((self.context, self.request), name="plone_context_state")
+    def __init__(self, context, request):
+        self.context, self.request = context, request
+        self.pps = queryMultiAdapter((context, request), name="plone_portal_state")
+        self.pcs = queryMultiAdapter((context, request), name="plone_context_state")
         self.gseo = queryAdapter(self.pps.portal(), ISEOConfigletSchema)
         self._seotags = self._getSEOTags()
 
@@ -170,6 +175,9 @@ class SEOContextPropertiesView( BrowserView ):
         """ Validate a seo property.
         """
         return ''
+
+    def seo_context(self):
+        return queryMultiAdapter((self.context, self.request), ISEOContext)
 
     def setProperty(self, property, value, type='string'):
         """ Add a new property.

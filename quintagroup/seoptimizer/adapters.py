@@ -8,6 +8,8 @@ from quintagroup.seoptimizer.util import SortedDict
 from quintagroup.seoptimizer.interfaces import IMetaKeywords, IMappingMetaTags
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
+from browser.interfaces import ISEOContext
+
 METADATA_MAPS = dict([
     ("DC.publisher", "Publisher"),
     ("DC.description", "Description"),
@@ -36,8 +38,7 @@ class MetaKeywordsAdapter(object):
         """ See interface.
         """
         meta_keywords = []
-        seo_context = queryMultiAdapter((self.context, self.context.REQUEST),
-                                        name='seo_context')
+        seo_context = queryMultiAdapter((self.context, self.context.REQUEST), ISEOContext)
         if seo_context:
             meta_keywords = list(seo_context['meta_keywords'])
         return ', '.join(meta_keywords)

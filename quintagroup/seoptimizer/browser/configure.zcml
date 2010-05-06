@@ -63,14 +63,6 @@
     <!--Views-->
 
     <browser:page
-        name="seo_context"
-        for="*"
-        class=".views.SEOContext"
-        layer=".interfaces.IPloneSEOLayer"
-        permission="zope2.View"
-        />
-
-    <browser:page
         name="seo-context-properties"
         for="*"
         class=".views.SEOContextPropertiesView"
@@ -80,5 +72,11 @@
 
 
     <browser:resourceDirectory name="quintagroup.seoptimizer" directory="./resources" />
+
+  <!--Adapters-->
+  <adapter
+      for="*
+           zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".views.SEOContext"/>
 
 </configure>

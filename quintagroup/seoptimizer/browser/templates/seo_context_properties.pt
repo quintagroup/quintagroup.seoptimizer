@@ -29,7 +29,7 @@
         tal:define="errors python:request.get('errors', {});
                     Iterator python:modules['Products.CMFPlone'].IndexIterator;
                     tabindex python:Iterator(mainSlot=False);
-		    seo_context here/@@seo_context"><!--TODO:implement validation and errors handling-->
+		    seo_context view/seo_context"><!--TODO:implement validation and errors handling-->
       <h1 i18n:translate="heading_edit_seo_properties">Edit SEO Properties</h1>
       <div class="documentDescription" i18n:translate="description_edit_seo_properties">
           This form allows you to edit html header meta tags that are produced by 

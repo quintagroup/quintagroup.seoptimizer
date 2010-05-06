@@ -13,3 +13,8 @@ class IValidateSEOKeywordsView(Interface):
         """ 1. Get *text* parameter from request
             2. Parse *text* and validate each extracted keyword
                for appearing on the context page """
+
+class ISEOContext(Interface):
+    """
+    """
+
