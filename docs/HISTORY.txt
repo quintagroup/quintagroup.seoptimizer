@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.0.5 (2010-05-15)
+------------------
+
+* Fix version issue in metadata.xml [crchemist]
+
+
 3.0.4 (2010-05-05)
 ------------------
 
