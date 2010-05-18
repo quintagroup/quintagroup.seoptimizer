@@ -87,13 +87,3 @@ Authors
 * Andriy Myelnkyy
 
 
-Product was sponsored by "4webresults, SEO and Internet Marketing Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra configuration features sponsored by:
-
-* "Eogogics Inc.": http://eogogics.com
- 
-* "4webresults": http://4webresults.com
-
-* "eLawSoftware": http://www.elawsoftware.com
-
-Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
-
