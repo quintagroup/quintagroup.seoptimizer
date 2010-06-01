@@ -243,7 +243,7 @@ class SEOContextPropertiesView( BrowserView ):
                 if name_value[0]:
                     globalCustomMetaTags.append(
                         {'meta_name' : name_value[0],
-                         'meta_content' : len(name_value) == 1 and '' or name_value[1]})
+                         'meta_content' : len(name_value) > 1 and name_value[1] or ''})
         for tag in custommetatags:
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:

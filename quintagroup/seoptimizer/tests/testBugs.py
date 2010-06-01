@@ -11,6 +11,8 @@ from zope.viewlet.interfaces import IViewlet, IViewletManager
 from zope.publisher.browser import TestRequest
 
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
+from quintagroup.seoptimizer.browser.views import PROP_CUSTOM_PREFIX
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import DefaultCanonicalLinkAdapter
 from base import *
@@ -91,7 +93,6 @@ class TestBugs(FunctionalTestCase):
         gsm.registerAdapter(DefaultCanonicalLinkAdapter, [ITraversable,],
                             ICanonicalLink)
 
-
     def test_bug_19_23_at_plone_org(self):
         """overrides.zcml should present in the root of the package"""
         import quintagroup.seoptimizer
@@ -99,6 +100,22 @@ class TestBugs(FunctionalTestCase):
             zcml.load_config('overrides.zcml', quintagroup.seoptimizer)
         except IOError:
             self.fail("overrides.zcml removed from the package root")
+
+    def test_bug_custom_metatags_update(self):
+        # Prepare a page for the test
+        page = self.portal["front-page"]
+        request = self.portal.REQUEST
+        directlyProvides(request, IPloneSEOLayer)
+        seo_context_props = getMultiAdapter((page, request), name="seo-context-properties")
+        # Set default custom meta tag without default value (tag name only)
+        self.gseo = queryAdapter(self.portal, ISEOConfigletSchema)
+        self.gseo.default_custom_metatags = ["test_tag",]
+        try:
+            # Breakage on updating custom metatag with seo-context-properties view
+            seo_context_props.updateSEOCustomMetaTagsProperties([])
+        except IndexError:
+            self.fail("Error in calculating of default tag value, when only tag name set "\
+                      "in default_custom_metatags property of the configlet.")
 
 
 class TestBug24AtPloneOrg(FunctionalTestCase):
