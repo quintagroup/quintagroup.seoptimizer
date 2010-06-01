@@ -21,7 +21,7 @@ Changelog
 * Prevent view breakage for context, which canonical url can't be calculated for
   http://plone.org/products/plone-seo/issues/22 [mylan]
 * Fixed security issue for SEO Property action and view
-  http://plone.org/products/plone-seo/issues/23
+  http://plone.org/products/plone-seo/issues/24
   [crchemist, mylan]
 
 
