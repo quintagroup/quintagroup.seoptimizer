@@ -6,7 +6,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '3.0.4'
+version = '4.0'
 
 setup(name='quintagroup.seoptimizer',
       version=version,
@@ -36,6 +36,7 @@ setup(name='quintagroup.seoptimizer',
           'setuptools',
           'quintagroup.canonicalpath>=0.6',
           'collective.monkeypatcher',
+          'Plone >= 4.0a',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
