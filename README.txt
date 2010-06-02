@@ -1,7 +1,7 @@
-Quintagroup Search Engine Optimization Tool
-===========================================
+Introduction
+============
 
-This product was created to enhance SE visibility of Plone sites.
+quintagroup.seoptimizer was created to enhance SE visibility of Plone sites.
 
 
 Features
@@ -25,7 +25,11 @@ quintagroup.seoptimizer allows per document editing of:
 
 For Title, description keywords and comment you have statistics
 (total/stop/used words, field length counter).
-  
+
+IMPORTANT
+---------
+
+**Starting from 3.0 release - quintagroup.seoptimizer package does not need 'overrides.zcml' file. So please remove 'quintagroup.seoptimizer-overrides' line from your buildout's ZCML area.**
   
 Usage
 -----
@@ -48,23 +52,22 @@ Usage
 Requirements
 ------------
 
-* Plone 3.1.1+ 
+* Plone 4 
 
-quintagroup.seoptimizer 3.0 was tested with Plone 3.1, 3.2 and 3.3.
+Notes
+-----
 
-Note
-----
+* For Plone 4 versions - use Plone SEO 4.0 release and up (http://plone.org/products/plone-seo/releases/4.0)
 
-* For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
+* For Plone 3.x versions - use Plone SEO 3.0.5 release (http://plone.org/products/plone-seo/releases/3.0.5)
 
-* For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
+* For Plone 2.x versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
 
-* Starting from quintagroup.seoptimizer > 2.0.2 version global keywords support feature dropped - the following fields were removed from SEO Configlet: additional_keywords, settings_use_keywords_lg, and settings_use_keywords_lg. As a result, removed global keywords are now mixing with local ones from seo_context view.
 
 Links
 -----
 
-Watch Plone SEO screencast (http://quintagroup.com/cms/screencasts/plone-seo) to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
+Watch Plone SEO screencast http://quintagroup.com/cms/screencasts/plone-seo to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
 
 
 Authors
@@ -72,18 +75,16 @@ Authors
 
 * Myroslav Opyr
 
-* Volodymyr Romaniuk
-
-* Mykola Kharechko
-
-* Vitaliy Podoba
+* Andriy Myelnkyy
 
 * Volodymyr Cherepanyak
 
+* Vitaliy Podoba
+
 * Taras Melnychuk
+
+* Mykola Kharechko
 
 * Vitaliy Stepanov
 
-* Andriy Myelnkyy
-
-
+* Volodymyr Romaniuk
