@@ -21,7 +21,7 @@ quintagroup.seoptimizer allows per document editing of:
 
 * META Disposition tag
 
-* Canonical URl (http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL)
+* Canonical URl http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL
 
 For Title, description keywords and comment you have statistics
 (total/stop/used words, field length counter).
@@ -57,11 +57,24 @@ Requirements
 Notes
 -----
 
-* For Plone 4 versions - use Plone SEO 4.0 release and up (http://plone.org/products/plone-seo/releases/4.0)
+* For Plone 4 versions - use Plone SEO 4.0 release and up http://plone.org/products/plone-seo/releases/4.0. In your buildout.cfg file's egg section set product version::
 
-* For Plone 3.x versions - use Plone SEO 3.0.5 release (http://plone.org/products/plone-seo/releases/3.0.5)
+   [buildout]
+   ....
+   eggs =
+        ...
+        quintagroup.seoptimizer >=4.0
 
-* For Plone 2.x versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
+* For Plone 3 versions - use the latest Plone SEO 3.x release http://plone.org/products/plone-seo/releases/3.0.5. In your buildout.cfg file's egg section set product version::
+
+   [buildout]
+   ....
+   eggs =
+        ...
+        quintagroup.seoptimizer >3.0,<4.0
+
+
+* For Plone 2.x versions - use Plone SEO 1.7.1  release http://plone.org/products/plone-seo/releases/1.7.1
 
 
 Links
@@ -75,7 +88,7 @@ Authors
 
 * Myroslav Opyr
 
-* Andriy Myelnkyy
+* Andriy Mylenkyy
 
 * Volodymyr Cherepanyak
 
@@ -88,3 +101,4 @@ Authors
 * Vitaliy Stepanov
 
 * Volodymyr Romaniuk
+
