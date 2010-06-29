@@ -27,8 +27,6 @@
   <body>
     <div metal:fill-slot="main"
         tal:define="errors python:request.get('errors', {});
-                    Iterator python:modules['Products.CMFPlone'].IndexIterator;
-                    tabindex python:Iterator(mainSlot=False);
 		    seo_context here/@@seo_context"><!--TODO:implement validation and errors handling-->
       <h1 i18n:translate="heading_edit_seo_properties">Edit SEO Properties</h1>
       <div class="documentDescription" i18n:translate="description_edit_seo_properties">
@@ -61,9 +59,7 @@
             <input type="checkbox"
                    id="seo_title_override"
                    name="seo_title_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_title'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_title'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_title_override">
               Override
@@ -74,9 +70,7 @@
                    name="seo_title"
                    size="40"
                    value=""
-                   tabindex=""
-                   tal:attributes="value request/seo_title | seo_context/seo_title;
-                                   tabindex tabindex/next;"
+                   tal:attributes="value request/seo_title | seo_context/seo_title;"
                    />
           </div>
           <div class="field">
@@ -89,9 +83,7 @@
             <input type="checkbox"
                    id="seo_description_override"
                    name="seo_description_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_description'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_description'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_description_override">
               Override
@@ -102,8 +94,6 @@
                       name="seo_description"
                       rows="5"
                       cols="15"
-                      tabindex=""
-                      tal:attributes="tabindex tabindex/next;"
                       tal:content="request/seo_description | seo_context/seo_description"
                       />
           </div>
@@ -122,9 +112,7 @@
             <input type="checkbox"
                    id="seo_keywords_override"
                    name="seo_keywords_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_keywords'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_keywords'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_keywords_override">
               Override
@@ -135,8 +123,6 @@
                       rows="11"
                       cols="15"
                       wrap="off"
-                      tabindex=""
-                      tal:attributes="tabindex tabindex/next;"
                       tal:define="keywords request/seo_keywords | seo_context/seo_keywords"
                       tal:content="python:'\n'.join(keywords)"
                       />
@@ -152,9 +138,7 @@
             <input type="checkbox"
                    id="seo_html_comment_override"
                    name="seo_html_comment_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_html_comment'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_html_comment'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_html_comment_override">
               Override
@@ -164,8 +148,6 @@
                       name="seo_html_comment"
                       rows="5"
                       cols="15"
-                      tabindex=""
-                      tal:attributes="tabindex tabindex/next;"
                       tal:content="request/seo_html_comment | seo_context/seo_html_comment"
                       />
           </div>
@@ -180,9 +162,7 @@
             <input type="checkbox"
                    id="seo_robots_override"
                    name="seo_robots_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_robots'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_robots'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_robots_override">
               Override
@@ -193,9 +173,7 @@
                    name="seo_robots"
                    size="25"
                    value=""
-                   tabindex=""
-                   tal:attributes="value request/seo_robots | seo_context/seo_robots;
-                                   tabindex tabindex/next;"
+                   tal:attributes="value request/seo_robots | seo_context/seo_robots;"
                    />
           </div>
           <div class="field">
@@ -209,9 +187,7 @@
             <input type="checkbox"
                    id="seo_distribution_override"
                    name="seo_distribution_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_distribution'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_distribution'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_distribution_override">
               Override
@@ -222,9 +198,7 @@
                    name="seo_distribution"
                    size="25"
                    value=""
-                   tabindex=""
-                   tal:attributes="value request/seo_distribution | seo_context/seo_distribution;
-                                   tabindex tabindex/next;"
+                   tal:attributes="value request/seo_distribution | seo_context/seo_distribution;"
                    />
           </div>
           <div class="field"
@@ -241,9 +215,7 @@
             <input type="checkbox"
                    id="seo_canonical_override"
                    name="seo_canonical_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context['has_seo_canonical'], 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_canonical'], 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_canonical_override">
               Override
@@ -255,9 +227,7 @@
                    name="seo_canonical"
                    size="55"
                    value=""
-                   tabindex=""
-                   tal:attributes="value request/seo_canonical | seo_context/seo_canonical;
-                                   tabindex tabindex/next;"
+                   tal:attributes="value request/seo_canonical | seo_context/seo_canonical;"
                    />
           </div>
           <div class="field"
@@ -272,9 +242,7 @@
             <input type="checkbox"
                    id="seo_custommetatags_override"
                    name="seo_custommetatags_override"
-                   tabindex=""
-                   tal:attributes="checked python:view.test(seo_context.seo_localCustomMetaTags(), 'on', None);
-                                   tabindex tabindex/next;"
+                   tal:attributes="checked python:view.test(seo_context.seo_localCustomMetaTags(), 'on', None);"
                    />
             <label i18n:translate="label_override" for="seo_custommetatags_override">
               Override
@@ -386,19 +354,15 @@
                tal:define="process_creation request/process_creation|nothing;"
                i18n:domain="plone">
             <input class="context"
-                   tabindex=""
                    type="submit"
                    name="form.button.Save"
                    value="Save"
-                   i18n:attributes="value"
-                   tal:attributes="tabindex tabindex/next;" />
+                   i18n:attributes="value" />
             <input class="standalone"
-                   tabindex=""
                    type="submit"
                    name="form.button.Cancel"
                    value="Cancel"
-                   i18n:attributes="value"
-                   tal:attributes="tabindex tabindex/next;" />
+                   i18n:attributes="value" />
           </div>
         </fieldset>
         <input type="hidden" name="form.submitted" value="1" />
