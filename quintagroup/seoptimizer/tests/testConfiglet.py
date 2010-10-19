@@ -1,5 +1,9 @@
 from base import *
 
+from zope.formlib.form import FormFields
+from zope.schema.interfaces import IBool
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
+
 class TestConfiglet(FunctionalTestCase):
 
     def afterSetUp(self):
@@ -133,6 +137,26 @@ class TestConfiglet(FunctionalTestCase):
         f = self.seo.getProperty("stop_words", ())
         self.assertTrue(f == (), '"stop_words" property ' \
             'contains: "%s", must be empty"' % str(f))
+
+    def test_externalKeywordTest(self):
+        fields = FormFields(ISEOConfigletSchema)
+        ffield = fields.get("external_keywords_test")
+        self.assertTrue(ffield is not None, 'Not found "external_keywords_test" '\
+            'field in ISEOConfigletSchema interface')
+        self.assertTrue(IBool.providedBy(ffield.field),
+            '"external_keywords_test" is not boolean type field')
+        self.assertTrue(ffield.field.default == False,
+            '"external_keywords_test" field default value is not set to False')
+
+    def test_externalKeyword_On(self):
+        self.publish(self.save_url + '&form.external_keywords_test=on',
+                     self.basic_auth)
+        self.assert_(self.sp.external_keywords_test)
+
+    def test_externalKeyword_Off(self):
+        self.publish(self.save_url + '&form.external_keywords_test=',
+             self.basic_auth)
+        self.assertTrue(not self.sp.external_keywords_test)
 
 
 def test_suite():
