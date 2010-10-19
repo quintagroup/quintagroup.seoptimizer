@@ -151,12 +151,12 @@ class TestConfiglet(FunctionalTestCase):
     def test_externalKeyword_On(self):
         self.publish(self.save_url + '&form.external_keywords_test=on',
                      self.basic_auth)
-        self.assert_(self.sp.external_keywords_test)
+        self.assert_(self.seo.external_keywords_test)
 
     def test_externalKeyword_Off(self):
         self.publish(self.save_url + '&form.external_keywords_test=',
              self.basic_auth)
-        self.assertTrue(not self.sp.external_keywords_test)
+        self.assertTrue(not self.seo.external_keywords_test)
 
 
 def test_suite():
