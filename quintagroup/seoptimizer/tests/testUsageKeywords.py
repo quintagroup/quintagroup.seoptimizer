@@ -1,4 +1,8 @@
 from base import *
+import urllib2
+from zope.component import queryMultiAdapter
+from zope.interface import alsoProvides
+from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 
 KWSTMPL = '.*(<meta\s+(?:(?:name="keywords"\s*)|(?:content="%s"\s*)){2}/>)'
 
@@ -58,8 +62,52 @@ class TestUsageKeywords(FunctionalTestCase):
                                   html, re.S|re.M), "'keyword' meta tag found")
 
 
+class TestCalcKeywords(FunctionalTestCase):
+
+    def afterSetUp(self):
+        self.loginAsPortalOwner()
+        self.seo = self.portal.portal_properties.seo_properties
+        #Preparation for functional testing
+        self.key = "SEO_KEYWORD "
+        self.portal.invokeFactory('Document', id='my_doc')
+        self.my_doc = getattr(self.portal, 'my_doc')
+        self.my_doc.setText(self.key * 2)
+        # Emulate JS request
+        self.app.REQUEST.set("text", self.key)
+        # Mark request with IPloneSEOLayer browser layer interface
+        alsoProvides(self.app.REQUEST, IPloneSEOLayer)
+        # Get checkSEOKeywords view
+        self.chckView = queryMultiAdapter((self.my_doc, self.app.REQUEST),
+            name="checkSEOKeywords")
+        
+    def patchURLLib(self):
+        self.orig_urlopen = urllib2.urlopen
+        def patch_urlopen(*args, **kwargs):
+            if args[0] == self.my_doc.absolute_url():
+                return unicode(self.my_doc() + self.key).encode("utf-8")
+            else:
+                return self.orig_urlopen(*args, **kwargs)
+        urllib2.urlopen = patch_urlopen
+    
+    def unpatchURLLib(self):
+        urllib2.urlopen = self.orig_urlopen
+
+    def test_InternalPageRendering(self):
+        self.assertTrue(not self.seo.external_keywords_test)
+        self.assertTrue('2' in self.chckView())
+
+    def test_ExternalPageRendering(self):
+        self.seo._updateProperty("external_keywords_test", True)
+        self.patchURLLib()
+        self.assertTrue(self.seo.external_keywords_test)
+        self.assertTrue('3' in self.chckView())
+        self.unpatchURLLib()
+        
+
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestUsageKeywords))
+    suite.addTest(makeSuite(TestCalcKeywords))
     return suite
+
