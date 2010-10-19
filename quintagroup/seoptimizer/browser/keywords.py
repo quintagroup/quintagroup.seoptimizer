@@ -10,7 +10,7 @@ from Products.CMFCore.utils import getToolByName
 from interfaces import IValidateSEOKeywordsView
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
-from pyquery import PyQuery as pq
+#from pyquery import PyQuery as pq
 
 class ValidateSEOKeywordsView(BrowserView):
 
