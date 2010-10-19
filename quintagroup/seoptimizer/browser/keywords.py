@@ -10,6 +10,8 @@ from Products.CMFCore.utils import getToolByName
 from interfaces import IValidateSEOKeywordsView
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
 
+from pyquery import PyQuery as pq
+
 class ValidateSEOKeywordsView(BrowserView):
 
     implements(IValidateSEOKeywordsView)
@@ -32,6 +34,7 @@ class ValidateSEOKeywordsView(BrowserView):
 
         # extract words from url page using lynx browser (test page by 'url'
         # randered without metatag keywords)
+        #import pdb;pdb.set_trace()
         page_text = commands.getoutput('lynx --dump --nolist %s' % url).lower()
         if page_text and page_text != 'sh: lynx: command not found':
             page_text = safe_unicode(page_text, 'utf-8')
@@ -39,6 +42,9 @@ class ValidateSEOKeywordsView(BrowserView):
             return ts.utranslate(domain='quintagroup.seoptimizer',
                                  msgid=_(u'Could not find lynx browser!'),
                                  context=self.context)
+
+        # html = self.context()
+        # page_text = pq("body", html).text()
 
         # check every keyword on appearing in body of html page
         result = []

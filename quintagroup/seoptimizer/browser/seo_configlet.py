@@ -87,6 +87,16 @@ class ISEOConfigletAdvancedSchema(Interface):
                     'be excluded from kewords statistics calculation.'),
         required=False)
 
+    external_keywords_test = Bool(
+        title=_("label_external_keywords_test",
+                default='External keywords check'),
+        description=_("description_external_keywords_test",
+                default='Make keywords test by opening context url as '
+                    'external resource with urllib2.openurl(). This is '
+                    'useful when xdv/Deliverance transformation is used '
+                    'on the site.'),
+        default=False,
+        required=False)
 
 
 class ISEOConfigletSchema(ISEOConfigletBaseSchema,
@@ -141,6 +151,7 @@ class SEOConfigletAdapter(SchemaAdapterBase):
     custom_script = property(getCustomScript, setCustomScript)
     fields = ProxyFieldProperty(ISEOConfigletSchema['fields'])
     stop_words = ProxyFieldProperty(ISEOConfigletSchema['stop_words'])
+    external_keywords_test = ProxyFieldProperty(ISEOConfigletSchema['external_keywords_test'])
 
 
 class Text2ListWidget(TextAreaWidget):

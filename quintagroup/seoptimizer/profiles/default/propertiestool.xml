@@ -88,6 +88,7 @@
    <element value="File"/>
    <element value="News Item"/>
   </property>
+  <property name="external_keywords_test" type="boolean">False</property>
  </object>
  <object name="site_properties" meta_type="Plone Property Sheet">
   <property name="exposeDCMetaTags" type="boolean">True</property>
