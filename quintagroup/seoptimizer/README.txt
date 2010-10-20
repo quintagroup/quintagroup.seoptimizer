@@ -24,7 +24,7 @@ Usage
 
   * Go to Plone Control Panel, enable Plone SEO for desired content types
 
-  * Go to a document (Blog entry, news item, event, etc)
+  * Go to a document (Blog entry, news item, event, etc.)
 
   * Switch to *SEO Properties* tab
 
@@ -36,19 +36,13 @@ Usage
 
   * Do this for all documents that need enhanced SEO properties
 
-Requirements
-
-  Plone 3.1.1+ 
-
-  quintagroup.seoptimizer 3.0 was tested with Plone 3.1, 3.2 and 3.3.
-
 Note
 
-  * For Plone 2.0, 2.1, 2.5 versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
+  * For Plone 2.x versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
 
-  * For Plone 3 version and up - use Plone SEO releases starting from 2.0.2 release (http://plone.org/products/plone-seo/releases/2.0.2)
+  * For Plone 3.x versions - use Plone SEO 3.0.5  release (http://plone.org/products/plone-seo/releases/3.0.5)
 
-  * Starting from quintagroup.seoptimizer > 2.0.2 version global keywords support feature dropped - the following fields were removed from SEO Configlet: additional_keywords, settings_use_keywords_lg, settings_use_keywords_lg. As a result, removed global keywords are now mixing with local ones from seo_context view.
+  * For Plone 4.x versions - use Plone SEO releases starting from 4.0 (http://plone.org/products/plone-seo/releases/4.0)
 
 Links
 
@@ -71,16 +65,6 @@ Authors
   * Vitaliy Stepanov
 
   * Andriy Myelnkyy
-
-Product was sponsored by "4webresults, SEO and Internet Marketing
-Services provider": http://4webresults.com. Plone-3.x.x compatibility, extra
-configuration features sponsored by:
-
-* "Eogogics Inc.": http://eogogics.com
- 
-* "4webresults": http://4webresults.com
-
-* "eLawSoftware": http://www.elawsoftware.com
 
 Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
 
