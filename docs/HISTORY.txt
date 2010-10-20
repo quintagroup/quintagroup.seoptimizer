@@ -4,11 +4,11 @@ Changelog
 3.0.7 (2010-10-20)
 ------------------
 
-* Refuse from lynx dependency,
+* Refused from lynx dependency,
   fixed http://plone.org/products/plone-seo/issues/28 issue.
   [mylan]
-* Added "External keywords test" option in SEO configlet.
-  It allows to change method of page retrieval on keywords
+* Added 'External keywords test' option to SEO configlet.
+  It allows to change the method of page retrieval during keywords
   check. [mylan]
 
 
