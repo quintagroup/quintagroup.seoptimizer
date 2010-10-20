@@ -1,5 +1,6 @@
 from base import *
 import urllib2
+from StringIO import StringIO
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
@@ -80,27 +81,73 @@ class TestCalcKeywords(FunctionalTestCase):
         self.chckView = queryMultiAdapter((self.my_doc, self.app.REQUEST),
             name="checkSEOKeywords")
         
-    def patchURLLib(self):
+    def patchURLLib(self, fnc):
         self.orig_urlopen = urllib2.urlopen
-        def patch_urlopen(*args, **kwargs):
-            if args[0] == self.my_doc.absolute_url():
-                return unicode(self.my_doc() + self.key).encode("utf-8")
-            else:
-                return self.orig_urlopen(*args, **kwargs)
-        urllib2.urlopen = patch_urlopen
+        self.urlfd = StringIO()
+        urllib2.urlopen = fnc
     
     def unpatchURLLib(self):
         urllib2.urlopen = self.orig_urlopen
+        self.urlfd.close()
 
     def test_InternalPageRendering(self):
         self.assertTrue(not self.seo.external_keywords_test)
+        # Only keywords from content must present in check view
         self.assertTrue('2' in self.chckView())
 
     def test_ExternalPageRendering(self):
+        def patch_urlopen(*args, **kwargs):
+            if args[0] == self.my_doc.absolute_url():
+                self.urlfd.write(unicode(self.my_doc() + self.key).encode("utf-8"))
+                self.urlfd.seek(0)
+                return self.urlfd
+            else:
+                return self.orig_urlopen(*args, **kwargs)
         self.seo._updateProperty("external_keywords_test", True)
-        self.patchURLLib()
+        self.patchURLLib(fnc=patch_urlopen)
         self.assertTrue(self.seo.external_keywords_test)
+        # 1. Extra keyword must present in check view
         self.assertTrue('3' in self.chckView())
+        # 2. Opened urllib file descriptor must be closed
+        self.assertTrue(self.urlfd.closed, "Opened file descriptor was not closed.")
+        self.unpatchURLLib()
+        
+    def test_ExternalURLError(self):
+        def patch_urlopen(*args, **kwargs):
+            if args[0] == self.my_doc.absolute_url():
+                raise urllib2.URLError("Some URL Error occured")
+            else:
+                return self.orig_urlopen(*args, **kwargs)
+        self.seo._updateProperty("external_keywords_test", True)
+        self.patchURLLib(fnc=patch_urlopen)
+        self.assertTrue(self.seo.external_keywords_test)
+        # 1. Information about problem must present in check view
+        self.assertTrue("Problem with page retrieval" in self.chckView())
+        # 2. Opened urllib file descriptor should not be closed because
+        #    it even not returned to the view
+        self.assertFalse(self.urlfd.closed, "Opened file descriptor was closed.")
+        self.unpatchURLLib()
+    
+    def test_ExternalIOError(self):
+        def patch_urlopen(*args, **kwargs):
+            if args[0] == self.my_doc.absolute_url():
+                self.urlfd.write(unicode(self.my_doc() + self.key).encode("utf-8"))
+                self.urlfd.seek(0)
+                return self.urlfd
+            else:
+                return self.orig_urlopen(*args, **kwargs)
+        def patch_read(*args, **kwargs):
+            raise IOError()
+        # Patch urllib2.urlopen to emulate external url retrieval
+        self.patchURLLib(fnc=patch_urlopen)
+        # Patch opened by urllib2 file descriptor to emulate IOError during reading
+        self.urlfd.read = patch_read
+        self.seo._updateProperty("external_keywords_test", True)
+        self.assertTrue(self.seo.external_keywords_test)
+        # 1. Information about problem must present in check view
+        self.assertTrue("Problem with page retrieval" in self.chckView())
+        # 2. Opened urllib file descriptor must be closed
+        self.assertTrue(self.urlfd.closed, "Opened file descriptor was not closed.")
         self.unpatchURLLib()
         
 
