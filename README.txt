@@ -48,7 +48,7 @@ Usage
 Requirements
 ------------
 
-* Plone 3.x, Plone 4.0
+* Plone 3.1+, Plone 4.0
 
 Notes
 -----
