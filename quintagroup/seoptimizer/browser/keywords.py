@@ -4,7 +4,6 @@ from xml.dom import Node
 from zope.interface import implements
 from zope.component import getUtility
 from zope.component import queryAdapter
-#from zope.component import queryMultiAdapter
 from Products.Five.browser import BrowserView
 
 from Products.CMFCore.utils import getToolByName
