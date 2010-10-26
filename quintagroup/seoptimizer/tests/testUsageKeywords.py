@@ -122,7 +122,12 @@ class TestCalcKeywords(FunctionalTestCase):
         self.patchURLLib(fnc=patch_urlopen)
         self.assertTrue(self.seo.external_keywords_test)
         # 1. Information about problem must present in check view
-        self.assertTrue("Problem with page retrieval" in self.chckView())
+        msg = self.chckView()
+        rematch = re.match(
+            ".*Problem with page retrieval.*error_log/showEntry\?id=",
+             msg, re.S)
+        self.assertTrue(rematch, "Return message has incomplete information "
+            "about problem with page retrieval: %s" % msg)
         # 2. Opened urllib file descriptor should not be closed because
         #    it even not returned to the view
         self.assertFalse(self.urlfd.closed, "Opened file descriptor was closed.")
@@ -137,15 +142,15 @@ class TestCalcKeywords(FunctionalTestCase):
             else:
                 return self.orig_urlopen(*args, **kwargs)
         def patch_read(*args, **kwargs):
-            raise IOError()
+            raise Exception("General exception")
         # Patch urllib2.urlopen to emulate external url retrieval
         self.patchURLLib(fnc=patch_urlopen)
         # Patch opened by urllib2 file descriptor to emulate IOError during reading
         self.urlfd.read = patch_read
         self.seo._updateProperty("external_keywords_test", True)
         self.assertTrue(self.seo.external_keywords_test)
-        # 1. Information about problem must present in check view
-        self.assertTrue("Problem with page retrieval" in self.chckView())
+        # 1. General exception must be raised.
+        self.assertRaises(Exception, self.chckView)
         # 2. Opened urllib file descriptor must be closed
         self.assertTrue(self.urlfd.closed, "Opened file descriptor was not closed.")
         self.unpatchURLLib()
