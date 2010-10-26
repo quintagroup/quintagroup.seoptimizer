@@ -1,4 +1,4 @@
-import re, commands, urllib2
+import re, sys, urllib2
 from xml.dom import Node
 
 from zope.interface import implements
@@ -34,6 +34,7 @@ class ValidateSEOKeywordsView(BrowserView):
                                  msgid=_(u'Keywords list is empty!'),
                                  context=self.context)
         # Get html page internally or with external request
+        error_url = ""
         if isExternal:
             # Not pass timeout option because:
             # 1. its value get from the global default timeout settings by default.
@@ -44,8 +45,12 @@ class ValidateSEOKeywordsView(BrowserView):
                     html = resp.read()
                 finally:
                     'resp' in locals().keys() and resp.close()
-            except Exception:
+            except (urllib2.URLError, urllib2.HTTPError), e:
                 # In case of exceed timeout period or other URL connection errors.
+                info = sys.exc_info()
+                elog = getToolByName(self.context, "error_log")
+                if elog:
+                    error_url = elog.raising(info)
                 html = None
         else:
             html = unicode(self.context()).encode(enc)
@@ -59,7 +64,8 @@ class ValidateSEOKeywordsView(BrowserView):
                 keyword_on_page = unicode(len(re.findall(u'\\b%s\\b' % keyword, page_text, re.I|re.U)))
                 result.append(' - '.join((keyword, keyword_on_page)))
         else:
-            result.append("Problem with page retrieval")
+            sfx = error_url and ", details at %s." % error_url or "."
+            result.append("Problem with page retrieval" + sfx)
 
         return ts.utranslate(domain='quintagroup.seoptimizer',
                              msgid=_(u'number_keywords',
