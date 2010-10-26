@@ -53,12 +53,8 @@ class ValidateSEOKeywordsView(BrowserView):
                 # Get nearest to context error_log object (stolen from Zope2/App/startup.py)
                 html = None
                 info = sys.exc_info()
-                try:
-                    elog = aq_acquire(self.context, '__error_log__', containment=1)
-                except AttributeError:
-                    pass
-                else:
-                    error_url = elog.raising(info)
+                elog = getToolByName(self.context, "error_log")
+                error_url = elog.raising(info)
         else:
             html = unicode(self.context()).encode(enc)
 
