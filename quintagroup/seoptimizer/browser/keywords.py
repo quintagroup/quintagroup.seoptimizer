@@ -4,6 +4,8 @@ from xml.dom import Node
 from zope.interface import implements
 from zope.component import getUtility
 from zope.component import queryAdapter
+
+from Acquisition import aq_acquire
 from Products.Five.browser import BrowserView
 
 from Products.CMFCore.utils import getToolByName
@@ -41,27 +43,31 @@ class ValidateSEOKeywordsView(BrowserView):
             # 1. its value get from the global default timeout settings.
             # 2. timeout option added in python 2.6 (so acceptable only in plone4+)
             try:
+                resp = urllib2.urlopen(self.context.absolute_url())
                 try:
-                    resp = urllib2.urlopen(self.context.absolute_url())
                     html = resp.read()
                 finally:
-                    if 'resp' in locals().keys():
-                        resp.close()
+                    resp.close()
             except (urllib2.URLError, urllib2.HTTPError), e:
                 # In case of exceed timeout period or other URL connection errors.
-                info = sys.exc_info()
-                elog = getToolByName(self.context, "error_log")
-                if elog:
-                    error_url = elog.raising(info)
+                # Get nearest to context error_log object (stolen from Zope2/App/startup.py)
                 html = None
+                info = sys.exc_info()
+                try:
+                    elog = aq_acquire(self.context, '__error_log__', containment=1)
+                except AttributeError:
+                    pass
+                else:
+                    error_url = elog.raising(info)
         else:
             html = unicode(self.context()).encode(enc)
 
         # If no html - information about problem with page retrieval should be returned
         result = []
         if html is None:
-            sfx = error_url and ", details at %s." % error_url or "."
-            result.append("Problem with page retrieval" + sfx)
+            result.append("Problem with page retrieval.")
+            if error_url:
+                result.append("Details at %s." % error_url)
         else:
             page_text = transforms.convert("html_to_text", html).getData()
             # check every keyword on appearing in body of html page
