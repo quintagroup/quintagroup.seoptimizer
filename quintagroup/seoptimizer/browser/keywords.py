@@ -2,12 +2,14 @@ import re, sys, urllib2
 from xml.dom import Node
 
 from zope.interface import implements
+from zope.component import getUtility
 from zope.component import queryAdapter
-from zope.component import queryMultiAdapter
+#from zope.component import queryMultiAdapter
 from Products.Five.browser import BrowserView
 
-from Products.CMFPlone.utils import safe_unicode, getSiteEncoding
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode, getSiteEncoding
+from Products.PortalTransforms.interfaces import IPortalTransformsTool
 
 from interfaces import IValidateSEOKeywordsView
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
@@ -21,7 +23,7 @@ class ValidateSEOKeywordsView(BrowserView):
         """ see interface """
         text = self.request.get('text')
         ts = getToolByName(self.context, 'translation_service')
-        transforms = getToolByName(self.context, 'portal_transforms')
+        transforms = getUtility(IPortalTransformsTool)
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
         isExternal = queryAdapter(portal, ISEOConfigletSchema).external_keywords_test
         # extract keywords from text
