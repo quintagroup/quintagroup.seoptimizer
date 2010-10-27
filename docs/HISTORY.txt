@@ -4,12 +4,13 @@ Changelog
 3.0.7 (2010-10-20)
 ------------------
 
-* Refused from lynx dependency,
+* Removed lynx dependency,
   fixed http://plone.org/products/plone-seo/issues/28 issue.
   [mylan]
 * Added 'External keywords test' option to SEO configlet.
-  It allows to change the method of page retrieval during keywords
-  check. [mylan]
+  Keyword validation can occur against HTML produced by Plone
+  itself or against one processed externally with Deliverance/xdv.
+  [mylan]
 
 
 3.0.5 (2010-05-15)
