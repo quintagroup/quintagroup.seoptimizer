@@ -5,6 +5,7 @@
     i18n_domain="quintagroup.seoptimizer">
 
   <!-- include dependent packages -->
+  <include package="plone.browserlayer" />
   <include package="quintagroup.canonicalpath" />
 
   <!-- This need for QI for possibility to find "uninstall"

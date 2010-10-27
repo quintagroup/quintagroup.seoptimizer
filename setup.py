@@ -34,6 +34,7 @@ setup(name='quintagroup.seoptimizer',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.browserlayer',
           'quintagroup.canonicalpath>=0.6',
           'collective.monkeypatcher',
           # -*- Extra requirements: -*-
