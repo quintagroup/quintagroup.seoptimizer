@@ -53,10 +53,8 @@ quintagroup.seoptimizer requires plone.browserlayer package to be installed in y
 
 But for Plone 3.0.x < 3.1 the process looks like this:
 
-    * if you are creating a new Plone site and want it to support Quintagroup Search Engine Optimization Tool, just select 2 extension profiles Local browser layer support and quintagroup.seoptimizer profile in 'Extension
-      Profiles' when adding a new Plone site;
-    * if you want to add quintagroup.seoptimizer to already-existing Plone site, you need to apply Local browser layer support extension profile and then quintagroup.seoptimizer profile. You can do it either in 
-      portal_setup/Import or in portal_quickinstaller by simple installation procedure.
+    * if you are creating a new Plone site and want it to support Quintagroup Search Engine Optimization Tool, just select 2 extension profiles Local browser layer support and quintagroup.seoptimizer profile in 'Extension Profiles' when adding a new Plone site;
+    * if you want to add quintagroup.seoptimizer to already-existing Plone site, you need to apply Local browser layer support extension profile and then quintagroup.seoptimizer profile. You can do it either in  portal_setup/Import or in portal_quickinstaller by simple installation procedure.
 
 In Plone 3.1 you can simply install quintagroup.seoptimizer profile in portal_quickinstaller without need of prior installation of Local browser layer support (that is not available for installation anyway, since it is a part of core system).
 
