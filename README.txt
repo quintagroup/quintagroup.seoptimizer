@@ -23,8 +23,7 @@ quintagroup.seoptimizer allows per document editing of:
 
 * Canonical URl (http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL
 
-For Title, description keywords and comment you have statistics
-(total/stop/used words, field length counter).
+For Title, description keywords and comment you have statistics (total/stop/used words, field length counter).
   
   
 Usage
@@ -48,18 +47,20 @@ Usage
 Requirements
 ------------
 
-* Plone 3.X, Plone 4.0
+* Plone 3.x, Plone 4.0
 
 quintagroup.seoptimizer requires plone.browserlayer package to be installed in your site. plone.browserlayer package is shipped with Plone >= 3.1 and thus you don't need anything extra when you have that version of Plone.
 
 But for Plone 3.0.x < 3.1 the process looks like this:
 
-    * if you are creating a new Plone site and want it to support Quintagroup Search Engine Optimization Tool, just select 2 extension profiles Local browser layer support and quintagroup.seoptimizer profile in Extension Profiles select when adding a new Plone site;
-    * if you want to add quintagroup.seoptimizer to already-existing Plone site, you need to apply Local browser layer support extension profile and then quintagroup.seoptimizer profile. You can do it either in portal_setup/Import or in portal_quickinstaller by simple installation procedure.
+    * if you are creating a new Plone site and want it to support Quintagroup Search Engine Optimization Tool, just select 2 extension profiles Local browser layer support and quintagroup.seoptimizer profile in 'Extension
+      Profiles' when adding a new Plone site;
+    * if you want to add quintagroup.seoptimizer to already-existing Plone site, you need to apply Local browser layer support extension profile and then quintagroup.seoptimizer profile. You can do it either in 
+      portal_setup/Import or in portal_quickinstaller by simple installation procedure.
 
-In Plone 3.1 you can simply install quintagroup.seoptimizer profile in portal_quickinstaller without need of prior installation of Local browser layer support (that is not available for installation anyway, since is a part of core system).
+In Plone 3.1 you can simply install quintagroup.seoptimizer profile in portal_quickinstaller without need of prior installation of Local browser layer support (that is not available for installation anyway, since it is a part of core system).
 
-IMPORTANT For Plone 3.0.x you should use plone.browserlayer 1.0.rc3. Be sure to define the right version of plone.browserlayer in your buildout.cfg (you are using buildout, aren't you? ;)). For Plone 3.1.x just use the version you have.
+IMPORTANT! For Plone 3.0.x you should use plone.browserlayer 1.0.rc3. Be sure to define the right version of plone.browserlayer in your buildout.cfg. For Plone 3.1.x just use the version you have.
 
 
 Notes

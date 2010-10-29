@@ -1,4 +1,4 @@
-Quintagroup Search Engine Optimization Tool product was created to enhance SE visibility of Plone sites.
+Quintagroup Search Engine Optimization Tool was created to enhance SE visibility of Plone sites.
 
 Features
 
