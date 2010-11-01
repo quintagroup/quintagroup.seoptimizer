@@ -62,6 +62,8 @@ class Installed(NotInstalled):
         ptc_setup._placefulSetUp(portal)
         # Install PROJECT
         qi = getattr(portal, 'portal_quickinstaller', None)
+        if not ptc.PLONE31:
+            qi.installProduct("plone.browserlayer")
         qi.installProduct(PROJECT_NAME)
         transaction.commit()
 
@@ -100,3 +102,8 @@ class FunctionalTestCase(MixinTestCase, ptc.FunctionalTestCase):
 
 class FunctionalTestCaseNotInstalled(MixinTestCase, ptc.FunctionalTestCase):
     layer = NotInstalled
+
+    def afterSetUp(self):
+        qi = getattr(self.portal, 'portal_quickinstaller', None)
+        if not ptc.PLONE31:
+            qi.installProduct("plone.browserlayer")

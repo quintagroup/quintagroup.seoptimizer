@@ -1,6 +1,25 @@
 Changelog
 =========
 
+4.0.3 (2010-11-01)
+------------------
+
+* merged changes from 3.0.7 version into 4.0 version
+  [mylan]
+
+
+3.0.7 (2010-10-20)
+------------------
+
+* Removed lynx dependency,
+  fixed http://plone.org/products/plone-seo/issues/28 issue.
+  [mylan]
+* Added 'External keywords test' option to SEO configlet.
+  Keyword validation can occur against HTML produced by Plone
+  itself or against one processed externally with Deliverance/xdv.
+  [mylan]
+
+
 4.0.1 (2010-08-04)
 ------------------
 

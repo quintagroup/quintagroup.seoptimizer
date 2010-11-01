@@ -6,7 +6,7 @@ import os
 from setuptools import setup, find_packages
 
 
-version = '4.0.1'
+version = '4.0.3'
 
 setup(name='quintagroup.seoptimizer',
       version=version,
@@ -34,6 +34,7 @@ setup(name='quintagroup.seoptimizer',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.browserlayer',
           'quintagroup.canonicalpath>=0.6',
           'collective.monkeypatcher',
           'Plone >= 4.0a',
