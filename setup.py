@@ -37,7 +37,7 @@ setup(name='quintagroup.seoptimizer',
           'plone.browserlayer',
           'quintagroup.canonicalpath>=0.6',
           'collective.monkeypatcher',
-          'Plone >= 4.0a',
+          'Plone',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
