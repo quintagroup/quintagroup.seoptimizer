@@ -6,7 +6,7 @@ from OFS.interfaces import ITraversable
 from zope.component import providedBy
 from zope.component import getGlobalSiteManager
 from zope.component import queryAdapter, getMultiAdapter
-from zope.interface import directlyProvides, alsoProvides
+from zope.interface import directlyProvides
 from zope.viewlet.interfaces import IViewlet, IViewletManager
 from zope.publisher.browser import TestRequest
 
@@ -121,9 +121,6 @@ class TestBugs(FunctionalTestCase):
 class TestBug24AtPloneOrg(FunctionalTestCase):
 
     def afterSetUp(self):
-        super(TestBug24AtPloneOrg, self).afterSetUp()
-        self.loginAsPortalOwner()
-        self.portal.error_log.setProperties(20)
         # Add test users: member, editor
         member_id = 'test_member'
         editor_id = 'test_editor'
