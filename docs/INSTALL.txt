@@ -6,7 +6,7 @@ Buildout
 
 Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance recipe to manage your project, you can do this:
 
-* Add ``quintagroup.seoptimizer`` to the list of eggs to install, e.g.::
+* Add ``quintagroup.seoptimizer`` to the list of eggs to install, e.g.:
 
   For Plone 4 - in your buildout.cfg file write::
 
@@ -16,6 +16,7 @@ Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance r
         ...
         quintagroup.seoptimizer >=4.0
 
+
   For Plone 3 - in your buildout.cfg file write::
 
    [buildout]
@@ -23,6 +24,7 @@ Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance r
    eggs =
         ...
         quintagroup.seoptimizer >3.0,<4.0
+
 
 * Tell the plone.recipe.zope2instance recipe to install a ZCML slug::
 
@@ -73,3 +75,4 @@ In case you want to upgrate quintagroup.seoptimizer to a newer version in your b
 * Upgrade quintagroup.seoptimizer to the newer version using buildout (rerun the buildout to replace old package with a new one in your instance)
 
 * Run the reinstall procedure: visit "Site Setup" -> "Add-ons" control panel in your Plone site, where you have to press quintagroup.seoptimizer button next to Upgrade. (The same can be done with quickinstaller via ZMI: at /portal_quickinstaller/manage_installProductsForm: check the seoptimizer box and press Reinstall button.) This is an essential step as new version of product introduces new persistent settings and ways to migrate settings/content from old to new version. 
+

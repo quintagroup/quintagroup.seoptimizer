@@ -5,8 +5,7 @@ This module contains the tool of quintagroup.seoptimizer
 import os
 from setuptools import setup, find_packages
 
-
-version = '3.0.7'
+version = '4.0.1'
 
 setup(name='quintagroup.seoptimizer',
       version=version,
@@ -37,6 +36,7 @@ setup(name='quintagroup.seoptimizer',
           'plone.browserlayer',
           'quintagroup.canonicalpath>=0.6',
           'collective.monkeypatcher',
+          #'Plone >= 4.0a',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

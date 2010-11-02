@@ -13,6 +13,20 @@ Changelog
   [mylan]
 
 
+4.0.1 (2010-08-04)
+------------------
+
+* Removed tabindex form tags attributes
+  from seo-context view
+  [mylan]
+
+
+4.0 (2010-06-02)
+----------------
+
+* Release 4.0 version for Plone-4.X
+
+
 3.0.5 (2010-05-15)
 ------------------
 
@@ -27,7 +41,7 @@ Changelog
 * Prevent view breakage for context, which canonical url can't be calculated for
   http://plone.org/products/plone-seo/issues/22 [mylan]
 * Fixed security issue for SEO Property action and view
-  http://plone.org/products/plone-seo/issues/23
+  http://plone.org/products/plone-seo/issues/24
   [crchemist, mylan]
 
 

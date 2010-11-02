@@ -133,9 +133,7 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
 
         self.member_auth = '%s:%s'%(member_id, test_pswd)
         self.editor_auth = '%s:%s'%(editor_id, test_pswd)
-
         self.portal_url = '/'.join(self.portal.getPhysicalPath())
-
 
     def test_not_break(self):
         """Default portal page should not breaks for any user"""

@@ -84,7 +84,7 @@
         class=".views.VisibilityCheckerView"
         attribute="checkVisibilitySEOAction"
         layer=".interfaces.IPloneSEOLayer"
-        permission="zope2.Public"
+        permission="zope.Public"
         />
 
     <browser:resourceDirectory name="quintagroup.seoptimizer" directory="./resources" />
