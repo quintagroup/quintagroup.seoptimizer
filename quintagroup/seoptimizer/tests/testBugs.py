@@ -136,28 +136,18 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
 
         self.member_auth = '%s:%s'%(member_id, test_pswd)
         self.editor_auth = '%s:%s'%(editor_id, test_pswd)
-
         self.portal_url = '/'.join(self.portal.getPhysicalPath())
-        #alsoProvides(self.app.REQUEST, IPloneSEOLayer)
-        # add IPloneSEOLayer
-        directlyProvides(self.portal.REQUEST, IPloneSEOLayer)
-
-
 
     def test_not_break(self):
         """Default portal page should not breaks for any user"""
         # Anonymous
         resp = self.publish(path=self.portal_url)
-        file("/tmp/b24.0.1.html","wb").write(resp.getBody())
-        #self.assertEqual(resp.getStatus(), 200)
+        self.assertEqual(resp.getStatus(), 200)
         # Member
         resp = self.publish(path=self.portal_url, basic=self.member_auth)
-        file("/tmp/b24.0.2.html","wb").write(resp.getBody())
-        #self.assertEqual(resp.getStatus(), 200)
+        self.assertEqual(resp.getStatus(), 200)
         # Editor: this fails, althought must pass
         resp = self.publish(path=self.portal_url, basic=self.editor_auth)
-        file("/tmp/b24.0.3.html","wb").write(resp.getBody())
-
         self.assertEqual(resp.getStatus(), 200)
 
     def test_tab_visibility(self):
@@ -167,34 +157,28 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
                '\s*SEO Properties\s*</a>', re.I|re.S)
         # Anonymous: NO SEO Properties link
         res = self.publish(path=self.portal_url).getBody()
-        file("/tmp/b24.1.1.html","wb").write(res)
-
-        # self.assertEqual(rexp.search(res), None)
+        self.assertEqual(rexp.search(res), None)
         # Member: NO 'SEO Properties' link
         res = self.publish(path=self.portal_url, basic=self.member_auth).getBody()
-        file("/tmp/b24.1.2.html","wb").write(res)
-        # self.assertEqual(rexp.search(res), None)
+        self.assertEqual(rexp.search(res), None)
         # Editor: PRESENT 'SEO Properties' link
         res = self.publish(path=self.portal_url, basic=self.editor_auth).getBody()
-        file("/tmp/b24.1.3.html","wb").write(res)
-        # self.assertNotEqual(rexp.search(res), None)
+        self.assertNotEqual(rexp.search(res), None)
 
     def test_tab_access(self):
         """Only Editor can access 'SEO Properties' tab"""
         test_url = self.portal_url + '/front-page/@@seo-context-properties'
         # Anonymous: can NOT ACCESS
         headers = self.publish(path=test_url).headers
-        # self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
-        #    "No 'Unauthorized' exception rised for Anonymous on '@@seo-context-properties' view")
+        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
+            "No 'Unauthorized' exception rised for Anonymous on '@@seo-context-properties' view")
         # Member: can NOT ACCESS
         status = self.publish(path=test_url, basic=self.member_auth).headers
-        # self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
-        #    "No 'Unauthorized' exception rised for Member on '@@seo-context-properties' view")
+        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
+            "No 'Unauthorized' exception rised for Member on '@@seo-context-properties' view")
         # Editor: CAN Access
         res = self.publish(path=test_url, basic=self.editor_auth)
-        file("/tmp/b24.2.1.html","wb").write(res.getBody())
-
-        # self.assertEqual(res.status, 200)
+        self.assertEqual(res.status, 200)
 
 
     def test_tab_edit(self):
@@ -205,9 +189,7 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
                      'form.submitted:int': 1}
         res = self.publish(path=test_url, basic=self.editor_auth,
                   request_method='POST', stdin=StringIO(urllib.urlencode(form_data)))
-        file("/tmp/b24.3.1.html","wb").write(res.getBody())
-
-        # self.assertNotEqual(res.status, 200)
+        self.assertNotEqual(res.status, 200)
 
 
 def test_suite():
