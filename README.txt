@@ -1,7 +1,8 @@
 Introduction
 ============
 
-quintagroup.seoptimizer was created to enhance SE visibility of Plone sites.
+Quintagroup Search Engine Optimization Tool (quintagroup.seoptimizer)
+was created to enhance SE visibility of Plone sites.
 
 
 Features

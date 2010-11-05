@@ -1,6 +1,15 @@
 Changelog
 =========
 
+4.0.3 (2010-11-05)
+------------------
+
+* Merged fixes from v3.0.7,
+  [mylan]
+* Fixed plone-3.X compatibility,
+  [mylan]
+
+
 3.0.7 (2010-10-20)
 ------------------
 

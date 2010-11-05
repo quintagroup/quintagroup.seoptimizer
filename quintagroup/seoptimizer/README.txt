@@ -40,9 +40,11 @@ Note
 
   * For Plone 2.x versions - use Plone SEO 1.7.1  release (http://plone.org/products/plone-seo/releases/1.7.1)
 
-  * For Plone 3.x versions - use Plone SEO 3.0.5  release (http://plone.org/products/plone-seo/releases/3.0.5)
+  * For Plone 3.x, 4.x versions - use Plone SEO releases starting from 4.0 (http://plone.org/products/plone-seo/releases/4.0)
 
-  * For Plone 4.x versions - use Plone SEO releases starting from 4.0 (http://plone.org/products/plone-seo/releases/4.0)
+  * For Plone 3.0.x you must also add plone.browserlayer 1.0.rc3 into your zope instance.
+    Be sure to define the right version of plone.browserlayer in your buildout.cfg.
+    For Plone 3.1.x and upper Plone versions just use the version you have.
 
 Links
 
@@ -52,19 +54,19 @@ Authors
 
   * Myroslav Opyr
 
-  * Volodymyr Romaniuk
-
-  * Mykola Kharechko
-
-  * Vitaliy Podoba
+  * Andriy Mylenkyy
 
   * Volodymyr Cherepanyak
 
+  * Vitaliy Podoba
+
   * Taras Melnychuk
+
+  * Mykola Kharechko
 
   * Vitaliy Stepanov
 
-  * Andriy Myelnkyy
+  * Volodymyr Romaniuk
 
 Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
 
