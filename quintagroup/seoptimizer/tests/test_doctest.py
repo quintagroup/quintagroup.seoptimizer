@@ -8,8 +8,14 @@ def test_suite():
 
         # Demonstrate the main content types
         ztc.FunctionalDocFileSuite(
-            'browser.txt', package='quintagroup.seoptimizer.tests',
+            'seo_migration.txt', package='quintagroup.seoptimizer.tests',
             test_class=FunctionalTestCaseNotInstalled, globs=globals(),
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE |
+                doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
+
+        ztc.FunctionalDocFileSuite(
+            'seo_properties.txt', package='quintagroup.seoptimizer.tests',
+            test_class=FunctionalTestCase, globs=globals(),
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE |
                 doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
 

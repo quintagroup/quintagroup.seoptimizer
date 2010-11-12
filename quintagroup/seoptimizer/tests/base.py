@@ -89,6 +89,11 @@ class MixinTestCase:
     def beforeTearDown(self):
         getUtility(IRAMCache).invalidateAll()
 
+    def installBrowserLayer(self):
+        if not ptc.PLONE31:
+            qi = getattr(self.portal, 'portal_quickinstaller', None)
+            qi.installProduct("plone.browserlayer")
+
 
 class TestCase(MixinTestCase, ptc.PloneTestCase):
     layer = Installed
@@ -100,10 +105,11 @@ class TestCaseNotInstalled(MixinTestCase, ptc.PloneTestCase):
 class FunctionalTestCase(MixinTestCase, ptc.FunctionalTestCase):
     layer = Installed
 
+    def afterSetUp(self):
+        self.installBrowserLayer()
+
 class FunctionalTestCaseNotInstalled(MixinTestCase, ptc.FunctionalTestCase):
     layer = NotInstalled
 
     def afterSetUp(self):
-        qi = getattr(self.portal, 'portal_quickinstaller', None)
-        if not ptc.PLONE31:
-            qi.installProduct("plone.browserlayer")
+        self.installBrowserLayer()
