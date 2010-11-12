@@ -17,6 +17,7 @@ VIEW_METATAGS = [
 FORM = {
     'seo_robots': 'ALL',
     'form.submitted:int': 1,
+    'form.button.Save': "Save",
     'seo_title': 'hello world',
     'seo_title_override:int': 1,
     'seo_robots_override:int': 1,
@@ -135,6 +136,7 @@ class TestContextForm(FunctionalTestCase):
             default_custom_metatags = 'metatag1|global_metatag1value')
         form_data = {'seo_custommetatags': CUSTOM_METATAGS,
                      'seo_custommetatags_override:int': 0,
+                     'form.button.Save': "Save",
                      'form.submitted:int': 1}
 
         # Clean-up ram cache

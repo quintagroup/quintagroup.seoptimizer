@@ -32,6 +32,7 @@ class TestBugs(FunctionalTestCase):
         """ Modification date changing on SEO properties edit """
         form_data = {'seo_title': 'New Title',
                      'seo_title_override:int': 1,
+                     'form.button.Save': "Save",
                      'form.submitted:int': 1}
 
         md_before = self.my_doc.modification_date

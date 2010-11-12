@@ -27,7 +27,7 @@ class TestCanonicalURL(FunctionalTestCase):
         # Update canonical url property
         self.publish(self.mydoc_path + '/@@seo-context-properties?' \
            'seo_canonical_override=checked&seo_canonical=%s&' \
-           'form.submitted=1' % mydoc_url_new, self.basic_auth)
+           'form.submitted=1&form.button.Save=Save' % mydoc_url_new, self.basic_auth)
         # Test updated canonical url
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
         foundcurls = self.curl.findall(html)
@@ -59,7 +59,8 @@ class TestCanonicalURL(FunctionalTestCase):
         mydoc_url_new = self.mydoc.absolute_url() + '.new'
         self.publish(self.mydoc_path + '/@@seo-context-properties?' \
             'seo_canonical_override=checked&seo_canonical=%s' \
-            '&form.submitted=1' % mydoc_url_new, self.basic_auth)
+            '&form.submitted=1&form.button.Save=Save' % mydoc_url_new,
+             self.basic_auth)
 
         newcpath = ICanonicalLink(self.mydoc).canonical_link
         mydoc_catalog_canonical = catalog(id="mydoc")[0].canonical_link
@@ -72,7 +73,7 @@ class TestCanonicalURL(FunctionalTestCase):
         # Update canonical url property
         html = self.publish(self.mydoc_path + '/@@seo-context-properties?' \
                'seo_canonical_override=checked&seo_canonical=%s&' \
-               'form.submitted=1' % wrong_canonical, self.basic_auth).getBody()
+               'form.submitted=1&form.button.Save=Save' % wrong_canonical, self.basic_auth).getBody()
         self.assertTrue("wrong canonical url" in html,
                         "Canonical url not validated")
 
@@ -84,7 +85,7 @@ class TestCanonicalURL(FunctionalTestCase):
 
         # remove canonical url customization
         self.publish(self.mydoc_path + '/@@seo-context-properties?' \
-           'seo_canonical=%s&seo_canonical_override=&form.submitted=1' % newcanonical,
+           'seo_canonical=%s&seo_canonical_override=&form.submitted=1&form.button.Save=Save' % newcanonical,
             self.basic_auth)
 
         mydoc_canonical = ICanonicalLink(self.mydoc).canonical_link
