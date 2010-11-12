@@ -289,15 +289,28 @@ class SEOContextPropertiesView( BrowserView ):
         request = self.request
         form = self.request.form
         submitted = form.get('form.submitted', False)
+        #import pdb;pdb.set_trace()
         if submitted:
-            state = self.manageSEOProps(**form)
-            if not state:
-                state = _('seoproperties_saved', default=u'Content SEO properties have been saved.')
-                context.plone_utils.addPortalMessage(state)
-                kwargs = {'modification_date' : DateTime()} 
-                context.plone_utils.contentEdit(context, **kwargs)
+            msgtype = "info"
+            save = form.get('form.button.Save', False)
+            if save:
+                msg = self.manageSEOProps(**form)
+                if not msg:
+                    msg = _('seoproperties_saved',
+                            default=u'Content SEO properties have been saved.')
+                    kwargs = {'modification_date' : DateTime()} 
+                    context.plone_utils.contentEdit(context, **kwargs)
+                else:
+                    msgtype = "error"
+            else:
+                # Cancel
+                msg = _('seoproperties_canceled',
+                        default=u'No content SEO properties have been changed.')
+
+            context.plone_utils.addPortalMessage(msg, msgtype)
+            if msgtype == "info":
                 return request.response.redirect(self.context.absolute_url())
-            context.plone_utils.addPortalMessage(state, 'error')
+
         return self.template()
 
 
