@@ -1,0 +1,112 @@
+Introduction
+============
+
+This is a full-blown functional test. The emphasis here is on testing what
+the user may input and see, and the system is largely tested as a black box.
+We use PloneTestCase to set up this test as well, so we have a full Plone site
+to play with. We *can* inspect the state of the portal, e.g. using 
+self.portal and self.folder, but it is often frowned upon since you are not
+treating the system as a black box. Also, if you, for example, log in or set
+roles using calls like self.setRoles(), these are not reflected in the test
+browser, which runs as a separate session.
+
+Being a doctest, we can tell a story here.
+
+First, we must perform some setup. We use the testbrowser that is shipped
+with Five, as this provides proper Zope 2 integration. Most of the 
+documentation, though, is in the underlying zope.testbrower package.
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> portal_url = self.portal.absolute_url()
+
+The following is useful when writing and debugging testbrowser tests. It lets
+us see all error messages in the error_log.
+
+    >>> self.portal.error_log._ignored_exceptions = ()
+
+With that in place, we can go to the portal front page and log in. We will
+do this using the default user from PloneTestCase:
+
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> browser.open(portal_url)
+
+We have the login portlet, so let's use that.
+
+    >>> browser.open('http://nohost/plone/login_form')
+    >>> browser.getLink('Log in').click()
+    >>> browser.url
+    'http://nohost/plone/login_form'
+    >>> browser.getControl('Login Name').value = portal_owner
+    >>> browser.getControl('Password').value = default_password
+    >>> browser.getControl('Log in').click()
+    >>> "You are now logged in" in browser.contents
+    True
+    >>> "Login failed" in browser.contents
+    False
+    >>> browser.url
+    'http://nohost/plone/login_form'
+
+
+-*- extra stuff goes here -*-
+Test 'SEO Properties' in action
+===============================
+
+Let's define some helpfull variables:
+
+    >>> page = self.portal["front-page"]
+    >>> page_url = page.absolute_url()
+    >>> seoprops_url = page_url + "/@@seo-context-properties"
+
+Test wheter 'SEO Properties' tab is visible on front page or not.
+
+    >>> browser.open(page_url)
+    >>> "SEO Properties" in browser.contents
+    True
+
+Now, let's go to the "SEO Properties" page, make some changes
+and click on "Cansel" button.
+
+    >>> browser.open(seoprops_url)
+    >>> browser.getControl(name="seo_description_override").value = True
+    >>> descr_ctrl = browser.getControl(name="seo_description")
+    >>> descr_ctrl.value = "Test change of SEO description"
+    >>> browser.getControl("Cancel").click()
+    >>> cancel_page = browser.contents
+    >>> file("/tmp/seo_props.cancel.html","wb").write(cancel_page)
+
+Clicking on "Cancel" button should lead us to the front-page view.
+
+    >>> browser.url == page_url
+    True
+
+No changes must be applied.
+
+    >>> not "Test change of SEO description" in cancel_page
+    True
+
+Check whether status message is correct or not?
+
+    >>> "No content SEO properties have been changed." in cancel_page
+    True
+
+
+Let's review other situation. Go to the "SEO Properties" page, make some changes
+and click on "Save" button.
+
+    >>> browser.open(seoprops_url)
+    >>> browser.getControl(name="seo_description_override").value = True
+    >>> descr_ctrl = browser.getControl(name="seo_description")
+    >>> descr_ctrl.value = "Test change of SEO description"
+    >>> browser.getControl("Save").click()
+    >>> save_page = browser.contents
+
+No changes must be applied.
+
+    >>> "Test change of SEO description" in save_page
+    True
+
+Check whether status message is correct or not?
+
+    >>> "Content SEO properties have been saved" in save_page
+    True
