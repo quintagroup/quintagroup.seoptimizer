@@ -1,6 +1,14 @@
 Changelog
 =========
 
+4.0.4 (2010-11-05)
+------------------
+
+* Fixed "Cancel" button processing by SEO Properties
+  form on the context. Thanks Vitaliy Podoba for report.
+  [mylan]
+
+
 4.0.3 (2010-11-05)
 ------------------
 
