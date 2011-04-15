@@ -102,6 +102,43 @@ class TestBugs(FunctionalTestCase):
         except IOError:
             self.fail("overrides.zcml removed from the package root")
 
+    def test_escape_characters_title(self):
+        """Change escape characters in title of SEO properties 
+           Bug url http://plone.org/products/plone-seo/issues/31 
+        """       
+        from cgi import escape
+        title = 'New <i>Title</i>'
+        form_data = {'seo_title': title,
+                     'seo_title_override:int': 1,
+                     'form.button.Save': "Save",
+                     'form.submitted:int': 1}
+            
+        res = self.publish(path=self.mydoc_path+'/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
+        html = self.publish(self.mydoc_path, self.basic_auth).getBody()
+        m = re.match('.*<title>\\s*%s\\s*</title>' % escape(title), html, re.S|re.M)
+        self.assert_(m, 'Title is not escaped properly.')       
+
+    def test_escape_characters_comment(self):
+        """Change escape characters in comment of SEO properties 
+        """       
+        from cgi import escape
+        comment = 'New <i>comment</i>'
+        form_data = {'seo_title': 'New Title',
+                     'seo_title_override:int': 1,
+                     'seo_html_comment': comment,
+                     'seo_html_comment_override:int': 1,
+                     'form.button.Save': "Save",
+                     'form.submitted:int': 1}
+            
+        res = self.publish(path=self.mydoc_path+'/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
+        html = self.publish(self.mydoc_path, self.basic_auth).getBody()
+        m = re.match('.*<!--\\s*%s\\s*-->' % escape(comment), html, re.S|re.M)
+        self.assert_(m, 'Comment is not escaped properly.')       
+
     def test_bug_custom_metatags_update(self):
         # Prepare a page for the test
         page = self.portal["front-page"]
