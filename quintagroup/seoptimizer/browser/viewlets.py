@@ -16,34 +16,38 @@ from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 from Products.CMFPlone.PloneTool import *
 
-class SEOTagsViewlet( ViewletBase ):
+
+class SEOTagsViewlet(ViewletBase):
     """ Simple viewlet for custom title rendering.
     """
 
     def render(self):
         TEMPLATE = '<meta name="%s" content="%s"/>'
         enc = getSiteEncoding(self.context)
-        sfuncd = lambda x, enc=enc:safe_unicode(x, enc)
-        return u'\n'.join([TEMPLATE % tuple(map(sfuncd, (k,v))) \
-                           for k,v in self.listMetaTags().items()])
+        sfuncd = lambda x, enc=enc: safe_unicode(x, enc)
+        return u'\n'.join([TEMPLATE % tuple(map(sfuncd, (k, v))) \
+                           for k, v in self.listMetaTags().items()])
 
     def listMetaTags(self):
         """Calculate list metatags"""
 
         result = SortedDict()
-        pps = queryMultiAdapter((self.context, self.request), name="plone_portal_state")
+        pps = queryMultiAdapter((self.context, self.request),
+                                name="plone_portal_state")
         seo_global = queryAdapter(pps.portal(), ISEOConfigletSchema)
-        seo_context = queryMultiAdapter((self.context, self.request), name='seo_context')
+        seo_context = queryMultiAdapter((self.context, self.request),
+                                        name='seo_context')
 
         use_all = seo_global.exposeDCMetaTags
         adapter = IMappingMetaTags(self.context, None)
-        mapping_metadata = adapter and adapter.getMappingMetaTags() or SortedDict()
+        mapping_metadata = adapter and adapter.getMappingMetaTags() \
+                           or SortedDict()
 
         if not use_all:
-            metadata_names = mapping_metadata.has_key('DC.description') \
-                             and {'DC.description': mapping_metadata['DC.description']} \
-                             or SortedDict()
-            if mapping_metadata.has_key('description'):
+            metadata_names = 'DC.description' in mapping_metadata and \
+                {'DC.description': mapping_metadata['DC.description']} \
+                or SortedDict()
+            if 'description' in mapping_metadata:
                 metadata_names['description'] = mapping_metadata['description']
         else:
             metadata_names = mapping_metadata
@@ -58,12 +62,13 @@ class SEOTagsViewlet( ViewletBase ):
                         result['keywords'] = keywords
                 continue
 
-            if seo_context._seotags.has_key(accessor):
+            if accessor in seo_context._seotags:
                 value = seo_context._seotags.get(accessor, None)
             else:
                 method = getattr(seo_context, accessor, None)
                 if method is None:
-                    method = getattr(aq_inner(self.context).aq_explicit, accessor, None)
+                    method = getattr(aq_inner(self.context).aq_explicit,
+                                     accessor, None)
 
                 if not callable(method):
                     continue
@@ -85,9 +90,11 @@ class SEOTagsViewlet( ViewletBase ):
                 value = ', '.join(value)
 
             # Special cases
-            if accessor == 'Description' and not metadata_names.has_key('description'):
+            if accessor == 'Description' and \
+               not 'description' in metadata_names:
                 result['description'] = value
-            elif accessor == 'Subject' and not metadata_names.has_key('keywords'):
+            elif accessor == 'Subject' and \
+                 not 'keywords' in metadata_names:
                 result['keywords'] = value
 
             if accessor not in ('Description', 'Subject'):
@@ -132,13 +139,13 @@ class SEOTagsViewlet( ViewletBase ):
 
         # add custom meta tags (added from qseo tab by user)
         # for given context and default from configlet
-        custom_meta_tags = seo_context and seo_context['seo_customMetaTags'] or []
+        custom_meta_tags = seo_context and \
+                           seo_context['seo_customMetaTags'] or []
         for tag in custom_meta_tags:
             if tag['meta_content']:
                 result[tag['meta_name']] = tag['meta_content']
 
         return result
-
 
 
 class TitleCommentViewlet(ViewletBase):
@@ -174,7 +181,7 @@ class TitleCommentViewlet(ViewletBase):
             else:
                 qseo_comments = u"<!--%s-->" % safe_unicode(
                     self.seo_context["seo_html_comment"])
-                return u"%s\n%s"%(std_title, qseo_comments)
+                return u"%s\n%s" % (std_title, qseo_comments)
         else:
             qseo_title = u"<title>%s</title>" % safe_unicode(
                 self.seo_context["seo_title"])
@@ -183,13 +190,13 @@ class TitleCommentViewlet(ViewletBase):
             else:
                 qseo_comments = u"<!--%s-->" % safe_unicode(
                     self.seo_context["seo_html_comment"])
-                return u"%s\n%s"%(qseo_title, qseo_comments)
+                return u"%s\n%s" % (qseo_title, qseo_comments)
 
 
-class CustomScriptViewlet( ViewletBase ):
+class CustomScriptViewlet(ViewletBase):
     """ Simple viewlet for custom script rendering.
     """
-    def getCustomScript( self ):
+    def getCustomScript(self):
         pps = queryMultiAdapter((self.context, self.request),
                                 name="plone_portal_state")
         gseo = queryAdapter(pps.portal(), ISEOConfigletSchema)
@@ -197,15 +204,17 @@ class CustomScriptViewlet( ViewletBase ):
             return gseo.custom_script
         return ''
 
-    def render( self ):
-        return safe_unicode("""%s"""% self.getCustomScript())
+    def render(self):
+        return safe_unicode("""%s""" % self.getCustomScript())
 
 
-class CanonicalUrlViewlet( ViewletBase ):
+class CanonicalUrlViewlet(ViewletBase):
     """ Simple viewlet for canonical url link rendering.
     """
-    def render( self ):
-        seoc = getMultiAdapter((self.context, self.request), name=u'seo_context')
+    def render(self):
+        seoc = getMultiAdapter((self.context, self.request),
+                               name=u'seo_context')
         if seoc['seo_canonical']:
-            return """<link rel="canonical" href="%s" />""" % seoc['seo_canonical']
+            return """<link rel="canonical" href="%s" />""" \
+                   % seoc['seo_canonical']
         return ""

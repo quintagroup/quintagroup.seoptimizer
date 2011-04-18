@@ -26,6 +26,7 @@ METADATA_MAPS = dict([
     ("robots", "seo_robots"),
     ("distribution", "seo_distribution")])
 
+
 class MetaKeywordsAdapter(object):
     implements(IMetaKeywords)
 
@@ -58,6 +59,6 @@ class MappingMetaTags(object):
         metadata_name = SortedDict()
         if self.gseo:
             for mt in self.gseo.metatags_order:
-                if METADATA_MAPS.has_key(mt):
+                if mt in METADATA_MAPS:
                     metadata_name[mt] = METADATA_MAPS[mt]
         return metadata_name

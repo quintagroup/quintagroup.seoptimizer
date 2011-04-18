@@ -6,9 +6,12 @@ from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 
 logger = logging.getLogger('quintagroup.seoptimizer')
 FIX_PTYPES_DOMAIN = ['Document', 'File', 'News Item']
-REMOVE_SEOPROPERTIES = ['additional_keywords', 'settings_use_keywords_sg',
-                        'settings_use_keywords_lg', 'filter_keywords_by_content',
+REMOVE_SEOPROPERTIES = ['additional_keywords',
+                        'settings_use_keywords_sg',
+                        'settings_use_keywords_lg',
+                        'filter_keywords_by_content',
                        ]
+
 
 def changeDomain(plone_tools):
     """ Fix i18n_domain bug for some portal_types,
@@ -22,8 +25,10 @@ def changeDomain(plone_tools):
             logger.log(logging.INFO, "I18n Domain of the type \'%s\' "
                        "changed to \'plone\'." % ptype.id)
 
+
 def changeMetatagsOrderList(plone_tools):
-    """ Change format metatags order list from "metaname accessor" to "metaname".
+    """ Change format metatags order list
+        from "metaname accessor" to "metaname".
     """
     types_tool = plone_tools.types()
     setup_tool = plone_tools.url().getPortalObject().portal_setup
@@ -36,8 +41,8 @@ def changeMetatagsOrderList(plone_tools):
                        "configlet from \"metaname accessor\" to \"metaname\".")
             seoprops_tool.manage_changeProperties(metatags_order=mto_new)
     else:
-        setup_tool.runImportStepFromProfile('profile-quintagroup.seoptimizer:default',
-                                            'propertiestool')
+        name_profile = 'profile-quintagroup.seoptimizer:default'
+        setup_tool.runImportStepFromProfile(name_profile, 'propertiestool')
 
 
 def migrationActions(plone_tools):
@@ -46,7 +51,8 @@ def migrationActions(plone_tools):
     """
     types_tool = plone_tools.types()
     seoprops_tool = plone_tools.properties().seo_properties
-    ctws = list(seoprops_tool.getProperty('content_types_with_seoproperties', []))
+    property_name = 'content_types_with_seoproperties'
+    ctws = list(seoprops_tool.getProperty(property_name, []))
     flag = False
     for ptype in types_tool.objectValues():
         idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions())
@@ -59,7 +65,9 @@ def migrationActions(plone_tools):
             logger.log(logging.INFO, "Moved \"SEO Properties\" action from %s "
                        "type in portal actions." % ptype.id)
     if flag:
-        seoprops_tool.manage_changeProperties(content_types_with_seoproperties=ctws)
+        seo_change_properties = seoprops_tool.manage_changeProperties
+        seo_change_properties(content_types_with_seoproperties=ctws)
+
 
 def removeNonUseSeoProperties(plone_tools):
     """ Revome properties used in earlier versions of the package
@@ -67,11 +75,13 @@ def removeNonUseSeoProperties(plone_tools):
     seoprops_tool = plone_tools.properties().seo_properties
     remove_properties = []
     for pr in REMOVE_SEOPROPERTIES:
-      if seoprops_tool.hasProperty(pr):
-          remove_properties.append(pr)
-          logger.log(logging.INFO, "Removed %s property in seoproperties tool." % pr)
+        if seoprops_tool.hasProperty(pr):
+            remove_properties.append(pr)
+            logger.log(logging.INFO, "Removed %s property in "
+                       "seoproperties tool." % pr)
     if not remove_properties:
         seoprops_tool.manage_delProperties(remove_properties)
+
 
 def removeSkin(plone_tools):
     """ Remove skin layers.
@@ -79,10 +89,12 @@ def removeSkin(plone_tools):
     layer = 'quintagroup.seoptimizer'
     skins_tool = plone_tools.url().getPortalObject().portal_skins
     for skinName in skins_tool.getSkinSelections():
-        skin_paths = skins_tool.getSkinPath(skinName).split(',') 
-        paths = [l.strip() for l in skin_paths if not (l == layer or l.startswith(layer+'/'))]
+        skin_paths = skins_tool.getSkinPath(skinName).split(',')
+        paths = [l.strip() for l in skin_paths \
+                           if not (l == layer or l.startswith(layer + '/'))]
         logger.log(logging.INFO, "Removed layers from %s skin." % skinName)
         skins_tool.addSkinSelection(skinName, ','.join(paths))
+
 
 def migrateCanonical(plone_tools):
     """ Rename qSEO_canonical property into PROPERTY_LINK
@@ -91,13 +103,14 @@ def migrateCanonical(plone_tools):
     types = plone_tools.types()
     portal = plone_tools.url().getPortalObject()
     allCTTypes = types.listContentTypes()
-    obj_metatypes =  [m.content_meta_type for m in types.objectValues() \
-                      if m.getId() in allCTTypes]
+    obj_metatypes = [m.content_meta_type for m in types.objectValues() \
+                     if m.getId() in allCTTypes]
     portal.ZopeFindAndApply(
                             portal,
                             obj_metatypes=','.join(obj_metatypes),
                             apply_func=renameProperty
                             )
+
 
 def renameProperty(obj, path):
     """ Rename qSEO_canonical property into PROPERTY_LINK
@@ -114,14 +127,18 @@ def renameProperty(obj, path):
             level, msg = logging.ERROR, "%s on renaming 'qSEO_canonical' " \
                          "property for %%(url)s object" % str(e)
 
-        logger.log(level, msg % {'url':obj.absolute_url(), 'name':PROPERTY_LINK} )
+        logger.log(level, msg % {'url': obj.absolute_url(),
+                                 'name': PROPERTY_LINK})
         obj.manage_delProperties(['qSEO_canonical'])
+
 
 def upgrade_2_to_3(setuptool):
     """ Upgrade quintagroup.seoptimizer from version 2.x.x to 3.0.0.
     """
-    plone_tools = queryMultiAdapter((setuptool, setuptool.REQUEST), name="plone_tools")
-    setuptool.runAllImportStepsFromProfile('profile-quintagroup.seoptimizer:upgrade_2_to_3')
+    plone_tools = queryMultiAdapter((setuptool, setuptool.REQUEST),
+                                    name="plone_tools")
+    profile_name = 'profile-quintagroup.seoptimizer:upgrade_2_to_3'
+    setuptool.runAllImportStepsFromProfile(profile_name)
     migrationActions(plone_tools)
     changeDomain(plone_tools)
     changeMetatagsOrderList(plone_tools)

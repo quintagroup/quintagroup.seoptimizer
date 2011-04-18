@@ -26,12 +26,13 @@ class ISEOConfigletBaseSchema(Interface):
 
     exposeDCMetaTags = Bool(
         title=_("label_exposeDCMetaTags",
-                default='Expose <abbr title="Dublin Core">DC</abbr> meta tags'),
+                default='Expose <abbr title="Dublin Core">DC</abbr> ' \
+                'meta tags'),
         description=_("description_seo_dc_metatags",
-                default='Controls if <abbr title="Dublin Core">DC</abbr> '
-                    'metatags are exposed to page header. They include '
-                    'DC.description, DC.type, DC.format, DC.creator and '
-                    'others.'),
+                      default='Controls if <abbr title="Dublin Core">DC</abbr>'
+                      ' metatags are exposed to page header. They include '
+                      'DC.description, DC.type, DC.format, DC.creator and '
+                      'others.'),
         default=True,
         required=False)
 
@@ -39,9 +40,9 @@ class ISEOConfigletBaseSchema(Interface):
         title=_("label_metatags_order",
                 default='Meta tags order in the page.'),
         description=_("help_metatags_order",
-                default='Fill in meta tags (one per line) in the order in which'
-                    ' they will appear on site source pages. Example: '
-                    '"metaname accessor".'),
+                      default='Fill in meta tags (one per line) in the order '
+                      'in which they will appear on site source pages. '
+                      'Example: "metaname accessor".'),
         required=False)
 
     types_seo_enabled = Tuple(
@@ -55,13 +56,13 @@ class ISEOConfigletBaseSchema(Interface):
             vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"))
 
     default_custom_metatags = List(
-        title=_("label_default_custom_metatags", default='Default custom metatags.'),
+        title=_("label_default_custom_metatags",
+                default='Default custom metatags.'),
         description=_("help_default_custom_metatags",
-                default='Fill in custom metatag names (one per line) which will '
-                    'appear on qseo_properties edit tab. Example: '
-                    '"metaname|metacontent" or "metaname".'),
+                      default='Fill in custom metatag names (one per line) ' \
+                      'which will appear on qseo_properties edit tab. ' \
+                      'Example: "metaname|metacontent" or "metaname".'),
         required=False)
-
 
 
 class ISEOConfigletAdvancedSchema(Interface):
@@ -74,17 +75,18 @@ class ISEOConfigletAdvancedSchema(Interface):
         required=False)
 
     fields = List(
-        title=_("label_fields", default='Fields for keywords statistic calculation.'),
-        description=_("help_fields",
-                default='Fill in filds (one per line) which statistics of keywords usage '
-                    'should be calculated for.'),
+        title=_("label_fields", default='Fields for keywords statistic '
+                'calculation.'),
+        description=_("help_fields", default='Fill in filds (one per line)'
+                      'which statistics of keywords usage should '
+                      'be calculated for.'),
         required=False)
 
     stop_words = List(
         title=_("label_stop_words", default='Stop words.'),
-        description=_("help_stop_words",
-                default='Fill in stop words (one per line) which will '
-                    'be excluded from kewords statistics calculation.'),
+        description=_("help_stop_words", default='Fill in stop words '
+                      '(one per line) which will be excluded from kewords '
+                      'statistics calculation.'),
         required=False)
 
     external_keywords_test = Bool(
@@ -119,7 +121,6 @@ class SEOConfigletAdapter(SchemaAdapterBase):
         self.ttool = getToolByName(context, 'portal_types')
         self.encoding = pprop.site_properties.default_charset
 
-
     def getExposeDC(self):
         return self.siteprops.getProperty('exposeDCMetaTags')
 
@@ -145,18 +146,20 @@ class SEOConfigletAdapter(SchemaAdapterBase):
             self.context.custom_script = ''
 
     exposeDCMetaTags = property(getExposeDC, setExposeDC)
-    default_custom_metatags = ProxyFieldProperty(ISEOConfigletSchema['default_custom_metatags'])
+    seo_default_custom_metatag = ISEOConfigletSchema['default_custom_metatags']
+    default_custom_metatags = ProxyFieldProperty(seo_default_custom_metatag)
     metatags_order = ProxyFieldProperty(ISEOConfigletSchema['metatags_order'])
     types_seo_enabled = property(getTypesSEOEnabled, setTypesSEOEnabled)
     custom_script = property(getCustomScript, setCustomScript)
     fields = ProxyFieldProperty(ISEOConfigletSchema['fields'])
     stop_words = ProxyFieldProperty(ISEOConfigletSchema['stop_words'])
-    external_keywords_test = ProxyFieldProperty(ISEOConfigletSchema['external_keywords_test'])
+    seo_external_keywords_test = ISEOConfigletSchema['external_keywords_test']
+    external_keywords_test = ProxyFieldProperty(seo_external_keywords_test)
 
 
 class Text2ListWidget(TextAreaWidget):
     height = 5
-    splitter = re.compile(u'\\r?\\n', re.S|re.U)
+    splitter = re.compile(u'\\r?\\n', re.S | re.U)
 
     def _toFieldValue(self, input):
         if input == self._missing:
@@ -165,7 +168,8 @@ class Text2ListWidget(TextAreaWidget):
             return self.context._type(filter(None, self.splitter.split(input)))
 
     def _toFormValue(self, value):
-        if value == self.context.missing_value or value == self.context._type():
+        if value == self.context.missing_value or \
+           value == self.context._type():
             return self._missing
         else:
             return u'\r\n'.join(list(value))
@@ -180,20 +184,22 @@ advancedset = FormFieldsets(ISEOConfigletAdvancedSchema)
 advancedset.id = 'seoadvanced'
 advancedset.label = _(u'label_seoadvanced', default=u'Advanced')
 
+
 class SEOConfiglet(ControlPanelForm):
 
     form_fields = FormFieldsets(baseset, advancedset)
+    type_seo_enabled = MultiCheckBoxThreeColumnWidget
 
     form_fields['default_custom_metatags'].custom_widget = Text2ListWidget
     form_fields['metatags_order'].custom_widget = Text2ListWidget
-    form_fields['types_seo_enabled'].custom_widget = MultiCheckBoxThreeColumnWidget
-    form_fields['types_seo_enabled'].custom_widget.cssClass='label'
+    form_fields['types_seo_enabled'].custom_widget = type_seo_enabled
+    form_fields['types_seo_enabled'].custom_widget.cssClass = 'label'
     form_fields['fields'].custom_widget = Text2ListWidget
     form_fields['stop_words'].custom_widget = Text2ListWidget
 
     label = _("Search Engine Optimizer configuration")
     description = _("seo_configlet_description", default="You can select what "
                     "content types are qSEOptimizer-enabled, and control if "
-                    "Dublin Core metatags are exposed in the header of content "
-                    "pages.")
+                    "Dublin Core metatags are exposed in the header of content"
+                    " pages.")
     form_name = _("")

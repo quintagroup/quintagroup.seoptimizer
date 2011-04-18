@@ -11,10 +11,11 @@ setup(name='quintagroup.seoptimizer',
       version=version,
       description="Quintagroup Search Engine Optimization Tool",
       long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "INSTALL.txt")).read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+          open(os.path.join("docs", "INSTALL.txt")).read() + "\n" +
+          open(os.path.join("docs", "HISTORY.txt")).read(),
 
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      # Get more strings from
+      # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Framework :: Zope2",
@@ -23,9 +24,12 @@ setup(name='quintagroup.seoptimizer',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, Vitaliy Stepanov, Andriy Mylenkyy',
+      author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, ' \
+             'Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, '\
+             'Vitaliy Stepanov, Andriy Mylenkyy',
       author_email='support@quintagroup.com',
-      url='http://quintagroup.com/services/plone-development/products/qSEOptimizer/',
+      url='http://quintagroup.com/services/'\
+          'plone-development/products/qSEOptimizer/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['quintagroup'],

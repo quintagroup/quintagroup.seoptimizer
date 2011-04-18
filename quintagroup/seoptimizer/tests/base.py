@@ -37,6 +37,7 @@ from quintagroup.seoptimizer.config import SUPPORT_BLAYER
 
 ptc.setupPloneSite()
 
+
 class NotInstalled(PloneSite):
     """ Only package register, without installation into portal
     """
@@ -70,7 +71,7 @@ class Installed(NotInstalled):
     @classmethod
     def tearDown(cls):
         ptc_setup._placefulTearDown()
-        
+
 
 class MixinTestCase:
 
@@ -80,7 +81,7 @@ class MixinTestCase:
         try:
             authenticator = self.portal.restrictedTraverse("@@authenticator")
         except:
-            handle  = ""
+            handle = ""
         else:
             html = authenticator.authenticator()
             handle = re.search('value="(.*)"', html).groups()[0]
@@ -98,6 +99,7 @@ class MixinTestCase:
 class TestCase(MixinTestCase, ptc.PloneTestCase):
     layer = Installed
 
+
 class TestCaseNotInstalled(MixinTestCase, ptc.PloneTestCase):
     layer = NotInstalled
 
@@ -107,6 +109,7 @@ class FunctionalTestCase(MixinTestCase, ptc.FunctionalTestCase):
 
     def afterSetUp(self):
         self.installBrowserLayer()
+
 
 class FunctionalTestCaseNotInstalled(MixinTestCase, ptc.FunctionalTestCase):
     layer = NotInstalled

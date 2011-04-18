@@ -3,6 +3,7 @@ import doctest
 
 from base import *
 
+
 def test_suite():
     return unittest.TestSuite([
 

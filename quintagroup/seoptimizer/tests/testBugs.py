@@ -21,7 +21,7 @@ from base import *
 class TestBugs(FunctionalTestCase):
 
     def afterSetUp(self):
-        self.basic_auth = ':'.join((portal_owner,default_password))
+        self.basic_auth = ':'.join((portal_owner, default_password))
         self.loginAsPortalOwner()
         # prepare test document
         my_doc = self.portal.invokeFactory('Document', id='my_doc')
@@ -36,7 +36,7 @@ class TestBugs(FunctionalTestCase):
                      'form.submitted:int': 1}
 
         md_before = self.my_doc.modification_date
-        self.publish(path=self.mydoc_path+'/@@seo-context-properties',
+        self.publish(path=self.mydoc_path + '/@@seo-context-properties',
                      basic=self.basic_auth, request_method='POST',
                      stdin=StringIO(urllib.urlencode(form_data)))
         md_after = self.my_doc.modification_date
@@ -72,9 +72,10 @@ class TestBugs(FunctionalTestCase):
            should disappear.
         """
         curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
-                         '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S|re.M)
-        # When adapter registered for the object - canoncal link present on the page
-        self.assertNotEqual( queryAdapter(self.my_doc, ICanonicalLink), None)
+                          '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S | re.M)
+        # When adapter registered for the object - canoncal link
+        # present on the page
+        self.assertNotEqual(queryAdapter(self.my_doc, ICanonicalLink), None)
 
         res = self.publish(path=self.mydoc_path, basic=self.basic_auth)
         self.assertNotEqual(curl.search(res.getBody()), None)
@@ -83,15 +84,15 @@ class TestBugs(FunctionalTestCase):
         #     - not break page on rendering;
         #     - canonical link will be absent on the page
         gsm = getGlobalSiteManager()
-        gsm.unregisterAdapter(DefaultCanonicalLinkAdapter, [ITraversable,],
+        gsm.unregisterAdapter(DefaultCanonicalLinkAdapter, [ITraversable, ],
                               ICanonicalLink)
-        self.assertEqual( queryAdapter(self.my_doc, ICanonicalLink), None)
+        self.assertEqual(queryAdapter(self.my_doc, ICanonicalLink), None)
 
         res = self.publish(path=self.mydoc_path, basic=self.basic_auth)
         self.assertEqual(curl.search(res.getBody()), None)
 
         # register adapter back in the global site manager
-        gsm.registerAdapter(DefaultCanonicalLinkAdapter, [ITraversable,],
+        gsm.registerAdapter(DefaultCanonicalLinkAdapter, [ITraversable, ],
                             ICanonicalLink)
 
     def test_bug_19_23_at_plone_org(self):
@@ -103,26 +104,27 @@ class TestBugs(FunctionalTestCase):
             self.fail("overrides.zcml removed from the package root")
 
     def test_escape_characters_title(self):
-        """Change escape characters in title of SEO properties 
-           Bug url http://plone.org/products/plone-seo/issues/31 
-        """       
+        """Change escape characters in title of SEO properties
+           Bug url http://plone.org/products/plone-seo/issues/31
+        """
         from cgi import escape
         title = 'New <i>Title</i>'
         form_data = {'seo_title': title,
                      'seo_title_override:int': 1,
                      'form.button.Save': "Save",
                      'form.submitted:int': 1}
-            
-        res = self.publish(path=self.mydoc_path+'/@@seo-context-properties',
+
+        res = self.publish(path=self.mydoc_path + '/@@seo-context-properties',
                      basic=self.basic_auth, request_method='POST',
                      stdin=StringIO(urllib.urlencode(form_data)))
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
-        m = re.match('.*<title>\\s*%s\\s*</title>' % escape(title), html, re.S|re.M)
-        self.assert_(m, 'Title is not escaped properly.')       
+        m = re.match('.*<title>\\s*%s\\s*</title>' % escape(title), html,
+                     re.S | re.M)
+        self.assert_(m, 'Title is not escaped properly.')
 
     def test_escape_characters_comment(self):
-        """Change escape characters in comment of SEO properties 
-        """       
+        """Change escape characters in comment of SEO properties
+        """
         from cgi import escape
         comment = 'New <i>comment</i>'
         form_data = {'seo_title': 'New Title',
@@ -131,29 +133,33 @@ class TestBugs(FunctionalTestCase):
                      'seo_html_comment_override:int': 1,
                      'form.button.Save': "Save",
                      'form.submitted:int': 1}
-            
-        res = self.publish(path=self.mydoc_path+'/@@seo-context-properties',
-                     basic=self.basic_auth, request_method='POST',
-                     stdin=StringIO(urllib.urlencode(form_data)))
+
+        res = self.publish(path=self.mydoc_path + '/@@seo-context-properties',
+                           basic=self.basic_auth, request_method='POST',
+                           stdin=StringIO(urllib.urlencode(form_data)))
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
-        m = re.match('.*<!--\\s*%s\\s*-->' % escape(comment), html, re.S|re.M)
-        self.assert_(m, 'Comment is not escaped properly.')       
+        m = re.match('.*<!--\\s*%s\\s*-->' % escape(comment), html,
+                     re.S | re.M)
+        self.assert_(m, 'Comment is not escaped properly.')
 
     def test_bug_custom_metatags_update(self):
         # Prepare a page for the test
         page = self.portal["front-page"]
         request = self.portal.REQUEST
         directlyProvides(request, IPloneSEOLayer)
-        seo_context_props = getMultiAdapter((page, request), name="seo-context-properties")
+        seo_context_props = getMultiAdapter((page, request),
+                                            name="seo-context-properties")
         # Set default custom meta tag without default value (tag name only)
         self.gseo = queryAdapter(self.portal, ISEOConfigletSchema)
-        self.gseo.default_custom_metatags = ["test_tag",]
+        self.gseo.default_custom_metatags = ["test_tag", ]
         try:
-            # Breakage on updating custom metatag with seo-context-properties view
+            # Breakage on updating custom metatag
+            # with seo-context-properties view
             seo_context_props.updateSEOCustomMetaTagsProperties([])
         except IndexError:
-            self.fail("Error in calculating of default tag value, when only tag name set "\
-                      "in default_custom_metatags property of the configlet.")
+            self.fail("Error in calculating of default tag value, when only "\
+                      "tag name set in default_custom_metatags property of "\
+                      "the configlet.")
 
 
 class TestBug24AtPloneOrg(FunctionalTestCase):
@@ -167,10 +173,10 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         uf.userFolderAddUser(member_id, test_pswd,
                         ['Member'], [])
         uf.userFolderAddUser(editor_id, test_pswd,
-                        ['Member','Editor'], [])
+                        ['Member', 'Editor'], [])
 
-        self.member_auth = '%s:%s'%(member_id, test_pswd)
-        self.editor_auth = '%s:%s'%(editor_id, test_pswd)
+        self.member_auth = '%s:%s' % (member_id, test_pswd)
+        self.editor_auth = '%s:%s' % (editor_id, test_pswd)
         self.portal_url = '/'.join(self.portal.getPhysicalPath())
 
     def test_not_break(self):
@@ -189,15 +195,17 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         """Only Editor can view seo tab"""
         rexp = re.compile('<a\s+[^>]*' \
                'href="[a-zA-Z0-9\:\/_-]*/@@seo-context-properties"[^>]*>'\
-               '\s*SEO Properties\s*</a>', re.I|re.S)
+               '\s*SEO Properties\s*</a>', re.I | re.S)
         # Anonymous: NO SEO Properties link
         res = self.publish(path=self.portal_url).getBody()
         self.assertEqual(rexp.search(res), None)
         # Member: NO 'SEO Properties' link
-        res = self.publish(path=self.portal_url, basic=self.member_auth).getBody()
+        res = self.publish(path=self.portal_url,
+                           basic=self.member_auth).getBody()
         self.assertEqual(rexp.search(res), None)
         # Editor: PRESENT 'SEO Properties' link
-        res = self.publish(path=self.portal_url, basic=self.editor_auth).getBody()
+        res = self.publish(path=self.portal_url,
+                           basic=self.editor_auth).getBody()
         self.assertNotEqual(rexp.search(res), None)
 
     def test_tab_access(self):
@@ -205,16 +213,17 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         test_url = self.portal_url + '/front-page/@@seo-context-properties'
         # Anonymous: can NOT ACCESS
         headers = self.publish(path=test_url).headers
-        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
-            "No 'Unauthorized' exception rised for Anonymous on '@@seo-context-properties' view")
+        self.assertEqual(headers.get('bobo-exception-type', ""),
+                         'Unauthorized', "No 'Unauthorized' exception rised " \
+                         "for Anonymous on '@@seo-context-properties' view")
         # Member: can NOT ACCESS
         status = self.publish(path=test_url, basic=self.member_auth).headers
-        self.assertEqual( headers.get('bobo-exception-type',""), 'Unauthorized',
-            "No 'Unauthorized' exception rised for Member on '@@seo-context-properties' view")
+        self.assertEqual(headers.get('bobo-exception-type', ""),
+                         'Unauthorized', "No 'Unauthorized' exception rised " \
+                         "for Member on '@@seo-context-properties' view")
         # Editor: CAN Access
         res = self.publish(path=test_url, basic=self.editor_auth)
         self.assertEqual(res.status, 200)
-
 
     def test_tab_edit(self):
         """Editor can change SEO Properties"""
@@ -223,7 +232,8 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
                      'seo_title_override:int': 1,
                      'form.submitted:int': 1}
         res = self.publish(path=test_url, basic=self.editor_auth,
-                  request_method='POST', stdin=StringIO(urllib.urlencode(form_data)))
+                           request_method='POST',
+                           stdin=StringIO(urllib.urlencode(form_data)))
         self.assertNotEqual(res.status, 200)
 
 
@@ -233,4 +243,3 @@ def test_suite():
     suite.addTest(makeSuite(TestBugs))
     suite.addTest(makeSuite(TestBug24AtPloneOrg))
     return suite
-

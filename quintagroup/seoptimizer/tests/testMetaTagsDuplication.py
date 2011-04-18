@@ -1,9 +1,10 @@
 from base import *
 
 GENERATOR = re.compile('.*(<meta\s+(?:(?:name="generator"\s*)|' \
-                       '(?:content=".*?"\s*)){2}/>)', re.S|re.M)
+                       '(?:content=".*?"\s*)){2}/>)', re.S | re.M)
 DESCRIPTION = re.compile('.*(<meta\s+(?:(?:name="description"\s*)|' \
-                         '(?:content=".*?"\s*)){2}/>)', re.S|re.M)
+                         '(?:content=".*?"\s*)){2}/>)', re.S | re.M)
+
 
 class InstallMixin:
 
@@ -27,12 +28,12 @@ class TestTagsDuplicationInstalled(InstallMixin, FunctionalTestCase):
 
     def test_GeneratorMetaSEOInstalled(self):
         lengen = len(GENERATOR.findall(self.html))
-        self.assert_(lengen==1, "There is %d generator meta tag(s) " \
+        self.assert_(lengen == 1, "There is %d generator meta tag(s) " \
            "when seoptimizer installed" % lengen)
- 
+
     def test_DescriptionMetaSEOInstalled(self):
         lendesc = len(DESCRIPTION.findall(self.html))
-        self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
+        self.assert_(lendesc == 1, "There is %d DESCRIPTION meta tag(s) " \
            "when seoptimizer installed" % lendesc)
 
 
@@ -44,12 +45,12 @@ class TestTagsDuplicationNotInstalled(InstallMixin,
 
     def test_GeneratorMetaSEOUninstalled(self):
         lengen = len(GENERATOR.findall(self.html))
-        self.assert_(lengen<=1, "There is %d generator meta tag(s) " \
+        self.assert_(lengen <= 1, "There is %d generator meta tag(s) " \
             "when seoptimizer uninstalled" % lengen)
 
     def test_DescriptionMetaSEOUninstalled(self):
         lendesc = len(DESCRIPTION.findall(self.html))
-        self.assert_(lendesc==1, "There is %d DESCRIPTION meta tag(s) " \
+        self.assert_(lendesc == 1, "There is %d DESCRIPTION meta tag(s) " \
            "when seoptimizer uninstalled" % lendesc)
 
 
