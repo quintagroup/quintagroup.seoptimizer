@@ -8,7 +8,11 @@ from zope.viewlet.interfaces import IViewletManager
 
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
-from base import *
+from quintagroup.seoptimizer.tests.base import TestCase, \
+    FunctionalTestCaseNotInstalled
+from quintagroup.seoptimizer.config import PROJECT_NAME, SUPPORT_BLAYER
+
+from Products.CMFCore.utils import getToolByName
 
 PROPERTY_SHEET = 'seo_properties'
 STOP_WORDS = ['a', 'an', 'amp', 'and', 'are', 'arial', 'as', 'at', 'be', 'but',

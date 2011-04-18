@@ -3,19 +3,24 @@ from cStringIO import StringIO
 
 from OFS.interfaces import ITraversable
 
-from zope.component import providedBy
+#from zope.component import providedBy
 from zope.component import getGlobalSiteManager
 from zope.component import queryAdapter, getMultiAdapter
 from zope.interface import directlyProvides
 from zope.viewlet.interfaces import IViewlet, IViewletManager
-from zope.publisher.browser import TestRequest
+#from zope.publisher.browser import TestRequest
 
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
-from quintagroup.seoptimizer.browser.views import PROP_CUSTOM_PREFIX
+#from quintagroup.seoptimizer.browser.views import PROP_CUSTOM_PREFIX
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import DefaultCanonicalLinkAdapter
-from base import *
+
+from quintagroup.seoptimizer.tests.base import FunctionalTestCase
+from Products.PloneTestCase.PloneTestCase import portal_owner, \
+    default_password
+import re
+from Products.Five import zcml
 
 
 class TestBugs(FunctionalTestCase):
@@ -24,7 +29,7 @@ class TestBugs(FunctionalTestCase):
         self.basic_auth = ':'.join((portal_owner, default_password))
         self.loginAsPortalOwner()
         # prepare test document
-        my_doc = self.portal.invokeFactory('Document', id='my_doc')
+        self.portal.invokeFactory('Document', id='my_doc')
         self.my_doc = self.portal['my_doc']
         self.mydoc_path = "/%s" % self.my_doc.absolute_url(1)
 
@@ -114,7 +119,7 @@ class TestBugs(FunctionalTestCase):
                      'form.button.Save': "Save",
                      'form.submitted:int': 1}
 
-        res = self.publish(path=self.mydoc_path + '/@@seo-context-properties',
+        self.publish(path=self.mydoc_path + '/@@seo-context-properties',
                      basic=self.basic_auth, request_method='POST',
                      stdin=StringIO(urllib.urlencode(form_data)))
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
@@ -134,9 +139,9 @@ class TestBugs(FunctionalTestCase):
                      'form.button.Save': "Save",
                      'form.submitted:int': 1}
 
-        res = self.publish(path=self.mydoc_path + '/@@seo-context-properties',
-                           basic=self.basic_auth, request_method='POST',
-                           stdin=StringIO(urllib.urlencode(form_data)))
+        self.publish(path=self.mydoc_path + '/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
         m = re.match('.*<!--\\s*%s\\s*-->' % escape(comment), html,
                      re.S | re.M)
@@ -217,7 +222,7 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
                          'Unauthorized', "No 'Unauthorized' exception rised " \
                          "for Anonymous on '@@seo-context-properties' view")
         # Member: can NOT ACCESS
-        status = self.publish(path=test_url, basic=self.member_auth).headers
+        self.publish(path=test_url, basic=self.member_auth).headers
         self.assertEqual(headers.get('bobo-exception-type', ""),
                          'Unauthorized', "No 'Unauthorized' exception rised " \
                          "for Member on '@@seo-context-properties' view")

@@ -1,5 +1,9 @@
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
-from base import *
+from quintagroup.seoptimizer.tests.base import FunctionalTestCase
+from Products.PloneTestCase.PloneTestCase import portal_owner, \
+    default_password
+import re
+from Products.CMFCore.utils import getToolByName
 
 
 class TestCanonicalURL(FunctionalTestCase):

@@ -5,7 +5,7 @@ Plone's products are loaded, and a Plone site will be created. This
 happens at module level, which makes it faster to run each test, but
 slows down test runner startup.
 """
-import re
+#import re
 import transaction
 from zope.component import getUtility
 
@@ -29,8 +29,8 @@ from Products.PloneTestCase.layer import PloneSite
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase import setup as ptc_setup
 
-from Products.PloneTestCase.PloneTestCase import portal_owner
-from Products.PloneTestCase.PloneTestCase import default_password
+#from Products.PloneTestCase.PloneTestCase import portal_owner
+#from Products.PloneTestCase.PloneTestCase import default_password
 
 from quintagroup.seoptimizer.config import PROJECT_NAME
 from quintagroup.seoptimizer.config import SUPPORT_BLAYER

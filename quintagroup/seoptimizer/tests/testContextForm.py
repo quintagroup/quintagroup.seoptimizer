@@ -1,6 +1,11 @@
 import urllib
 from cStringIO import StringIO
-from base import *
+
+from quintagroup.seoptimizer.tests.base import FunctionalTestCase, \
+    IRAMCache, getUtility
+from Products.PloneTestCase.PloneTestCase import portal_owner, \
+    default_password
+import re
 
 CUSTOM_METATAGS = [
    {'meta_name': 'metatag1', 'meta_content': 'metatag1value'},

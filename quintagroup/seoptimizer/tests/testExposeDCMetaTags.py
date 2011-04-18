@@ -1,6 +1,10 @@
 import string
 from DateTime import DateTime
-from base import *
+
+from quintagroup.seoptimizer.tests.base import FunctionalTestCase
+from Products.PloneTestCase.PloneTestCase import portal_owner, \
+    default_password
+import re
 
 METATAG = '.*(<meta\s+(?:(?:name="%s"\s*)|(?:content="(?P<tagcontent>.' \
           '*?)"\s*)){2}/>)'

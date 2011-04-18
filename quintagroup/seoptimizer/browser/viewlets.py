@@ -185,7 +185,7 @@ class TitleCommentViewlet(ViewletBase):
             comments = u"\n<!--%s-->" % escape(safe_unicode(
                 self.seo_context["seo_html_comment"]))
 
-        return qseo_title+comments
+        return qseo_title + comments
 
 
 class CustomScriptViewlet(ViewletBase):

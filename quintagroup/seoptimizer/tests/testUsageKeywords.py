@@ -1,5 +1,9 @@
-from base import *
+from quintagroup.seoptimizer.tests.base import FunctionalTestCase
+from Products.PloneTestCase.PloneTestCase import portal_owner, \
+    default_password
+
 import urllib2
+import re
 from StringIO import StringIO
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
