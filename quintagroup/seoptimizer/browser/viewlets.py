@@ -161,7 +161,7 @@ class TitleCommentViewlet(ViewletBase):
                                              name=u'seo_context')
 
         self.override_title = self.seo_context['has_seo_title']
-        self.override_comments = self.seo_context['has_html_comment']
+        self.has_comments = self.seo_context['has_html_comment']
 
     def std_title(self):
         page_title = safe_unicode(self.context_state.object_title())
@@ -174,23 +174,18 @@ class TitleCommentViewlet(ViewletBase):
                 escape(safe_unicode(portal_title)))
 
     def render(self):
-        if not self.override_title:
-            std_title = self.std_title()
-            if not self.override_comments:
-                return std_title
-            else:
-                qseo_comments = u"<!--%s-->" % safe_unicode(
-                    self.seo_context["seo_html_comment"])
-                return u"%s\n%s" % (std_title, qseo_comments)
+        if self.override_title:
+            qseo_title = u"<title>%s</title>" % escape(safe_unicode(
+                self.seo_context["seo_title"]))
         else:
-            qseo_title = u"<title>%s</title>" % safe_unicode(
-                self.seo_context["seo_title"])
-            if not self.override_comments:
-                return qseo_title
-            else:
-                qseo_comments = u"<!--%s-->" % safe_unicode(
-                    self.seo_context["seo_html_comment"])
-                return u"%s\n%s" % (qseo_title, qseo_comments)
+            qseo_title = self.std_title()
+
+        comments = ""
+        if self.has_comments:
+            comments = u"\n<!--%s-->" % escape(safe_unicode(
+                self.seo_context["seo_html_comment"]))
+
+        return qseo_title+comments
 
 
 class CustomScriptViewlet(ViewletBase):
