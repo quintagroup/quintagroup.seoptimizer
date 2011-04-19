@@ -30,6 +30,56 @@ class TestBugs(FunctionalTestCase):
         self.my_doc = self.portal['my_doc']
         self.mydoc_path = "/%s" % self.my_doc.absolute_url(1)
 
+    def set_title(self, title='', title_override=0, comment='',
+                  comment_override=0):
+        """ Set seo title """
+        portal = self.portal
+        fp = portal['front-page']
+        request = portal.REQUEST
+        view = portal.restrictedTraverse('@@plone')
+        manager = getMultiAdapter((fp, request, view), IViewletManager,
+                        name=u'plone.htmlhead')
+
+        directlyProvides(request, IPloneSEOLayer)
+        viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
+                        name=u'plone.htmlhead.title')
+
+        form_data = {'seo_title': title,
+                     'seo_title_override:int': title_override,
+                     'seo_html_comment': comment,
+                     'seo_html_comment_override:int': comment_override,
+                     'form.button.Save': "Save",
+                     'form.submitted:int': 1}
+
+        self.publish(path=fp.absolute_url(1) + '/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
+        viewlet.update()
+        seo_title_comment = viewlet.render()
+        return seo_title_comment
+
+    def test_seo_title(self):
+        """ Test changing title """
+        title = "New Title"
+        new_title = u'<title>%s</title>' % title
+        seo_title = self.set_title(title=title, title_override=1)
+        self.assertEqual(new_title, seo_title)
+
+    def test_seo_comment(self):
+        """ Test changing comment """
+        comment = "New Comment"
+        seo_title_comment = self.set_title(comment=comment, comment_override=1)
+        self.assert_(seo_title_comment.endswith("<!--%s-->" % comment))
+
+    def test_seo_title_comment(self):
+        """ Test changing title and comment """
+        title = "New Title"
+        comment = "New Comment"
+        new_title = u'<title>%s</title>\n<!--%s-->' % (title, comment)
+        seo_title_comment = self.set_title(title=title, title_override=1,
+                                           comment=comment, comment_override=1)
+        self.assertEqual(new_title, seo_title_comment)
+
     def test_modification_date(self):
         """ Modification date changing on SEO properties edit """
         form_data = {'seo_title': 'New Title',
