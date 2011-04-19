@@ -1,13 +1,11 @@
 import re
 import sys
 import urllib2
-from xml.dom import Node
 
 from zope.interface import implements
 from zope.component import getUtility
 from zope.component import queryAdapter
 
-from Acquisition import aq_acquire
 from Products.Five.browser import BrowserView
 
 from Products.CMFCore.utils import getToolByName
@@ -53,7 +51,7 @@ class ValidateSEOKeywordsView(BrowserView):
                     html = resp.read()
                 finally:
                     resp.close()
-            except (urllib2.URLError, urllib2.HTTPError), e:
+            except (urllib2.URLError, urllib2.HTTPError):
                 # In case of exceed timeout period or
                 # other URL connection errors.
                 # Get nearest to context error_log object

@@ -1,5 +1,3 @@
-import re
-
 from zope.interface import implements
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter

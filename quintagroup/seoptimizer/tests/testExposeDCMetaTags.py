@@ -1,4 +1,3 @@
-import string
 from DateTime import DateTime
 
 from quintagroup.seoptimizer.tests.base import FunctionalTestCase

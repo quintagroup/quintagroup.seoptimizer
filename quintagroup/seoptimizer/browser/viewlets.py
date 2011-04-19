@@ -14,7 +14,7 @@ from quintagroup.seoptimizer.interfaces import IMetaKeywords
 from quintagroup.seoptimizer.interfaces import IMappingMetaTags
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
-from Products.CMFPlone.PloneTool import *
+from Products.CMFPlone.PloneTool import FLOOR_DATE, CEILING_DATE
 
 
 class SEOTagsViewlet(ViewletBase):

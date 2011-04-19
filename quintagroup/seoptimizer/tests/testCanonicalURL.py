@@ -54,7 +54,7 @@ class TestCanonicalURL(FunctionalTestCase):
              cpath, expect))
 
     def testCatalogUpdated(self):
-        purl = getToolByName(self.portal, 'portal_url')
+        getToolByName(self.portal, 'portal_url')
         catalog = getToolByName(self.portal, 'portal_catalog')
         catalog.addColumn('canonical_link')
 

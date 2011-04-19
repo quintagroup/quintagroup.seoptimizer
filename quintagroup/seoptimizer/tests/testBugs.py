@@ -3,15 +3,12 @@ from cStringIO import StringIO
 
 from OFS.interfaces import ITraversable
 
-#from zope.component import providedBy
 from zope.component import getGlobalSiteManager
 from zope.component import queryAdapter, getMultiAdapter
 from zope.interface import directlyProvides
 from zope.viewlet.interfaces import IViewlet, IViewletManager
-#from zope.publisher.browser import TestRequest
 
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
-#from quintagroup.seoptimizer.browser.views import PROP_CUSTOM_PREFIX
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import DefaultCanonicalLinkAdapter

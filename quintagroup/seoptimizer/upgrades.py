@@ -30,7 +30,7 @@ def changeMetatagsOrderList(plone_tools):
     """ Change format metatags order list
         from "metaname accessor" to "metaname".
     """
-    types_tool = plone_tools.types()
+    plone_tools.types()
     setup_tool = plone_tools.url().getPortalObject().portal_setup
     seoprops_tool = plone_tools.properties().seo_properties
     if seoprops_tool.hasProperty('metatags_order'):

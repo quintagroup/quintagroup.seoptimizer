@@ -244,7 +244,7 @@ class SEOContextPropertiesView(BrowserView):
     def setSEOCustomMetaTags(self, custommetatags):
         """ Set seo custom metatags properties.
         """
-        context = aq_inner(self.context)
+        aq_inner(self.context)
         for tag in custommetatags:
             self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, tag['meta_name']),
                              tag['meta_content'])
@@ -290,7 +290,7 @@ class SEOContextPropertiesView(BrowserView):
             Change object properties by passing either a mapping object
             of name:value pairs {'foo':6} or passing name=value parameters.
         """
-        context = aq_inner(self.context)
+        aq_inner(self.context)
         self.delAllSEOCustomMetaTagsProperties()
         if kw.get('seo_custommetatags_override'):
             custommetatags = kw.get('seo_custommetatags', {})
@@ -353,7 +353,7 @@ class VisibilityCheckerView(BrowserView):
     def checkVisibilitySEOAction(self):
         """ Checks visibility 'SEO Properties' action for content
         """
-        context = aq_inner(self.context)
+        aq_inner(self.context)
         plone = queryMultiAdapter((self, self.request),
                                   name="plone_portal_state").portal()
         adapter = ISEOConfigletSchema(plone)

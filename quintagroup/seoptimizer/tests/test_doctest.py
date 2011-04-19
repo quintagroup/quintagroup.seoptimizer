@@ -4,9 +4,6 @@ import doctest
 from quintagroup.seoptimizer.tests.base import FunctionalTestCase, \
     FunctionalTestCaseNotInstalled, ztc
 
-from quintagroup.seoptimizer.config import PROJECT_NAME
-from quintagroup.seoptimizer.config import SUPPORT_BLAYER
-
 
 def test_suite():
     return unittest.TestSuite([
