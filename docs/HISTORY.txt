@@ -1,6 +1,14 @@
 Changelog
 =========
 
+4.0.5 (unreleased)
+------------------
+
+* Fixed title escaping,
+  http://plone.org/products/plone-seo/issues/31,
+  [vmaksymiv]
+
+
 4.0.4 (2010-11-05)
 ------------------
 
