@@ -265,14 +265,14 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         test_url = self.portal_url + '/front-page/@@seo-context-properties'
         # Anonymous: can NOT ACCESS
         headers = self.publish(path=test_url).headers
-        self.assertEqual(headers.get('bobo-exception-type', ""),
-                         'Unauthorized', "No 'Unauthorized' exception rised " \
-                         "for Anonymous on '@@seo-context-properties' view")
+        self.assert_('Unauthorized' in headers.get('bobo-exception-type', ""),
+                     "No 'Unauthorized' exception rised for Anonymous on " \
+                     "'@@seo-context-properties' view")
         # Member: can NOT ACCESS
         self.publish(path=test_url, basic=self.member_auth).headers
-        self.assertEqual(headers.get('bobo-exception-type', ""),
-                         'Unauthorized', "No 'Unauthorized' exception rised " \
-                         "for Member on '@@seo-context-properties' view")
+        self.assert_('Unauthorized' in headers.get('bobo-exception-type', ""),
+                     "No 'Unauthorized' exception rised for Member on " \
+                     "'@@seo-context-properties' view")
         # Editor: CAN Access
         res = self.publish(path=test_url, basic=self.editor_auth)
         self.assertEqual(res.status, 200)
