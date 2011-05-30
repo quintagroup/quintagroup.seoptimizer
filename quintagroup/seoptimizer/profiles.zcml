@@ -37,4 +37,11 @@
       sortkey="1"
       profile="quintagroup.seoptimizer:default" />
 
+  <genericsetup:upgradeStep
+      title="Upgrade quintagroup.seoptimizer"
+      description="Unescape quintagroup.seoptimizer title and comment properties"
+      destination="4.0.5"
+      handler=".upgrades.unescapeOldTitle"
+      profile="quintagroup.seoptimizer:default" />
+
 </configure>

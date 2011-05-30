@@ -51,7 +51,7 @@ except:
 def _group_unescape(m):
     if m.group("ent"):
         try:
-            return entitydefs[m.group("ent")]
+            return unescape(entitydefs[m.group("ent")])
         except KeyError:
             return m.group(0)
     if m.group("dec"):
@@ -65,9 +65,4 @@ expr = re.compile(r'&(?:(?P<ent>\w+?)|'\
 
 
 def unescape(s):
-    result = expr.sub(_group_unescape, s)
-
-    if isinstance(s, unicode):
-        return result
-    else:
-        return unicode(result)
+    return expr.sub(_group_unescape, s)

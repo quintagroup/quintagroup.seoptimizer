@@ -1,6 +1,11 @@
 import logging
 from zope.component import queryMultiAdapter
 
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import getSiteEncoding, safe_unicode
+
+from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
+from quintagroup.seoptimizer.util import unescape
 from quintagroup.canonicalpath.interfaces  import ICanonicalLink
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 
@@ -145,3 +150,28 @@ def upgrade_2_to_3(setuptool):
     removeNonUseSeoProperties(plone_tools)
     removeSkin(plone_tools)
     migrateCanonical(plone_tools)
+
+
+def unescapeOldTitle(setuptool):
+    """ Upgrade quintagroup.seoptimizer title and comments properties.
+    """
+    portal = getToolByName(setuptool, "portal_url").getPortalObject()
+    types = ISEOConfigletSchema(portal).types_seo_enabled
+
+    catalog = getToolByName(portal, "portal_catalog")
+    brains = catalog(portal_type=types)
+
+    for b in brains:
+        obj = b.getObject()
+        obj_enc = getSiteEncoding(obj)
+
+        if obj.hasProperty("qSEO_title"):
+            uni_qSEO_title = safe_unicode(obj.qSEO_title, encoding=obj_enc)
+            fixed_title = unescape(uni_qSEO_title).encode(obj_enc)
+            obj._updateProperty("qSEO_title", fixed_title)
+
+        if obj.hasProperty("qSEO_html_comment"):
+            uni_qSEO_html_comment = safe_unicode(obj.qSEO_html_comment,
+                                                 encoding=obj_enc)
+            fixed_comment = unescape(uni_qSEO_html_comment).encode(obj_enc)
+            obj._updateProperty("qSEO_html_comment", fixed_comment)
