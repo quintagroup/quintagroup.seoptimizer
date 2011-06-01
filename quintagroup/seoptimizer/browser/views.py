@@ -64,7 +64,7 @@ class SEOContext(BrowserView):
             "meta_keywords": self.getSEOProperty('qSEO_keywords',
                                                  'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
-            "seo_canonical": self.getCanonical(),
+            "seo_canonical": self.getSEOProperty(CANONICAL_PROPERTY),
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
             "has_seo_robots": self.context.hasProperty('qSEO_robots'),
@@ -157,9 +157,13 @@ class SEOContext(BrowserView):
                                                     name_value[1] or ''})
         return result
 
+    # Not used
     def getCanonical(self):
-        canonical = queryAdapter(self.context, ICanonicalLink)
-        return canonical and canonical.canonical_link or ""
+        # TODO: rewrite function structure
+        if self.context.hasProperty(CANONICAL_PROPERTY):
+            canonical = queryAdapter(self.context, ICanonicalLink)
+            return canonical and canonical.canonical_link or ""
+        return ""
 
 
 class SEOContextPropertiesView(BrowserView):

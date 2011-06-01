@@ -4,6 +4,8 @@ from Products.PloneTestCase.PloneTestCase import portal_owner, \
     default_password
 import re
 from Products.CMFCore.utils import getToolByName
+from quintagroup.canonicalpath.adapters import PROPERTY_LINK \
+                                        as CANONICAL_PROPERTY
 
 
 class TestCanonicalURL(FunctionalTestCase):
@@ -19,14 +21,59 @@ class TestCanonicalURL(FunctionalTestCase):
                                '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>',
                                 re.S | re.M)
 
-    def test_CanonicalURL(self):
+    def test_NoCanonicalURL(self):
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
         foundcurls = self.curl.findall(html)
-        mydoc_url = self.mydoc.absolute_url()
+        assert not self.mydoc.hasProperty(CANONICAL_PROPERTY)
+        self.assertTrue(not foundcurls, "CANONICAL URL found, " \
+                "but object hasn't '%s' property" % CANONICAL_PROPERTY)
 
-        self.assertTrue([1 for curl in foundcurls if curl == mydoc_url],
+    def test_CanonicalProperty(self):
+        self.assertTrue(not self.mydoc.hasProperty(CANONICAL_PROPERTY),
+                        'Canonical URL property is present in new document.')
+
+    def test_CanonicalPropertyEnable(self):
+        curl = '/newcanonical'
+        res = self.publish(self.mydoc_path + '/@@seo-context-properties?' \
+                     'seo_canonical=%s&seo_canonical_override=checked&'\
+                     'form.submitted=1&form.button.Save=Save' % curl,
+                      self.basic_auth).getBody()
+
+        self.assertTrue(self.mydoc.hasProperty(CANONICAL_PROPERTY),
+                        'Overriding Canonical URL enabled,' \
+                        'but object hasn\'t canonical url property')
+
+        self.assertTrue(self.mydoc.getProperty(CANONICAL_PROPERTY) == curl,
+                        "Wrong Canonical URL for document: %s, all must be: %s"
+                        % (self.mydoc.getProperty(CANONICAL_PROPERTY), curl))
+
+    def test_CanonicalPropertyDisable(self):
+        curl = '/newcanonical'
+        self.mydoc.manage_addProperty(CANONICAL_PROPERTY, curl,
+                                      'string')
+
+        assert self.mydoc.getProperty(CANONICAL_PROPERTY) == curl
+
+        res = self.publish(self.mydoc_path + '/@@seo-context-properties?' \
+                     'seo_canonical=%s&seo_canonical_override=&'\
+                     'form.submitted=1&form.button.Save=Save' % curl,
+                      self.basic_auth).getBody()
+
+        self.assertTrue(not self.mydoc.hasProperty(CANONICAL_PROPERTY),
+                        'Overriding Canonical URL disabled,' \
+                        'but canonical link is present in object properties')
+
+    def test_CanonicalUrlPresent(self):
+        self.mydoc.manage_addProperty(CANONICAL_PROPERTY, self.mydoc_path,
+                                      'string')
+        assert self.mydoc.hasProperty(CANONICAL_PROPERTY)
+
+        html = self.publish(self.mydoc_path, self.basic_auth).getBody()
+        foundcurls = self.curl.findall(html)
+
+        self.assertTrue([1 for curl in foundcurls if curl == self.mydoc_path],
            "Wrong CANONICAL URL for document: %s, all must be: %s" % (
-           foundcurls, mydoc_url))
+           foundcurls, self.mydoc_path))
 
     def test_updateCanonicalURL(self):
         mydoc_url_new = self.mydoc.absolute_url() + '.new'
