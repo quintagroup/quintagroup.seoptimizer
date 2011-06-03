@@ -18,6 +18,7 @@ from Products.PloneTestCase.PloneTestCase import portal_owner, \
     default_password
 import re
 from Products.Five import zcml
+from Products.CMFCore.utils import getToolByName
 
 
 class TestBugs(FunctionalTestCase):
@@ -123,6 +124,14 @@ class TestBugs(FunctionalTestCase):
            - page rendering should not break, but only canonical link
            should disappear.
         """
+        # XXX: in 4.0.6 version we has quick fix bug #33 
+        # http://plone.org/products/plone-seo/issues/33
+        # so this test hasn't any sense at 4.0.6 version
+        qi = getToolByName(self.getPortal(), "portal_quickinstaller")
+        seo_version = qi.getProductVersion('quintagroup.seoptimizer')
+        if seo_version is not None and seo_version.startswith("4.0.6"):
+            return
+
         curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
                           '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S | re.M)
         # When adapter registered for the object - canoncal link
