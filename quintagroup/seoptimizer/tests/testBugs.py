@@ -1,5 +1,6 @@
 import urllib
 from cStringIO import StringIO
+import pkg_resources
 
 from OFS.interfaces import ITraversable
 
@@ -124,11 +125,16 @@ class TestBugs(FunctionalTestCase):
            - page rendering should not break, but only canonical link
            should disappear.
         """
-        # XXX: in 4.0.6 version we has quick fix bug #33 
+        # XXX: in 4.0.6 version we has quick fix bug #33
         # http://plone.org/products/plone-seo/issues/33
         # so this test hasn't any sense at 4.0.6 version
-        qi = getToolByName(self.getPortal(), "portal_quickinstaller")
-        seo_version = qi.getProductVersion('quintagroup.seoptimizer')
+        try:
+            # try to get version from egg-info. Need for plone<3.3
+            seo_version = pkg_resources.get_distribution(
+                            'quintagroup.seoptimizer').version
+        except pkg_resources.DistributionNotFound:
+            qi = getToolByName(self.getPortal(), "portal_quickinstaller")
+            seo_version = qi.getProductVersion('quintagroup.seoptimizer')
         if seo_version is not None and seo_version.startswith("4.0.6"):
             return
 
