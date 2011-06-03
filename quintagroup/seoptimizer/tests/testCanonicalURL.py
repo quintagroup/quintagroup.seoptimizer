@@ -34,10 +34,10 @@ class TestCanonicalURL(FunctionalTestCase):
 
     def test_CanonicalPropertyEnable(self):
         curl = '/newcanonical'
-        res = self.publish(self.mydoc_path + '/@@seo-context-properties?' \
+        self.publish(self.mydoc_path + '/@@seo-context-properties?' \
                      'seo_canonical=%s&seo_canonical_override=checked&'\
                      'form.submitted=1&form.button.Save=Save' % curl,
-                      self.basic_auth).getBody()
+                      self.basic_auth)
 
         self.assertTrue(self.mydoc.hasProperty(CANONICAL_PROPERTY),
                         'Overriding Canonical URL enabled,' \
@@ -54,10 +54,10 @@ class TestCanonicalURL(FunctionalTestCase):
 
         assert self.mydoc.getProperty(CANONICAL_PROPERTY) == curl
 
-        res = self.publish(self.mydoc_path + '/@@seo-context-properties?' \
+        self.publish(self.mydoc_path + '/@@seo-context-properties?' \
                      'seo_canonical=%s&seo_canonical_override=&'\
                      'form.submitted=1&form.button.Save=Save' % curl,
-                      self.basic_auth).getBody()
+                      self.basic_auth)
 
         self.assertTrue(not self.mydoc.hasProperty(CANONICAL_PROPERTY),
                         'Overriding Canonical URL disabled,' \
