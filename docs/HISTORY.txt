@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.0.6 (2011-06-06)
+------------------
+* Fixed canonical link displaying,
+  http://plone.org/products/plone-seo/issues/33,
+  [vmaksymiv]
+
+
 4.0.5 (unreleased)
 ------------------
 
