@@ -53,20 +53,14 @@ Links
 Authors
 
   * Myroslav Opyr
-
   * Andriy Mylenkyy
-
   * Volodymyr Cherepanyak
-
   * Vitaliy Podoba
-
   * Taras Melnychuk
-
   * Mykola Kharechko
-
   * Vitaliy Stepanov
-
   * Volodymyr Romaniuk
+  * Volodymyr Maksymiv
 
-Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2010
+Copyright (c) "Quintagroup": http://quintagroup.com, 2004-2011
 

@@ -4,7 +4,7 @@ Installation
 Buildout
 --------
 
-Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance recipe to manage your project, you can do this:
+If you are using zc.buildout and the plone.recipe.zope2instance recipe to manage your project:
 
 * Add ``quintagroup.seoptimizer`` to the list of eggs to install, e.g.:
 
@@ -40,22 +40,6 @@ Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance r
 * Restart the Zope server, e.g with the following command in the terminal::
 
    $ ./bin/instance restart
-
-
-Traditional Zope 2 Instance
----------------------------
-
-To install quintagroup.seoptimizer into the global Python environment (or a workingenv), using a traditional Zope 2 instance, you can do this:
-
-* Copy ``quintagroup`` folder to your instance's */lib/python* directory.
-
-* Create a file called ``quintagroup.seoptimizer-configure.zcml`` in your instance's */etc/package-includes* directory. The file should only contain this::
-
-  <include package="quintagroup.seoptimizer" file="configure.zcml" />
-
-* Restart the Zope server, for example with the following command in the terminal::
-
-   $ ./bin/zopectl restart
 
 
 Install quintagroup.seoptimizer via ZMI portal_setup  -> *Import* tab. Select ``quintagroup.seoptimizer`` from the list of available profiles and press *Import all steps*.

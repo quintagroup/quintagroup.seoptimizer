@@ -9,17 +9,11 @@ was created to enhance SE visibility of Plone sites.
 quintagroup.seoptimizer allows per document editing of:
 
 * HTML Title tag
-
 * META description tag
-
 * META keywords tag
-
 * HTML comment into page header
-
 * META robots tag
-
 * META Disposition tag
-
 * Canonical URl http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL
 
 For Title, description keywords and comment you have statistics (total/stop/used words, field length counter).
@@ -97,18 +91,12 @@ Authors
 -------
 
 * Myroslav Opyr
-
 * Andriy Mylenkyy
-
 * Volodymyr Cherepanyak
-
 * Vitaliy Podoba
-
 * Taras Melnychuk
-
 * Mykola Kharechko
-
 * Vitaliy Stepanov
-
 * Volodymyr Romaniuk
+* Volodymyr Maksymiv
 
