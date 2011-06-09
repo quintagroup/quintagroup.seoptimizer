@@ -127,7 +127,7 @@ class TestBugs(FunctionalTestCase):
         """
         # XXX: in 4.0.6 version we has quick fix bug #33
         # http://plone.org/products/plone-seo/issues/33
-        # so this test hasn't any sense at 4.0.6 version
+        # so this test hasn't any sense for versions with this fix
         try:
             # try to get version from egg-info. Need for plone<3.3
             seo_version = pkg_resources.get_distribution(
@@ -135,8 +135,12 @@ class TestBugs(FunctionalTestCase):
         except pkg_resources.DistributionNotFound:
             qi = getToolByName(self.getPortal(), "portal_quickinstaller")
             seo_version = qi.getProductVersion('quintagroup.seoptimizer')
-        if seo_version is not None and seo_version.startswith("4.0.6"):
-            return
+
+        exclude_versions = ("4.0.6", "4.1.0")
+        if seo_version is not None:
+            for v in exclude_versions:
+                if seo_version.startswith(v):
+                    return
 
         curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
                           '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S | re.M)

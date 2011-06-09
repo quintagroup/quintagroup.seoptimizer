@@ -34,9 +34,6 @@ do this using the default user from PloneTestCase:
 We have the login portlet, so let's use that.
 
     >>> browser.open('http://nohost/plone/login_form')
-    >>> browser.getLink('Log in').click()
-    >>> browser.url
-    'http://nohost/plone/login_form'
     >>> browser.getControl('Login Name').value = portal_owner
     >>> browser.getControl('Password').value = default_password
     >>> browser.getControl('Log in').click()

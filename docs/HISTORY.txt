@@ -1,6 +1,15 @@
 Changelog
 =========
 
+4.1.0 (unreleased)
+----------------
+
+* Fixed doc tests for plone v4.1.
+  'Log in' link leads to a python script("<site>/login") that provides
+  more opportunities to login.
+  [vmaksymiv]
+
+
 4.0.6 (2011-06-06)
 ------------------
 * Fixed canonical link display, it is now not added as default

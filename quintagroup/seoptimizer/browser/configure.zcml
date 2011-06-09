@@ -3,6 +3,11 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="quintagroup.seoptimizer">
 
+    <!-- Starting from Plone-4.1 it is necessary to import permissions.zcml from Products.CMFCore.
+         Since older versions of CMFCore didn't have that zcml, we are including whole
+         package and permissions.zcml gets included if available. -->
+    <include package="Products.CMFCore"/>
+
     <browser:page
         for="Products.Archetypes.interfaces.IBaseObject"
         attribute="validateKeywords"
