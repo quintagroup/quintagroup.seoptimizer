@@ -2,7 +2,10 @@ Changelog
 =========
 
 4.1.0 (unreleased)
-----------------
+------------------
+
+* Compatibility with plone 4.1 added.
+  [vmaksymiv]
 
 * Fixed doc tests for plone v4.1.
   'Log in' link leads to a python script("<site>/login") that provides
