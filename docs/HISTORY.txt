@@ -1,15 +1,15 @@
 Changelog
 =========
 
-4.1.0 (unreleased)
+4.1.0 (2011-10-28)
 ------------------
 
-* Compatibility with plone 4.1 added.
+* Compatibility with Plone 4.1 added.
   [vmaksymiv]
 
-* Fixed doc tests for plone v4.1.
-  'Log in' link leads to a python script("<site>/login") that provides
-  more opportunities to login.
+* Fixed doc tests for Plone 4.1.
+  Plone 4.1. introduced 'Log in' python script ("[your_domain/plone_site]/login")
+  instead of form in earlier Plones.
   [vmaksymiv]
 
 
