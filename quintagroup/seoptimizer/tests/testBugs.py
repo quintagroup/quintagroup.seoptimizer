@@ -193,6 +193,24 @@ class TestBugs(FunctionalTestCase):
                      re.S | re.M)
         self.assert_(m, 'Title is not escaped properly.')
 
+    def test_escape_characters_desctiption(self):
+        """Change escape characters in desctiption of SEO properties
+        """
+        from cgi import escape
+        description = 'New <i>Description</i>'
+        form_data = {'seo_description': description,
+                     'seo_description_override:int': 1,
+                     'form.button.Save': "Save",
+                     'form.submitted:int': 1}
+
+        self.publish(path=self.mydoc_path + '/@@seo-context-properties',
+                     basic=self.basic_auth, request_method='POST',
+                     stdin=StringIO(urllib.urlencode(form_data)))
+        html = self.publish(self.mydoc_path, self.basic_auth).getBody()
+        m = re.match('.*<meta name="description" content="%s"' % 
+                     escape(description), html, re.S | re.M)
+        self.assert_(m, 'Desctiption is not escaped properly.')
+
     def test_escape_characters_comment(self):
         """Change escape characters in comment of SEO properties
         """
