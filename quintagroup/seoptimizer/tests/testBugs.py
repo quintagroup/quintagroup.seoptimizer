@@ -207,7 +207,7 @@ class TestBugs(FunctionalTestCase):
                      basic=self.basic_auth, request_method='POST',
                      stdin=StringIO(urllib.urlencode(form_data)))
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
-        m = re.match('.*<meta name="description" content="%s"' % 
+        m = re.match('.*<meta name="description" content="%s"' %
                      escape(description), html, re.S | re.M)
         self.assert_(m, 'Desctiption is not escaped properly.')
 
