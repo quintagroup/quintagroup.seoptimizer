@@ -136,7 +136,7 @@ class TestBugs(FunctionalTestCase):
             qi = getToolByName(self.getPortal(), "portal_quickinstaller")
             seo_version = qi.getProductVersion('quintagroup.seoptimizer')
 
-        exclude_versions = ("4.0.6", "4.1.0")
+        exclude_versions = ("4.0.6", "4.1.0", "4.1.1")
         if seo_version is not None:
             for v in exclude_versions:
                 if seo_version.startswith(v):
