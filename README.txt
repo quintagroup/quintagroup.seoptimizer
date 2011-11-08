@@ -44,7 +44,7 @@ Usage
 Requirements
 ------------
 
-* Plone 3.x, Plone 4 
+* Plone 3.x, Plone 4.x
 
 quintagroup.seoptimizer requires plone.browserlayer package to be installed in your site. plone.browserlayer package is shipped with Plone >= 3.1 and thus you don't need anything extra when you have that version of Plone.
 

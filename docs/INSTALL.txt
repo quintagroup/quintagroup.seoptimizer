@@ -8,7 +8,7 @@ If you are using zc.buildout and the plone.recipe.zope2instance recipe to manage
 
 * Add ``quintagroup.seoptimizer`` to the list of eggs to install, e.g.:
 
-  For Plone 4 - in your buildout.cfg file write::
+  For Plone 4.x - in your buildout.cfg file write::
 
    [buildout]
    ....
