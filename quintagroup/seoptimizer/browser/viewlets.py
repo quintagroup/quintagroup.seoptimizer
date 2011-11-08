@@ -92,16 +92,13 @@ class SEOTagsViewlet(ViewletBase):
             # Special cases
             if accessor == 'Description' and \
                not 'description' in metadata_names:
-                result['description'] = value
+                result['description'] = escape(value)
             elif accessor == 'Subject' and \
                  not 'keywords' in metadata_names:
-                result['keywords'] = value
+                result['keywords'] = escape(value)
 
             if accessor not in ('Description', 'Subject'):
-                if accessor == 'seo_description':
-                    result[key] = escape(value)
-                else:
-                    result[key] = value
+                result[key] = escape(value)
 
         if use_all:
             created = self.context.CreationDate()
@@ -146,7 +143,7 @@ class SEOTagsViewlet(ViewletBase):
                            seo_context['seo_customMetaTags'] or []
         for tag in custom_meta_tags:
             if tag['meta_content']:
-                result[tag['meta_name']] = tag['meta_content']
+                result[tag['meta_name']] = escape(tag['meta_content'])
 
         return result
 
