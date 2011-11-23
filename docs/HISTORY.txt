@@ -1,10 +1,10 @@
 Changelog
 =========
 
-4.1.1 (2011-11-08)
+4.1.1 (2011-11-23)
 ------------------
 
-* Fixed seo fields escaping,
+* Fixed seo fields escaping.
   [vmaksymiv]
 
 
