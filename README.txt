@@ -100,3 +100,7 @@ Authors
 * Volodymyr Romaniuk
 * Volodymyr Maksymiv
 
+Contributors
+------------
+ * Michael Krishtopa (Theo) testing bug reporting
+  
