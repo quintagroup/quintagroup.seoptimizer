@@ -1,4 +1,4 @@
-from cgi import escape
+import cgi 
 from DateTime import DateTime
 from Acquisition import aq_inner
 
@@ -15,6 +15,12 @@ from quintagroup.seoptimizer.interfaces import IMappingMetaTags
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 
 from Products.CMFPlone.PloneTool import FLOOR_DATE, CEILING_DATE
+
+
+def escape(value):
+    """Extended escape"""
+    value = cgi.escape(value, True)
+    return value.replace("'","&apos;")
 
 
 class SEOTagsViewlet(ViewletBase):
