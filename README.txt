@@ -103,4 +103,5 @@ Authors
 Contributors
 ------------
  * Michael Krishtopa (Theo) testing bug reporting
+ * Craig Russell
   
