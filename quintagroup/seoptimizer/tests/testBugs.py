@@ -120,52 +120,6 @@ class TestBugs(FunctionalTestCase):
 
         self.assertEqual(old_title, new_title)
 
-    def test_bug_22_at_plone_org(self):
-        """If ICanonicalLink adapter is not found for the context object
-           - page rendering should not break, but only canonical link
-           should disappear.
-        """
-        # XXX: in 4.0.6 version we has quick fix bug #33
-        # http://plone.org/products/plone-seo/issues/33
-        # so this test hasn't any sense for versions with this fix
-        try:
-            # try to get version from egg-info. Need for plone<3.3
-            seo_version = pkg_resources.get_distribution(
-                            'quintagroup.seoptimizer').version
-        except pkg_resources.DistributionNotFound:
-            qi = getToolByName(self.getPortal(), "portal_quickinstaller")
-            seo_version = qi.getProductVersion('quintagroup.seoptimizer')
-
-        exclude_versions = ("4.0.6", "4.1.0", "4.1.1")
-        if seo_version is not None:
-            for v in exclude_versions:
-                if seo_version.startswith(v):
-                    return
-
-        curl = re.compile('<link\srel\s*=\s*"canonical"\s+' \
-                          '[^>]*href\s*=\s*\"([^\"]*)\"[^>]*>', re.S | re.M)
-        # When adapter registered for the object - canoncal link
-        # present on the page
-        self.assertNotEqual(queryAdapter(self.my_doc, ICanonicalLink), None)
-
-        res = self.publish(path=self.mydoc_path, basic=self.basic_auth)
-        self.assertNotEqual(curl.search(res.getBody()), None)
-
-        # Now remove adapter from the registry -> this should :
-        #     - not break page on rendering;
-        #     - canonical link will be absent on the page
-        gsm = getGlobalSiteManager()
-        gsm.unregisterAdapter(DefaultCanonicalLinkAdapter, [ITraversable, ],
-                              ICanonicalLink)
-        self.assertEqual(queryAdapter(self.my_doc, ICanonicalLink), None)
-
-        res = self.publish(path=self.mydoc_path, basic=self.basic_auth)
-        self.assertEqual(curl.search(res.getBody()), None)
-
-        # register adapter back in the global site manager
-        gsm.registerAdapter(DefaultCanonicalLinkAdapter, [ITraversable, ],
-                            ICanonicalLink)
-
     def test_bug_19_23_at_plone_org(self):
         """overrides.zcml should present in the root of the package"""
         import quintagroup.seoptimizer
