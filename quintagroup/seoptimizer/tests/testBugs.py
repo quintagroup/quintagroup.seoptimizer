@@ -1,25 +1,18 @@
 import urllib
 from cStringIO import StringIO
-import pkg_resources
 
-from OFS.interfaces import ITraversable
-
-from zope.component import getGlobalSiteManager
 from zope.component import queryAdapter, getMultiAdapter
 from zope.interface import directlyProvides
 from zope.viewlet.interfaces import IViewlet, IViewletManager
 
 from quintagroup.seoptimizer.browser.interfaces import IPloneSEOLayer
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
-from quintagroup.canonicalpath.interfaces import ICanonicalLink
-from quintagroup.canonicalpath.adapters import DefaultCanonicalLinkAdapter
 
 from quintagroup.seoptimizer.tests.base import FunctionalTestCase
 from Products.PloneTestCase.PloneTestCase import portal_owner, \
     default_password
 import re
 from Products.Five import zcml
-from Products.CMFCore.utils import getToolByName
 
 
 class TestBugs(FunctionalTestCase):
