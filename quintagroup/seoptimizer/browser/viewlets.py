@@ -104,7 +104,7 @@ class SEOTagsViewlet(ViewletBase):
                 result['keywords'] = escape(value)
 
             if accessor not in ('Description', 'Subject'):
-                result[key] = escape(value)
+                result[key] = escape(src(value))
 
         if use_all:
             created = self.context.CreationDate()
