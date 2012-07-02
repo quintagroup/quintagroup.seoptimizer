@@ -12,6 +12,7 @@ quintagroup.seoptimizer allows per document editing of:
 * META description tag
 * META keywords tag
 * HTML comment into page header
+* HTML noframes tag into page header
 * META robots tag
 * META Disposition tag
 * Canonical URl http://projects.quintagroup.com/products/wiki/qSEOptimizer#CanonicalURL
@@ -99,6 +100,7 @@ Authors
 * Vitaliy Stepanov
 * Volodymyr Romaniuk
 * Volodymyr Maksymiv
+* Taras Kozlovskyy
 
 Contributors
 ------------
