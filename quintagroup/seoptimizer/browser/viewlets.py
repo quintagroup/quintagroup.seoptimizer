@@ -154,7 +154,7 @@ class SEOTagsViewlet(ViewletBase):
         return result
 
 
-class TitleCommentViewlet(ViewletBase):
+class TitleCommentNoframeViewlet(ViewletBase):
     """ Simple viewlet for custom title rendering.
     """
 
@@ -168,6 +168,7 @@ class TitleCommentViewlet(ViewletBase):
 
         self.override_title = self.seo_context['has_seo_title']
         self.has_comments = self.seo_context['has_html_comment']
+        self.has_noframes = self.seo_context['has_noframes']
 
     def std_title(self):
         page_title = safe_unicode(self.context_state.object_title())
@@ -191,7 +192,13 @@ class TitleCommentViewlet(ViewletBase):
             comments = u"\n<!--%s-->" % escape(safe_unicode(
                 self.seo_context["seo_html_comment"]))
 
-        return qseo_title + comments
+        if self.has_noframes:
+            noframes = u"<noframes>%s</noframes>" % escape(safe_unicode(
+                self.seo_context["seo_noframes"]))
+        else:
+            noframes = ""
+
+        return qseo_title + comments + noframes
 
 
 class CustomScriptViewlet(ViewletBase):

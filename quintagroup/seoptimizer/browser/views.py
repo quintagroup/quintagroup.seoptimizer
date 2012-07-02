@@ -61,6 +61,8 @@ class SEOContext(BrowserView):
             # "seo_globalCustomMetaTags": self.seo_globalCustomMetaTags(),
             "seo_html_comment": self.getSEOProperty('qSEO_html_comment',
                                                     default=''),
+            "seo_noframes": self.getSEOProperty('qSEO_noframes',
+                                                    default=''),
             "meta_keywords": self.getSEOProperty('qSEO_keywords',
                                                  'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
@@ -73,6 +75,7 @@ class SEOContext(BrowserView):
             "has_seo_distribution": \
                      self.context.hasProperty('qSEO_distribution'),
             "has_html_comment": self.context.hasProperty('qSEO_html_comment'),
+            "has_noframes": self.context.hasProperty('qSEO_noframes'),
             "has_seo_keywords": self.context.hasProperty('qSEO_keywords'),
             "has_seo_canonical": self.context.hasProperty(CANONICAL_PROPERTY),
             }

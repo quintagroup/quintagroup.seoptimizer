@@ -149,6 +149,29 @@
                       />
           </div>
           <div class="field">
+            <label i18n:translate="label_noframes" for="seo_noframes">
+              HTML Noframes
+            </label>
+            <div class="formHelp" i18n:translate="help_seo_noframes">
+              Noframes into HTML header.
+            </div>
+            <input type="checkbox"
+                   id="seo_noframes_override"
+                   name="seo_noframes_override"
+                   tal:attributes="checked python:view.test(seo_context['has_noframes'], 'on', None);"
+                   />
+            <label i18n:translate="label_override" for="seo_noframes_override">
+              Override
+            </label>
+            <br />
+            <textarea id="seo_noframes"
+                      name="seo_noframes"
+                      rows="5"
+                      cols="15"
+                      tal:content="request/seo_noframes | seo_context/seo_noframes"
+                      />
+          </div>
+          <div class="field">
             <label i18n:translate="label_robot_tag" for="seo_robots">
               Robot Tag
             </label>

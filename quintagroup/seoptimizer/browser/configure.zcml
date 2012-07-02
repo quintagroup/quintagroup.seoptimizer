@@ -36,7 +36,7 @@
     <browser:viewlet
         name="plone.htmlhead.title"
         manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
-        class=".viewlets.TitleCommentViewlet"
+        class=".viewlets.TitleCommentNoframeViewlet"
         layer=".interfaces.IPloneSEOLayer"
         permission="zope2.View"
         />

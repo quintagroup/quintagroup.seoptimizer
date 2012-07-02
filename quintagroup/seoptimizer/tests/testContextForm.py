@@ -32,6 +32,8 @@ FORM = {
     'seo_description_override:int': 1,
     'seo_html_comment': 'no comments',
     'seo_html_comment_override:int': 1,
+    'seo_noframes': 'noframes set in',
+    'seo_noframes_override:int': 1,
     'seo_distribution_override:int': 1,
     'seo_custommetatags_override:int': 1,
     'seo_description': 'it is description, test keyword1',
@@ -76,6 +78,11 @@ class TestContextForm(FunctionalTestCase):
         m = re.match('.*<title>\\s*hello world\\s*</title>', self.html,
                      re.S | re.M)
         self.assert_(m, 'Title not set in')
+
+    def testNoframes(self):
+        m = re.match('.*<noframes>\\s*noframes set in\\s*</noframes>', self.html,
+                     re.S | re.M)
+        self.assert_(m, 'Noframes not set in')
 
     def testTitleDuplication(self):
         """If we are not overriding page title and current page title equals

@@ -12,6 +12,8 @@ Features
 
   * HTML comment into page header
 
+  * HTML nofames tag into page header
+
   * META robots tag
 
   * META Disposition tag
