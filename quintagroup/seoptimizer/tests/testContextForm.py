@@ -80,8 +80,8 @@ class TestContextForm(FunctionalTestCase):
         self.assert_(m, 'Title not set in')
 
     def testNoframes(self):
-        m = re.match('.*<noframes>\\s*noframes set in\\s*</noframes>', self.html,
-                     re.S | re.M)
+        m = re.match('.*<noframes>\\s*noframes set in\\s*</noframes>',
+                     self.html, re.S | re.M)
         self.assert_(m, 'Noframes not set in')
 
     def testTitleDuplication(self):
