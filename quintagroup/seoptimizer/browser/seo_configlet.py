@@ -4,8 +4,10 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.schema import Bool, Choice, Tuple, List
 from zope.schema import SourceText
-
-from zope.app.component.hooks import getSite
+try:
+    from zope.app.component.hooks import getSite
+except ImportError:
+    from zope.component.hooks import getSite
 from zope.app.form.browser import TextAreaWidget
 
 from plone.fieldsets.fieldsets import FormFieldsets
