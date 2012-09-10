@@ -4,8 +4,10 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.schema import Bool, Choice, Tuple, List
 from zope.schema import SourceText
+getSite = None
 try:
-    from zope.app.component.hooks import getSite
+    from zope.app.component import hooks
+    getSite = hooks.getSite
 except ImportError:
     from zope.component.hooks import getSite
 from zope.app.form.browser import TextAreaWidget
