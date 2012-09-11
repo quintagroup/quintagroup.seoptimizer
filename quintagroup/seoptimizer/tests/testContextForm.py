@@ -7,11 +7,9 @@ from Products.PloneTestCase.PloneTestCase import portal_owner, \
     default_password
 import re
 
-CUSTOM_METATAGS = [
-   {'meta_name': 'metatag1', 'meta_content': 'metatag1value'},
-   {'meta_name': 'metatag2', 'meta_content': 'metatag2value'},
-   {'meta_name': 'metatag3', 'meta_content': ''}
-]
+CUSTOM_METATAGS = [{'meta_name': 'metatag1', 'meta_content': 'metatag1value'},
+                   {'meta_name': 'metatag2', 'meta_content': 'metatag2value'},
+                   {'meta_name': 'metatag3', 'meta_content': ''}]
 
 VIEW_METATAGS = [
     'DC.creator', 'DC.format', 'DC.date.modified',
