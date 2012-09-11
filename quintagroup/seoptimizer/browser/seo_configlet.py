@@ -4,11 +4,14 @@ from zope.interface import implements
 from zope.component import adapts
 from zope.schema import Bool, Choice, Tuple, List
 from zope.schema import SourceText
+# BBB Support different versions of Plone
 getSite = None
 try:
+    # Plone 3.x, 4.0, 4.1, 4.2
     from zope.app.component import hooks
     getSite = hooks.getSite
 except ImportError:
+    # Plone 4.3
     from zope.component.hooks import getSite
 from zope.app.form.browser import TextAreaWidget
 
