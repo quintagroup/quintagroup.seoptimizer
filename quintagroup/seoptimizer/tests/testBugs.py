@@ -33,11 +33,11 @@ class TestBugs(FunctionalTestCase):
         request = portal.REQUEST
         view = portal.restrictedTraverse('@@plone')
         manager = getMultiAdapter((fp, request, view), IViewletManager,
-                        name=u'plone.htmlhead')
+                                  name=u'plone.htmlhead')
 
         directlyProvides(request, IPloneSEOLayer)
         viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
-                        name=u'plone.htmlhead.title')
+                                  name=u'plone.htmlhead.title')
 
         form_data = {'seo_title': title,
                      'seo_title_override:int': title_override,
@@ -97,9 +97,9 @@ class TestBugs(FunctionalTestCase):
         view = portal.restrictedTraverse('@@plone')
 
         manager = getMultiAdapter((fp, request, view), IViewletManager,
-                        name=u'plone.htmlhead')
+                                  name=u'plone.htmlhead')
         viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
-                        name=u'plone.htmlhead.title')
+                                  name=u'plone.htmlhead.title')
         viewlet.update()
         old_title = viewlet.render()
 
@@ -107,7 +107,7 @@ class TestBugs(FunctionalTestCase):
         directlyProvides(request, IPloneSEOLayer)
 
         viewlet = getMultiAdapter((fp, request, view, manager), IViewlet,
-                        name=u'plone.htmlhead.title')
+                                  name=u'plone.htmlhead.title')
         viewlet.update()
         new_title = viewlet.render()
 
@@ -193,8 +193,8 @@ class TestBugs(FunctionalTestCase):
             # with seo-context-properties view
             seo_context_props.updateSEOCustomMetaTagsProperties([])
         except IndexError:
-            self.fail("Error in calculating of default tag value, when only "\
-                      "tag name set in default_custom_metatags property of "\
+            self.fail("Error in calculating of default tag value, when only "
+                      "tag name set in default_custom_metatags property of "
                       "the configlet.")
 
 
@@ -207,9 +207,9 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         test_pswd = 'pswd'
         uf = self.portal.acl_users
         uf.userFolderAddUser(member_id, test_pswd,
-                        ['Member'], [])
+                             ['Member'], [])
         uf.userFolderAddUser(editor_id, test_pswd,
-                        ['Member', 'Editor'], [])
+                             ['Member', 'Editor'], [])
 
         self.member_auth = '%s:%s' % (member_id, test_pswd)
         self.editor_auth = '%s:%s' % (editor_id, test_pswd)
@@ -229,9 +229,9 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
 
     def test_tab_visibility(self):
         """Only Editor can view seo tab"""
-        rexp = re.compile('<a\s+[^>]*' \
-               'href="[a-zA-Z0-9\:\/_-]*/@@seo-context-properties"[^>]*>'\
-               '\s*SEO Properties\s*</a>', re.I | re.S)
+        rexp = re.compile('<a\s+[^>]*href="[a-zA-Z0-9\:\/_-]*'
+                          '/@@seo-context-properties"[^>]*>'
+                          '\s*SEO Properties\s*</a>', re.I | re.S)
         # Anonymous: NO SEO Properties link
         res = self.publish(path=self.portal_url).getBody()
         self.assertEqual(rexp.search(res), None)
@@ -250,12 +250,12 @@ class TestBug24AtPloneOrg(FunctionalTestCase):
         # Anonymous: can NOT ACCESS
         headers = self.publish(path=test_url).headers
         self.assert_('Unauthorized' in headers.get('bobo-exception-type', ""),
-                     "No 'Unauthorized' exception rised for Anonymous on " \
+                     "No 'Unauthorized' exception rised for Anonymous on "
                      "'@@seo-context-properties' view")
         # Member: can NOT ACCESS
         self.publish(path=test_url, basic=self.member_auth).headers
         self.assert_('Unauthorized' in headers.get('bobo-exception-type', ""),
-                     "No 'Unauthorized' exception rised for Member on " \
+                     "No 'Unauthorized' exception rised for Member on "
                      "'@@seo-context-properties' view")
         # Editor: CAN Access
         res = self.publish(path=test_url, basic=self.editor_auth)

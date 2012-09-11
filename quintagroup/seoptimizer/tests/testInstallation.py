@@ -16,11 +16,11 @@ from Products.CMFCore.utils import getToolByName
 
 PROPERTY_SHEET = 'seo_properties'
 STOP_WORDS = ['a', 'an', 'amp', 'and', 'are', 'arial', 'as', 'at', 'be', 'but',
-    'by', 'can', 'com', 'do', 'font', 'for', 'from', 'gif', 'had', 'has',
-    'have', 'he', 'helvetica', 'her', 'his', 'how', 'href', 'i', 'if', 'in',
-    'is', 'it', 'javascript', 'jpg', 'made', 'net', 'of', 'on', 'or', 'org',
-    'our', 'sans', 'see', 'serif', 'she', 'that', 'the', 'this', 'to', 'us',
-    'we', 'with', 'you', 'your']
+              'by', 'can', 'com', 'do', 'font', 'for', 'from', 'gif', 'had',
+              'has', 'have', 'he', 'helvetica', 'her', 'his', 'how', 'href',
+              'i', 'if', 'in', 'is', 'it', 'javascript', 'jpg', 'made', 'net',
+              'of', 'on', 'or', 'org', 'our', 'sans', 'see', 'serif', 'she',
+              'that', 'the', 'this', 'to', 'us', 'we', 'with', 'you', 'your']
 
 PROPS = {'stop_words': STOP_WORDS,
          'fields': ['seo_title', 'seo_description', 'seo_keywords']}
@@ -69,13 +69,13 @@ class TestInstallation(TestCase):
         """
         map_sheet = self.properties[PROPERTY_SHEET]
         for key, value in PROPS.items():
-            self.failUnless(map_sheet.hasProperty(key) and \
+            self.failUnless(map_sheet.hasProperty(key) and
                             list(map_sheet.getProperty(key)) == value)
 
     def test_configlet_install(self):
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
-        self.assert_(PROJECT_NAME in [a.getId() for a in \
-                                      configTool.listActions()], \
+        self.assert_(PROJECT_NAME in [a.getId() for a in
+                                      configTool.listActions()],
                      'Configlet not found')
 
     def test_viewlets_install(self):
@@ -88,9 +88,9 @@ class TestInstallation(TestCase):
         alsoProvides(request, IPloneSEOLayer)
         view = queryMultiAdapter((self.portal, request), name="plone")
         manager = queryMultiAdapter((self.portal['front-page'], request, view),
-                                     IViewletManager, name='plone.htmlhead')
+                                    IViewletManager, name='plone.htmlhead')
         for p in VIEWLETS:
-            self.assert_(manager.get(p) is not None, "Not registered '%s' " \
+            self.assert_(manager.get(p) is not None, "Not registered '%s' "
                          "viewlet" % p)
 
     def test_browser_layer(self):
@@ -121,10 +121,10 @@ class TestUninstallation(TestCase):
 
     def test_configlet_uninstall(self):
         self.assertNotEqual(self.qi.isProductInstalled(PROJECT_NAME), True,
-            'qSEOptimizer is already installed')
+                            'qSEOptimizer is already installed')
 
         configTool = getToolByName(self.portal, 'portal_controlpanel', None)
-        self.assertEqual(PROJECT_NAME in [a.getId() for a in \
+        self.assertEqual(PROJECT_NAME in [a.getId() for a in
                                           configTool.listActions()], False,
                          'Configlet found after uninstallation')
 
@@ -137,7 +137,7 @@ class TestUninstallation(TestCase):
                                     IViewletManager, name='plone.htmlhead')
         for p in VIEWLETS:
             self.assertEqual(manager.get(p) is None, True,
-                "'%s' viewlet present after uninstallation" % p)
+                             "'%s' viewlet present after uninstallation" % p)
 
     def test_browserlayer_uninstall(self):
         if not SUPPORT_BLAYER:
@@ -145,13 +145,13 @@ class TestUninstallation(TestCase):
 
         from plone.browserlayer import utils
         self.assertEqual(IPloneSEOLayer in utils.registered_layers(), False,
-            "Still registered 'IPloneSEOLayer' browser layer")
+                         "Still registered 'IPloneSEOLayer' browser layer")
 
     def test_action_uninstall(self):
         atool = getToolByName(self.portal, 'portal_actions')
         action_ids = [a.id for a in atool.listActions()]
         self.assertEqual("SEOProperties" in action_ids, False,
-                         "'SEOProperties' action not removed from " \
+                         "'SEOProperties' action not removed from "
                          "portal_actions on uninstallation")
 
 
@@ -177,7 +177,7 @@ class TestReinstallation(TestCase):
         self.qi.reinstallProducts([PROJECT_NAME])
         for type in SEO_CONTENT:
             self.assertEqual(self.types_tool.getTypeInfo(type).i18n_domain,
-                             'plone', "Not changed of %s content type's " \
+                             'plone', "Not changed of %s content type's "
                              "domain to 'plone'" % type)
 
     def testCutItemsMetatagsOrderList(self):
@@ -190,8 +190,8 @@ class TestReinstallation(TestCase):
         mto = list(self.seoprops_tool.getProperty('metatags_order'))
         mto.sort()
         self.assertEqual(mto, expect_mto,
-                         "Not changed format metatags order list from \"" \
-                         "metaname accessor\" to \"metaname\". %s != %s" \
+                         "Not changed format metatags order list from \""
+                         "metaname accessor\" to \"metaname\". %s != %s"
                          % (mto, expect_mto))
 
     def testAddMetatagsOrderList(self):
@@ -201,7 +201,7 @@ class TestReinstallation(TestCase):
         mto = list(self.seoprops_tool.getProperty('metatags_order'))
         mto.sort()
         self.assertEqual(mto, DEFAULT_METATAGS_ORDER,
-                         "Not added metatags order list with default values." \
+                         "Not added metatags order list with default values."
                          "%s != %s" % (mto, DEFAULT_METATAGS_ORDER))
 
     def testMigrationActions(self):
@@ -212,38 +212,38 @@ class TestReinstallation(TestCase):
 
         for type in CONTENTTYPES_WITH_SEOACTION:
             self.types_tool.getTypeInfo(type).addAction(
-                                    id='seo_properties',
-                                    name='SEO Properties',
-                                    action=None,
-                                    condition=None,
-                                    permission=(u'Modify portal content',),
-                                    category='object',
-                                   )
+                id='seo_properties',
+                name='SEO Properties',
+                action=None,
+                condition=None,
+                permission=(u'Modify portal content',),
+                category='object',
+            )
             # Check presence seoaction in content type
-            seoaction = [act.id for act in \
-                         self.types_tool.getTypeInfo(type).listActions() \
+            seoaction = [act.id for act in
+                         self.types_tool.getTypeInfo(type).listActions()
                          if act.id == 'seo_properties']
             self.assertEqual(bool(seoaction), True,
-                             "Not added seoaction to content type %s for " \
+                             "Not added seoaction to content type %s for "
                              "testing" % type)
 
         self.qi.reinstallProducts([PROJECT_NAME])
 
         # Check presence seoaction in content type
         for type in CONTENTTYPES_WITH_SEOACTION:
-            seoaction = [act.id for act in \
-                         self.types_tool.getTypeInfo(type).listActions() \
+            seoaction = [act.id for act in
+                         self.types_tool.getTypeInfo(type).listActions()
                          if act.id == 'seo_properties']
             self.assertEqual(bool(seoaction), False,
-                "Not removed seoaction in content type %s" % type)
+                             "Not removed seoaction in content type %s" % type)
 
         # Check added content type names in seo properties tool
         # if content types have seoaction
         ctws = list(self.seoprops_tool.content_types_with_seoproperties)
         ctws.sort()
         self.assertEqual(ctws, CONTENTTYPES_WITH_SEOACTION,
-                         "Not added content type names in seo properties " \
-                         "tool if content types have seoaction. %s != %s" \
+                         "Not added content type names in seo properties "
+                         "tool if content types have seoaction. %s != %s"
                          % (ctws, CONTENTTYPES_WITH_SEOACTION))
 
     def testRemoveSkin(self):
@@ -258,7 +258,7 @@ class TestReinstallation(TestCase):
             path = skinstool.getSkinPath(skin)
             path = map(string.strip, string.split(path, ','))
             self.assertEqual(layer in path, False,
-                             '%s layer found in %s after uninstallation' \
+                             '%s layer found in %s after uninstallation'
                              % (layer, skin))
 
     def testMigrateCanonical(self):
@@ -273,9 +273,9 @@ class TestReinstallation(TestCase):
         self.qi.reinstallProducts([PROJECT_NAME])
         value = doc.getProperty(PROPERTY_LINK)
         has_prop = bool(doc.hasProperty('qSEO_canonical'))
-        self.assertEqual(has_prop, False, "Property 'qSEO_canonical' is " \
+        self.assertEqual(has_prop, False, "Property 'qSEO_canonical' is "
                          "not deleted.")
-        self.assertEqual(value == 'val', True, "Property not migrated from " \
+        self.assertEqual(value == 'val', True, "Property not migrated from "
                          "'qSEO_canonical' to '%s'." % PROPERTY_LINK)
 
 

@@ -18,10 +18,10 @@ class SortedDict(dict):
 
     def items(self):
         primary_metatags = self.pmt
-        lst = [(name, self[name]) for name in primary_metatags \
-                                  if name in self.keys()] + \
-              [(name, self[name]) for name in self.keys() \
-                                  if name not in primary_metatags]
+        lst = [(name, self[name]) for name in primary_metatags
+               if name in self.keys()] + \
+              [(name, self[name]) for name in self.keys()
+               if name not in primary_metatags]
         return lst
 
     security.declarePublic('__init__')
@@ -59,9 +59,9 @@ def _group_unescape(m):
     if m.group("hex"):
         return unichr(int(m.group("hex"), 16))
 
-expr = re.compile(r'&(?:(?P<ent>\w+?)|'\
-                   '#(?P<dec>\d{1,10})|'\
-                   '#x(?P<hex>[0-9a-fA-F]{1,8}));')
+expr = re.compile(r'&(?:(?P<ent>\w+?)|'
+                  '#(?P<dec>\d{1,10})|'
+                  '#x(?P<hex>[0-9a-fA-F]{1,8}));')
 
 
 def unescape(s):

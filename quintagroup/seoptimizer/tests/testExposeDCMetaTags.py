@@ -25,7 +25,7 @@ class TestExposeDCMetaTags(FunctionalTestCase):
                                      self.basic_auth))
         m1 = re.match(METATAG % "DC.format", self.html, re.S | re.M)
         m2 = re.match(METATAG % "DC.distribution", self.html, re.S | re.M)
-        self.assert_(not (m1 or m2), 'DC meta tags avaliable when ' \
+        self.assert_(not (m1 or m2), 'DC meta tags avaliable when '
                      'exposeDCMetaTags=False')
 
     def test_propertyOn(self):
@@ -34,7 +34,7 @@ class TestExposeDCMetaTags(FunctionalTestCase):
                                      self.basic_auth))
         m1 = re.match(METATAG % "DC.format", self.html, re.S | re.M)
         m2 = re.match(METATAG % "DC.type", self.html, re.S | re.M)
-        self.assert_(m1 and m2, 'DC meta tags not avaliable when ' \
+        self.assert_(m1 and m2, 'DC meta tags not avaliable when '
                      'createManager=True')
 
     def test_descriptionInPropertyOff(self):
@@ -43,7 +43,7 @@ class TestExposeDCMetaTags(FunctionalTestCase):
         self.html = str(self.publish(self.portal.id + '/my_doc',
                                      self.basic_auth))
         m = re.match(METATAG % "description", self.html, re.S | re.M)
-        self.assert_(m, 'No "description" meta tag when expose DC meta tags ' \
+        self.assert_(m, 'No "description" meta tag when expose DC meta tags '
                      'is Off')
 
     def test_descriptionInPropertyOn(self):
@@ -52,7 +52,7 @@ class TestExposeDCMetaTags(FunctionalTestCase):
         self.html = str(self.publish(self.portal.id + '/my_doc',
                                      self.basic_auth))
         m = re.match(METATAG % "description", self.html, re.S | re.M)
-        self.assert_(m, 'No "description" meta tag when expose DC meta tags ' \
+        self.assert_(m, 'No "description" meta tag when expose DC meta tags '
                      'is On')
 
     def test_dateValidRange(self):
@@ -66,7 +66,7 @@ class TestExposeDCMetaTags(FunctionalTestCase):
         content = m and m.group("tagcontent")
         fact = content and map(DateTime, content.split("-"))
         expect = map(DateTime, [EFFDSTR, EXPDSTR])
-        self.assert_(fact == expect, '"DC.date.valid_range" meta tags ' \
+        self.assert_(fact == expect, '"DC.date.valid_range" meta tags '
                      'content="%s", but "%s" must be' % (fact, expect))
 
 

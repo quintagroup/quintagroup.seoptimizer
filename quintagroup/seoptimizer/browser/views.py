@@ -13,7 +13,7 @@ from Products.CMFPlone.utils import getSiteEncoding
 
 from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK \
-                                               as CANONICAL_PROPERTY
+    as CANONICAL_PROPERTY
 
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.seoptimizer import SeoptimizerMessageFactory as _
@@ -62,7 +62,7 @@ class SEOContext(BrowserView):
             "seo_html_comment": self.getSEOProperty('qSEO_html_comment',
                                                     default=''),
             "seo_noframes": self.getSEOProperty('qSEO_noframes',
-                                                    default=''),
+                                                default=''),
             "meta_keywords": self.getSEOProperty('qSEO_keywords',
                                                  'Subject', ()),
             "seo_keywords": self.getSEOProperty('qSEO_keywords', default=()),
@@ -70,15 +70,15 @@ class SEOContext(BrowserView):
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
             "has_seo_robots": self.context.hasProperty('qSEO_robots'),
-            "has_seo_description": \
-                     self.context.hasProperty('qSEO_description'),
-            "has_seo_distribution": \
-                     self.context.hasProperty('qSEO_distribution'),
+            "has_seo_description":
+            self.context.hasProperty('qSEO_description'),
+            "has_seo_distribution":
+            self.context.hasProperty('qSEO_distribution'),
             "has_html_comment": self.context.hasProperty('qSEO_html_comment'),
             "has_noframes": self.context.hasProperty('qSEO_noframes'),
             "has_seo_keywords": self.context.hasProperty('qSEO_keywords'),
             "has_seo_canonical": self.context.hasProperty(CANONICAL_PROPERTY),
-            }
+        }
         #seotags["seo_nonEmptylocalMetaTags"] = \
         #    bool(seotags["seo_localCustomMetaTags"])
         return seotags
@@ -116,8 +116,8 @@ class SEOContext(BrowserView):
         lnames = set(map(lambda x: x['meta_name'], loc))
         # Get untouch global, override global in custom
         # and new custom meta tags
-        untouchglob = [t for t in glob \
-                         if t['meta_name'] in list(gnames - lnames)]
+        untouchglob = [t for t in glob
+                       if t['meta_name'] in list(gnames - lnames)]
         return untouchglob + loc
 
     def seo_globalWithoutLocalCustomMetaTags(self):
@@ -140,7 +140,7 @@ class SEOContext(BrowserView):
         context = aq_inner(self.context)
         for property, value in context.propertyItems():
             if property.startswith(property_prefix) and \
-               property[len(property_prefix):]:
+                    property[len(property_prefix):]:
                 result.append({'meta_name': property[len(property_prefix):],
                                'meta_content': value})
         return result
@@ -156,8 +156,8 @@ class SEOContext(BrowserView):
                 name_value = tag.split(SEPERATOR)
                 if name_value[0]:
                     result.append({'meta_name': name_value[0],
-                                   'meta_content': len(name_value) == 2 and \
-                                                    name_value[1] or ''})
+                                   'meta_content': len(name_value) == 2 and
+                                   name_value[1] or ''})
         return result
 
     # Not used
@@ -211,8 +211,8 @@ class SEOContextPropertiesView(BrowserView):
         context = aq_inner(self.context)
         state = ''
         delete_list, seo_overrides_keys, seo_keys = [], [], []
-        seo_items = dict([(k[len(SEO_PREFIX):], v) \
-                         for k, v in kw.items() if k.startswith(SEO_PREFIX)])
+        seo_items = dict([(k[len(SEO_PREFIX):], v)
+                          for k, v in kw.items() if k.startswith(SEO_PREFIX)])
         for key in seo_items.keys():
             if key.endswith(SUFFIX):
                 seo_overrides_keys.append(key[:-len(SUFFIX)])
@@ -223,7 +223,7 @@ class SEOContextPropertiesView(BrowserView):
                 self.manageSEOCustomMetaTagsProperties(**kw)
             else:
                 if seo_key in seo_overrides_keys and \
-                              seo_items.get(seo_key + SUFFIX):
+                        seo_items.get(seo_key + SUFFIX):
                     seo_value = seo_items[seo_key]
                     if seo_key == 'canonical':
                         try:
@@ -233,8 +233,8 @@ class SEOContextPropertiesView(BrowserView):
                             state = "'%s' - wrong canonical url" % str(e)
                     else:
                         t_value = 'string'
-                        if type(seo_value) == type([]) or \
-                           type(seo_value) == type(()):
+                        if isinstance(seo_value, list) or \
+                                isinstance(seo_value, tuple):
                             t_value = 'lines'
                         state = self.setProperty(PROP_PREFIX + seo_key,
                                                  seo_value, type=t_value)
@@ -263,7 +263,7 @@ class SEOContextPropertiesView(BrowserView):
         delete_list = []
         for property, value in context.propertyItems():
             if property.startswith(PROP_CUSTOM_PREFIX) and \
-                                   not property == PROP_CUSTOM_PREFIX:
+                    not property == PROP_CUSTOM_PREFIX:
                 delete_list.append(property)
         if delete_list:
             context.manage_delProperties(delete_list)
@@ -279,13 +279,13 @@ class SEOContextPropertiesView(BrowserView):
                 if name_value[0]:
                     globalCustomMetaTags.append(
                         {'meta_name': name_value[0],
-                         'meta_content': len(name_value) > 1 and \
-                                         name_value[1] or ''})
+                         'meta_content': len(name_value) > 1 and
+                         name_value[1] or ''})
         for tag in custommetatags:
             meta_name, meta_content = tag['meta_name'], tag['meta_content']
             if meta_name:
-                if not [gmt for gmt in globalCustomMetaTags \
-                        if (gmt['meta_name'] == meta_name and \
+                if not [gmt for gmt in globalCustomMetaTags
+                        if (gmt['meta_name'] == meta_name and
                             gmt['meta_content'] == meta_content)]:
                     self.setProperty('%s%s' % (PROP_CUSTOM_PREFIX, meta_name),
                                      meta_content)
@@ -343,7 +343,7 @@ class SEOContextPropertiesView(BrowserView):
                     msgtype = "error"
             else:
                 # Cancel
-                msg = _('seoproperties_canceled', default=u'No content SEO ' \
+                msg = _('seoproperties_canceled', default=u'No content SEO '
                         'properties have been changed.')
 
             context.plone_utils.addPortalMessage(msg, msgtype)

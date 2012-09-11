@@ -6,7 +6,7 @@ from Products.CMFPlone.utils import getSiteEncoding, safe_unicode
 
 from quintagroup.seoptimizer.browser.seo_configlet import ISEOConfigletSchema
 from quintagroup.seoptimizer.util import unescape
-from quintagroup.canonicalpath.interfaces  import ICanonicalLink
+from quintagroup.canonicalpath.interfaces import ICanonicalLink
 from quintagroup.canonicalpath.adapters import PROPERTY_LINK
 
 logger = logging.getLogger('quintagroup.seoptimizer')
@@ -15,7 +15,7 @@ REMOVE_SEOPROPERTIES = ['additional_keywords',
                         'settings_use_keywords_sg',
                         'settings_use_keywords_lg',
                         'filter_keywords_by_content',
-                       ]
+                        ]
 
 
 def changeDomain(plone_tools):
@@ -24,7 +24,7 @@ def changeDomain(plone_tools):
     """
     types_tool = plone_tools.types()
     for ptype in [ptypes for ptypes in types_tool.objectValues()
-                         if ptypes.id in FIX_PTYPES_DOMAIN]:
+                  if ptypes.id in FIX_PTYPES_DOMAIN]:
         if ptype.i18n_domain == 'quintagroup.seoptimizer':
             ptype.i18n_domain = 'plone'
             logger.log(logging.INFO, "I18n Domain of the type \'%s\' "
@@ -61,7 +61,7 @@ def migrationActions(plone_tools):
     flag = False
     for ptype in types_tool.objectValues():
         idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions())
-                           if idx_act[1].id == 'seo_properties']
+                if idx_act[1].id == 'seo_properties']
         if idxs:
             if ptype.id not in ctws:
                 ctws.append(ptype.id)
@@ -95,8 +95,8 @@ def removeSkin(plone_tools):
     skins_tool = plone_tools.url().getPortalObject().portal_skins
     for skinName in skins_tool.getSkinSelections():
         skin_paths = skins_tool.getSkinPath(skinName).split(',')
-        paths = [l.strip() for l in skin_paths \
-                           if not (l == layer or l.startswith(layer + '/'))]
+        paths = [l.strip() for l in skin_paths
+                 if not (l == layer or l.startswith(layer + '/'))]
         logger.log(logging.INFO, "Removed layers from %s skin." % skinName)
         skins_tool.addSkinSelection(skinName, ','.join(paths))
 
@@ -108,10 +108,9 @@ def migrateCanonical(plone_tools):
     types = plone_tools.types()
     portal = plone_tools.url().getPortalObject()
     allCTTypes = types.listContentTypes()
-    obj_metatypes = [m.content_meta_type for m in types.objectValues() \
+    obj_metatypes = [m.content_meta_type for m in types.objectValues()
                      if m.getId() in allCTTypes]
-    portal.ZopeFindAndApply(
-                            portal,
+    portal.ZopeFindAndApply(portal,
                             obj_metatypes=','.join(obj_metatypes),
                             apply_func=renameProperty
                             )
@@ -125,12 +124,12 @@ def renameProperty(obj, path):
         value = obj.getProperty('qSEO_canonical')
 
         level, msg = logging.INFO, "For %(url)s object 'qSEO_canonical' "\
-                     "property renamed to '%(name)s'."
+            "property renamed to '%(name)s'."
         try:
             ICanonicalLink(obj).canonical_link = value
         except Exception, e:
             level, msg = logging.ERROR, "%s on renaming 'qSEO_canonical' " \
-                         "property for %%(url)s object" % str(e)
+                "property for %%(url)s object" % str(e)
 
         logger.log(level, msg % {'url': obj.absolute_url(),
                                  'name': PROPERTY_LINK})

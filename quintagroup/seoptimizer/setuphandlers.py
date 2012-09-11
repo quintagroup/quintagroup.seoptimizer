@@ -14,8 +14,8 @@ def removeActions(site):
     """
     types_tool = getToolByName(site, 'portal_types')
     for ptype in types_tool.objectValues():
-        idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions()) \
-                           if idx_act[1].id == 'seo_properties']
+        idxs = [idx_act[0] for idx_act in enumerate(ptype.listActions())
+                if idx_act[1].id == 'seo_properties']
         if idxs:
             ptype.deleteActions(idxs)
             msg_delete = "Deleted \"SEO Properties\" action for %s type."

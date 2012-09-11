@@ -21,7 +21,7 @@ def install(portal, reinstall=False):
     if reinstall:
         step = None
         profile_id = 'quintagroup.seoptimizer:default'
-        steps_to_run = [s['id'] for s in \
+        steps_to_run = [s['id'] for s in
                         setup_tool.listUpgrades(profile_id, show_old=False)]
         for step_id in steps_to_run:
             step = _upgrade_registry.getUpgradeStep(profile_id, step_id)

@@ -15,8 +15,7 @@ class TestConfiglet(FunctionalTestCase):
         self.basic_auth = ':'.join((portal_owner, default_password))
         self.loginAsPortalOwner()
         self.save_url = self.portal.id + '/@@seo-controlpanel?' \
-                        'form.actions.save=1&_authenticator=%s' \
-                        % self._getauth()
+            'form.actions.save=1&_authenticator=%s' % self._getauth()
 
     def test_exposeDCMetaTags_On(self):
         self.publish(self.save_url + '&form.exposeDCMetaTags=on',
@@ -25,7 +24,7 @@ class TestConfiglet(FunctionalTestCase):
 
     def test_exposeDCMetaTags_Off(self):
         self.publish(self.save_url + '&form.exposeDCMetaTags=',
-             self.basic_auth)
+                     self.basic_auth)
         self.assertTrue(not self.sp.exposeDCMetaTags)
 
     def test_defaultCustomMetatags_On(self):
@@ -35,7 +34,7 @@ class TestConfiglet(FunctionalTestCase):
                      % formdata, self.basic_auth)
 
         dcm = self.seo.getProperty("default_custom_metatags", ())
-        self.assertTrue(dcm == expect, '"default_custom_metatags" property ' \
+        self.assertTrue(dcm == expect, '"default_custom_metatags" property '
                         'contains: "%s", must: "%s"' % (dcm, expect))
 
     def test_defaultCustomMetatags_Off(self):
@@ -45,7 +44,7 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         dcm = self.seo.getProperty("default_custom_metatags", ())
-        self.assertTrue(dcm == (), '"default_custom_metatags" property ' \
+        self.assertTrue(dcm == (), '"default_custom_metatags" property '
                         'contains: "%s", must be empty"' % str(dcm))
 
     def test_metatagsOrder_On(self):
@@ -55,7 +54,7 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         mo = self.seo.getProperty("metatags_order", ())
-        self.assertTrue(mo == expect, '"metatags_order" property ' \
+        self.assertTrue(mo == expect, '"metatags_order" property '
                         'contains: "%s", must: "%s"' % (mo, expect))
 
     def test_metatagsOrder_Off(self):
@@ -65,7 +64,7 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         mo = self.seo.getProperty("metatags_order", ())
-        self.assertTrue(mo == (), '"metatags_order" property ' \
+        self.assertTrue(mo == (), '"metatags_order" property '
                         'contains: "%s", must be empty"' % str(mo))
 
     def test_typesSEOEnabled_On(self):
@@ -74,34 +73,34 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
         tse = self.seo.getProperty("content_types_with_seoproperties", ())
         self.assertTrue(tse == (expect,),
-                        '"content_types_with_seoproperties" property ' \
+                        '"content_types_with_seoproperties" property '
                         'contains:" %s", must: "%s"' % (tse, expect))
 
     def test_typesSEOEnabled_Off(self):
         self.publish(self.save_url + '&form.types_seo_enabled-empty-marker=1',
-             self.basic_auth)
+                     self.basic_auth)
 
         tse = self.seo.getProperty("content_types_with_seoproperties", ())
-        self.assertTrue(tse == (), '"content_types_with_seoproperties" ' \
+        self.assertTrue(tse == (), '"content_types_with_seoproperties" '
                         'property contains: "%s", must be empty"' % str(tse))
 
     def test_CustomScriptAdd(self):
         expect = "<script>\n<!-- Test custom script -->\n</script>"
 
         self.publish(self.save_url + '&form.custom_script=%s' % expect,
-             self.basic_auth)
+                     self.basic_auth)
 
         cs = self.seo.getProperty("custom_script", "")
-        self.assertTrue(cs == expect, '"custom_script" property ' \
-            'contains: "%s", but "%s" must be"' % (cs, expect))
+        self.assertTrue(cs == expect, '"custom_script" property '
+                        'contains: "%s", but "%s" must be"' % (cs, expect))
 
     def test_CustomScriptDel(self):
         self.publish(self.save_url + '&form.custom_script=',
-             self.basic_auth)
+                     self.basic_auth)
 
         cs = self.seo.getProperty("custom_script", "")
-        self.assertTrue(cs == "", '"custom_script" property ' \
-            'contains: "%s", must be empty"' % cs)
+        self.assertTrue(cs == "", '"custom_script" property '
+                        'contains: "%s", must be empty"' % cs)
 
     def test_fieldsAdd(self):
         expect = ('field1', 'field2')
@@ -110,8 +109,8 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         f = self.seo.getProperty("fields", ())
-        self.assertTrue(f == expect, '"fields" property ' \
-            'contains: "%s", must: "%s"' % (f, expect))
+        self.assertTrue(f == expect, '"fields" property '
+                        'contains: "%s", must: "%s"' % (f, expect))
 
     def test_fieldsDel(self):
         data = ('field1', 'field2')
@@ -120,7 +119,7 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         f = self.seo.getProperty("fields", ())
-        self.assertTrue(f == (), '"fields" property ' \
+        self.assertTrue(f == (), '"fields" property '
                         'contains: "%s", must be empty"' % str(f))
 
     def test_stopWordsAdd(self):
@@ -130,7 +129,7 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         f = self.seo.getProperty("stop_words", ())
-        self.assertTrue(f == expect, '"stop_words" property ' \
+        self.assertTrue(f == expect, '"stop_words" property '
                         'contains: "%s", must: "%s"' % (f, expect))
 
     def test_stopWordsDel(self):
@@ -140,19 +139,19 @@ class TestConfiglet(FunctionalTestCase):
                      self.basic_auth)
 
         f = self.seo.getProperty("stop_words", ())
-        self.assertTrue(f == (), '"stop_words" property ' \
+        self.assertTrue(f == (), '"stop_words" property '
                         'contains: "%s", must be empty"' % str(f))
 
     def test_externalKeywordTest(self):
         fields = FormFields(ISEOConfigletSchema)
         ffield = fields.get("external_keywords_test")
         self.assertTrue(ffield is not None,
-                        'Not found "external_keywords_test" field in ' \
+                        'Not found "external_keywords_test" field in '
                         'ISEOConfigletSchema interface')
         self.assertTrue(IBool.providedBy(ffield.field),
                         '"external_keywords_test" is not boolean type field')
-        self.assertTrue(ffield.field.default == False,
-                        '"external_keywords_test" field default value ' \
+        self.assertTrue(ffield.field.default is False,
+                        '"external_keywords_test" field default value '
                         'is not set to False')
 
     def test_externalKeyword_On(self):
@@ -162,7 +161,7 @@ class TestConfiglet(FunctionalTestCase):
 
     def test_externalKeyword_Off(self):
         self.publish(self.save_url + '&form.external_keywords_test=',
-             self.basic_auth)
+                     self.basic_auth)
         self.assertTrue(not self.seo.external_keywords_test)
 
 

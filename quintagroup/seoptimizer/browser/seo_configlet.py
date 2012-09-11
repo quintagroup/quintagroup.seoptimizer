@@ -30,7 +30,7 @@ class ISEOConfigletBaseSchema(Interface):
 
     exposeDCMetaTags = Bool(
         title=_("label_exposeDCMetaTags",
-                default='Expose <abbr title="Dublin Core">DC</abbr> ' \
+                default='Expose <abbr title="Dublin Core">DC</abbr> '
                 'meta tags'),
         description=_("description_seo_dc_metatags",
                       default='Controls if <abbr title="Dublin Core">DC</abbr>'
@@ -52,8 +52,8 @@ class ISEOConfigletBaseSchema(Interface):
     types_seo_enabled = Tuple(
         title=_("label_content_type_title", default='Content Types'),
         description=_("description_seo_content_types",
-            default='Select content types that will have SEO properties '
-                'enabled.'),
+                      default='Select content types that will have SEO '
+                      'properties enabled.'),
         required=False,
         missing_value=tuple(),
         value_type=Choice(
@@ -63,8 +63,8 @@ class ISEOConfigletBaseSchema(Interface):
         title=_("label_default_custom_metatags",
                 default='Default custom metatags.'),
         description=_("help_default_custom_metatags",
-                      default='Fill in custom metatag names (one per line) ' \
-                      'which will appear on qseo_properties edit tab. ' \
+                      default='Fill in custom metatag names (one per line) '
+                      'which will appear on qseo_properties edit tab. '
                       'Example: "metaname|metacontent" or "metaname".'),
         required=False)
 
@@ -73,8 +73,8 @@ class ISEOConfigletAdvancedSchema(Interface):
     custom_script = SourceText(
         title=_("label_custom_script", default=u'Header JavaScript'),
         description=_("help_custom_script",
-                default=u"This JavaScript code will be included in "
-                         "the rendered HTML as entered in the page header."),
+                      default=u"This JavaScript code will be included in "
+                      "the rendered HTML as entered in the page header."),
         default=u'',
         required=False)
 
@@ -97,10 +97,10 @@ class ISEOConfigletAdvancedSchema(Interface):
         title=_("label_external_keywords_test",
                 default='External keywords check'),
         description=_("description_external_keywords_test",
-                default='Make keywords test by opening context url as '
-                    'external resource with urllib2.openurl(). This is '
-                    'useful when xdv/Deliverance transformation is used '
-                    'on the site.'),
+                      default='Make keywords test by opening context url as '
+                      'external resource with urllib2.openurl(). This is '
+                      'useful when xdv/Deliverance transformation is used '
+                      'on the site.'),
         default=False,
         required=False)
 
@@ -173,7 +173,7 @@ class Text2ListWidget(TextAreaWidget):
 
     def _toFormValue(self, value):
         if value == self.context.missing_value or \
-           value == self.context._type():
+                value == self.context._type():
             return self._missing
         else:
             return u'\r\n'.join(list(value))

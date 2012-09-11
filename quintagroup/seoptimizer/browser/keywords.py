@@ -33,7 +33,7 @@ class ValidateSEOKeywordsView(BrowserView):
         enc = getSiteEncoding(self.context)
         if text.lower().strip():
             keywords = filter(None, map(lambda x: safe_unicode(x.strip(), enc),
-                                         text.lower().strip().split('\n')))
+                              text.lower().strip().split('\n')))
         else:
             return ts.utranslate(domain='quintagroup.seoptimizer',
                                  msgid=_(u'Keywords list is empty!'),
@@ -81,6 +81,6 @@ class ValidateSEOKeywordsView(BrowserView):
         return ts.utranslate(domain='quintagroup.seoptimizer',
                              msgid=_(u'number_keywords',
                                      default=u'Number of keywords at page:\n'
-                                              '${result}',
+                                     '${result}',
                                      mapping={'result': '\n'.join(result)}),
                              context=self.context)

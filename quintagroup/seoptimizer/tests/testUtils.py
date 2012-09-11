@@ -13,7 +13,7 @@ class TestUtils(TestCase):
 
     def test_entity_unicode_unescaping(self):
         self.assertEqual(unescape(u"&&amp;ї".encode('utf-8')),
-                                  u"&&ї".encode('utf-8'))
+                         u"&&ї".encode('utf-8'))
 
     def test_hex_unescaping(self):
         self.assertEqual(unescape('&#x5B;'), '[')

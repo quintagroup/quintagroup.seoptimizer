@@ -86,7 +86,7 @@ class TestCalcKeywords(FunctionalTestCase):
         alsoProvides(self.app.REQUEST, IPloneSEOLayer)
         # Get checkSEOKeywords view
         self.chckView = queryMultiAdapter((self.my_doc, self.app.REQUEST),
-            name="checkSEOKeywords")
+                                          name="checkSEOKeywords")
 
     def patchURLLib(self, fnc):
         self.orig_urlopen = urllib2.urlopen
@@ -134,9 +134,9 @@ class TestCalcKeywords(FunctionalTestCase):
         msg = self.chckView()
         rematch = re.match(
             ".*Problem with page retrieval.*error_log/showEntry\?id=",
-             msg, re.S)
+            msg, re.S)
         self.assertTrue(rematch, "Return message has incomplete information "
-            "about problem with page retrieval: %s" % msg)
+                        "about problem with page retrieval: %s" % msg)
         # 2. Opened urllib file descriptor should not be closed because
         #    it even not returned to the view
         self.assertFalse(self.urlfd.closed,

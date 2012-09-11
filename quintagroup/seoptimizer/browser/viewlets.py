@@ -31,7 +31,7 @@ class SEOTagsViewlet(ViewletBase):
         TEMPLATE = '<meta name="%s" content="%s"/>'
         enc = getSiteEncoding(self.context)
         sfuncd = lambda x, enc=enc: safe_unicode(x, enc)
-        return u'\n'.join([TEMPLATE % tuple(map(sfuncd, (k, v))) \
+        return u'\n'.join([TEMPLATE % tuple(map(sfuncd, (k, v)))
                            for k, v in self.listMetaTags().items()])
 
     def listMetaTags(self):
@@ -47,7 +47,7 @@ class SEOTagsViewlet(ViewletBase):
         use_all = seo_global.exposeDCMetaTags
         adapter = IMappingMetaTags(self.context, None)
         mapping_metadata = adapter and adapter.getMappingMetaTags() \
-                           or SortedDict()
+            or SortedDict()
 
         if not use_all:
             metadata_names = 'DC.description' in mapping_metadata and \
@@ -97,10 +97,10 @@ class SEOTagsViewlet(ViewletBase):
 
             # Special cases
             if accessor == 'Description' and \
-               not 'description' in metadata_names:
+                    not 'description' in metadata_names:
                 result['description'] = escape(value)
             elif accessor == 'Subject' and \
-                 not 'keywords' in metadata_names:
+                    not 'keywords' in metadata_names:
                 result['keywords'] = escape(value)
 
             if accessor not in ('Description', 'Subject'):
@@ -129,8 +129,8 @@ class SEOTagsViewlet(ViewletBase):
 
             # Filter out DWIMish artifacts on effective / expiration dates
             if effective is not None and \
-               effective > FLOOR_DATE and \
-               effective != created:
+                    effective > FLOOR_DATE and \
+                    effective != created:
                 eff_str = effective.Date()
             else:
                 eff_str = ''
@@ -146,7 +146,7 @@ class SEOTagsViewlet(ViewletBase):
         # add custom meta tags (added from qseo tab by user)
         # for given context and default from configlet
         custom_meta_tags = seo_context and \
-                           seo_context['seo_customMetaTags'] or []
+            seo_context['seo_customMetaTags'] or []
         for tag in custom_meta_tags:
             if tag['meta_content']:
                 result[tag['meta_name']] = escape(tag['meta_content'])
@@ -164,7 +164,7 @@ class TitleCommentNoframeViewlet(ViewletBase):
         self.context_state = getMultiAdapter((self.context, self.request),
                                              name=u'plone_context_state')
         self.seo_context = getMultiAdapter((self.context, self.request),
-                                             name=u'seo_context')
+                                           name=u'seo_context')
 
         self.override_title = self.seo_context['has_seo_title']
         self.has_comments = self.seo_context['has_html_comment']

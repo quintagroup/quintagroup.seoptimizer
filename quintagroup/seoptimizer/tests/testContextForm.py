@@ -58,8 +58,8 @@ class TestContextForm(FunctionalTestCase):
         my_doc = self.portal['my_doc']
         self.abs_path = "/%s" % my_doc.absolute_url(1)
         # prepare seo context form data
-        self.sp.manage_changeProperties(default_custom_metatags='metatag1|' \
-                                        'global_metatag1value\nmetatag4|' \
+        self.sp.manage_changeProperties(default_custom_metatags='metatag1|'
+                                        'global_metatag1value\nmetatag4|'
                                         'global_metatag4value')
         st = ''
         for d in CUSTOM_METATAGS:
@@ -99,7 +99,7 @@ class TestContextForm(FunctionalTestCase):
 
         m = re.match('.*<title>\\s*%s\\s*</title>' % self.portal.Title(),
                      html2, re.S | re.M)
-        self.assert_(m, 'Title is not set correctly, perhaps it is ' \
+        self.assert_(m, 'Title is not set correctly, perhaps it is '
                      'duplicated with plone site title')
 
     def testDescription(self):
@@ -123,11 +123,11 @@ class TestContextForm(FunctionalTestCase):
 
     def testTagsOrder(self):
         def is_match(html, mtorder):
-            return re.search('.*'.join(['<meta.*name="%s".*/>' % t \
+            return re.search('.*'.join(['<meta.*name="%s".*/>' % t
                                         for t in mtorder]), html, re.S | re.M)
 
-        metatags_order = [t for t in self.sp.getProperty('metatags_order') \
-                            if t in VIEW_METATAGS]
+        metatags_order = [t for t in self.sp.getProperty('metatags_order')
+                          if t in VIEW_METATAGS]
         self.assert_(is_match(self.html, metatags_order),
                      "Meta tags order not supported.")
 
@@ -148,10 +148,10 @@ class TestContextForm(FunctionalTestCase):
             m = re.match(METATAG % (tag['meta_name'], tag['meta_content']),
                          self.html, re.S | re.M)
             if tag['meta_content']:
-                self.assert_(m, "Custom meta tag %s not applied." \
+                self.assert_(m, "Custom meta tag %s not applied."
                              % tag['meta_name'])
             else:
-                self.assert_(not m, "Meta tag %s has no content, but is " \
+                self.assert_(not m, "Meta tag %s has no content, but is "
                              "present: in the page." % tag['meta_name'])
 
         m = re.match(METATAG % ("metatag4", "global_metatag4value"), self.html,
@@ -159,7 +159,7 @@ class TestContextForm(FunctionalTestCase):
         self.assert_(m, "Global custom meta tag %s not applied." % 'metatag4')
 
     def testDeleteCustomMetaTags(self):
-        self.sp.manage_changeProperties(default_custom_metatags='metatag1|' \
+        self.sp.manage_changeProperties(default_custom_metatags='metatag1|'
                                         'global_metatag1value')
         form_data = {'seo_custommetatags': CUSTOM_METATAGS,
                      'seo_custommetatags_override:int': 0,
@@ -176,7 +176,7 @@ class TestContextForm(FunctionalTestCase):
 
         m = re.match(METATAG % ("metatag4", "global_metatag4value"), html,
                      re.S | re.M)
-        self.assert_(not m, "Global custom meta tag %s is prosent in the " \
+        self.assert_(not m, "Global custom meta tag %s is prosent in the "
                      "page." % 'metatag4')
 
         m = re.match(METATAG % ("metatag1", "global_metatag1value"), html,
