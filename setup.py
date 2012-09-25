@@ -28,6 +28,7 @@ setup(name='quintagroup.seoptimizer',
           "Framework :: Zope3",
           "Programming Language :: Python",
           "Topic :: Software Development :: Libraries :: Python Modules",
+          "License :: OSI Approved :: GNU General Public License (GPL)",
       ],
       keywords='web zope plone seo search optimization',
       author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, '
