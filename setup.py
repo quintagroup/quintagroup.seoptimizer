@@ -18,12 +18,18 @@ setup(name='quintagroup.seoptimizer',
       # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
           "Framework :: Plone",
+          "Framework :: Plone :: 3.2",
+          "Framework :: Plone :: 3.3",
+          "Framework :: Plone :: 4.0",
+          "Framework :: Plone :: 4.1",
+          "Framework :: Plone :: 4.2",
+          "Framework :: Plone :: 4.3",
           "Framework :: Zope2",
           "Framework :: Zope3",
           "Programming Language :: Python",
           "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-      keywords='',
+      keywords='web zope plone seo search optimization',
       author='Myroslav Opyr, Volodymyr Romaniuk, Mykola Kharechko, '
              'Vitaliy Podoba, Volodymyr Cherepanyak, Taras Melnychuk, '
              'Vitaliy Stepanov, Andriy Mylenkyy',
