@@ -20,7 +20,11 @@ use the -c option to specify an alternate configuration file.
 $Id$
 """
 
-import os, shutil, sys, tempfile, urllib2
+import os
+import shutil
+import sys
+import tempfile
+import urllib2
 from optparse import OptionParser
 
 tmpeggs = tempfile.mkdtemp()
@@ -33,16 +37,16 @@ parser = OptionParser(
     'intended to meet a temporary need if you encounter problems with '
     'the zc.buildout 1.5 release.')
 parser.add_option("-v", "--version", dest="version", default='1.4.4',
-                          help='Use a specific zc.buildout version.  *This '
-                          'bootstrap script defaults to '
-                          '1.4.4, unlike usual buildpout bootstrap scripts.*')
+                  help='Use a specific zc.buildout version.  *This '
+                  'bootstrap script defaults to '
+                  '1.4.4, unlike usual buildpout bootstrap scripts.*')
 parser.add_option("-d", "--distribute",
-                   action="store_true", dest="distribute", default=False,
-                   help="Use Disribute rather than Setuptools.")
+                  action="store_true", dest="distribute", default=False,
+                  help="Use Disribute rather than Setuptools.")
 
 parser.add_option("-c", None, action="store", dest="config_file",
-                   help=("Specify the path to the buildout configuration "
-                         "file to be used."))
+                  help=("Specify the path to the buildout configuration "
+                        "file to be used."))
 
 options, args = parser.parse_args()
 
@@ -68,7 +72,7 @@ except ImportError:
     ez = {}
     if USE_DISTRIBUTE:
         exec urllib2.urlopen('http://python-distribute.org/distribute_setup.py'
-                         ).read() in ez
+                             ).read() in ez
         ez['use_setuptools'](to_dir=tmpeggs, download_delay=0, no_fake=True)
     else:
         exec urllib2.urlopen('http://peak.telecommunity.com/dist/ez_setup.py'
@@ -83,14 +87,14 @@ except ImportError:
 if sys.platform == 'win32':
     def quote(c):
         if ' ' in c:
-            return '"%s"' % c # work around spawn lamosity on windows
+            return '"%s"' % c  # work around spawn lamosity on windows
         else:
             return c
 else:
-    def quote (c):
+    def quote(c):
         return c
 
-ws  = pkg_resources.working_set
+ws = pkg_resources.working_set
 
 if USE_DISTRIBUTE:
     requirement = 'distribute'
@@ -116,7 +120,7 @@ cmd.append('zc.buildout' + VERSION)
 if is_jython:
     import subprocess
     exitcode = subprocess.Popen(cmd, env=env).wait()
-else: # Windows prefers this, apparently; otherwise we would prefer subprocess
+else:  # Windows prefers this, apparently; otherwise we would prefer subprocess
     exitcode = os.spawnle(*([os.P_WAIT, sys.executable] + cmd + [env]))
 assert exitcode == 0
 
