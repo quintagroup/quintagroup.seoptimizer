@@ -5,7 +5,7 @@ This module contains the tool of quintagroup.seoptimizer
 import os
 from setuptools import setup, find_packages
 
-version = '4.2.0'
+version = '4.2.1'
 
 setup(name='quintagroup.seoptimizer',
       version=version,
