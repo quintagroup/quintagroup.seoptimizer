@@ -209,4 +209,4 @@ class SEOConfiglet(ControlPanelForm):
                     "content types are qSEOptimizer-enabled, and control if "
                     "Dublin Core metatags are exposed in the header of content"
                     " pages.")
-    form_name = _("")
+    form_name = ""

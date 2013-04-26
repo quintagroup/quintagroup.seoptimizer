@@ -1,13 +1,10 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: seoptimizerqg\n"
 "POT-Creation-Date: 2010-12-01 02:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2010-12-01 02:13+0000\n"
+"Last-Translator: Roman Kozlovskyi <kroman0@quintagroup.com>\n"
+"Language-Team: Quintagroup <support@quintagroup.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,10 +13,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: quintagroup.seoptimizer\n"
-
-#: ./browser/seo_configlet.py:199
-msgid ""
-msgstr ""
 
 #: ./browser/keywords.py:37
 msgid "Keywords list is empty!"
