@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[quintagroup.seoptimizer]
+file_filter = quintagroup/seoptimizer/locales/<lang>/LC_MESSAGES/quintagroup.seoptimizer.po
+source_file = quintagroup/seoptimizer/locales/quintagroup.seoptimizer.pot
+source_lang = en
+type = PO
