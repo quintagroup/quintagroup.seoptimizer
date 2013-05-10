@@ -6,6 +6,9 @@ was created to enhance SE visibility of Plone sites.
 
 .. figure:: http://quintagroup.com/services/plone-development/products/qSEOptimizer/plone-seo.png
 
+.. image:: https://travis-ci.org/quintagroup/quintagroup.seoptimizer.png
+       :target: https://travis-ci.org/quintagroup/quintagroup.seoptimizer
+
 quintagroup.seoptimizer allows per document editing of:
 
 * HTML Title tag
@@ -87,7 +90,6 @@ Links
 
 Watch Plone SEO screencast http://quintagroup.com/cms/screencasts/plone-seo to learn how to install and set up Plone SEO on a buildout-based Plone instance for Plone 3.2 or above.
 
-
 Authors
 -------
 
@@ -101,9 +103,11 @@ Authors
 * Volodymyr Romaniuk
 * Volodymyr Maksymiv
 * Taras Kozlovskyy
+* Roman Kozlovskyi
 
 Contributors
 ------------
- * Michael Krishtopa (Theo) testing bug reporting
- * Craig Russell
-  
+
+* Michael Krishtopa (Theo) testing bug reporting
+* Craig Russell
+
