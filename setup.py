@@ -10,9 +10,9 @@ version = '4.2.1'
 setup(name='quintagroup.seoptimizer',
       version=version,
       description="Quintagroup Search Engine Optimization Tool",
-      long_description=open("README.txt").read() + "\n" +
-      open(os.path.join("docs", "INSTALL.txt")).read() + "\n" +
-      open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description=open("README.rst").read() + "\n" +
+      open(os.path.join("docs", "INSTALL.rst")).read() + "\n" +
+      open(os.path.join("docs", "HISTORY.rst")).read(),
 
       # Get more strings from
       # http://www.python.org/pypi?%3Aaction=list_classifiers
