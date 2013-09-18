@@ -24,9 +24,12 @@ class TestCanonicalURL(FunctionalTestCase):
     def test_NoCanonicalURL(self):
         html = self.publish(self.mydoc_path, self.basic_auth).getBody()
         foundcurls = self.curl.findall(html)
-        assert not self.mydoc.hasProperty(CANONICAL_PROPERTY)
-        self.assertTrue(not foundcurls, "CANONICAL URL found, "
-                        "but object hasn't '%s' property" % CANONICAL_PROPERTY)
+        try:
+            from plone.app.layout.links.viewlets import CanonicalURL
+        except ImportError:
+            assert not self.mydoc.hasProperty(CANONICAL_PROPERTY)
+            self.assertTrue(not foundcurls, "CANONICAL URL found, but object "
+                            "hasn't '%s' property" % CANONICAL_PROPERTY)
 
     def test_CanonicalProperty(self):
         self.assertTrue(not self.mydoc.hasProperty(CANONICAL_PROPERTY),
