@@ -24,7 +24,7 @@ before_install:
   - mkdir -p buildout-cache/downloads
 install:
   - sed -ie "s#travis-4.x.cfg#travis-$PLONE.x.cfg#" travis.cfg
-  - python bootstrap.py -c test-$PLONE.x.cfg
-  - bin/buildout -t 5 -Nqc test-$PLONE.x.cfg
+  - python bootstrap.py -c travis.cfg
+  - bin/buildout -t 5 -Nqc travis.cfg
 script:
   - bin/test
