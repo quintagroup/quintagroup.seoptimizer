@@ -1,7 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="quintagroup.seoptimizer">
 
+  <configure zcml:condition="installed Products.ATContentTypes">
   <adapter
       for="Products.Archetypes.public.BaseObject"
       provides=".interfaces.IMetaKeywords"
@@ -13,5 +15,18 @@
       provides=".interfaces.IMappingMetaTags"
       factory=".adapters.MappingMetaTags"
       />
+  </configure>
+  <configure zcml:condition="installed plone.dexterity">
+  <adapter
+      for="plone.dexterity.interfaces.IDexterityContent"
+      provides=".interfaces.IMetaKeywords"
+      factory=".adapters.MetaKeywordsAdapter"
+      />
+  <adapter
+      for="plone.dexterity.interfaces.IDexterityContent"
+      provides=".interfaces.IMappingMetaTags"
+      factory=".adapters.MappingMetaTags"
+      />
+  </configure>
 
 </configure>

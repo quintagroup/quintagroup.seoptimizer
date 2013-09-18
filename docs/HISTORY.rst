@@ -1,6 +1,12 @@
 Changelog
 =========
 
+4.3 (2013-09-18)
+----------------
+
+* Added Dexterity content types support [kroman0]
+
+
 4.2.1 (2013-01-16)
 ------------------
 

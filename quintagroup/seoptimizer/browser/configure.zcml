@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="quintagroup.seoptimizer">
 
     <!-- Starting from Plone-4.1 it is necessary to import permissions.zcml from Products.CMFCore.
@@ -8,6 +9,7 @@
          package and permissions.zcml gets included if available. -->
     <include package="Products.CMFCore"/>
 
+    <configure zcml:condition="installed Products.ATContentTypes">
     <browser:page
         for="Products.Archetypes.interfaces.IBaseObject"
         attribute="validateKeywords"
@@ -15,6 +17,16 @@
         name="checkSEOKeywords"
         permission="cmf.ModifyPortalContent"
         />
+    </configure>
+    <configure zcml:condition="installed plone.dexterity">
+    <browser:page
+        for="plone.dexterity.interfaces.IDexterityContent"
+        attribute="validateKeywords"
+        class=".keywords.ValidateSEOKeywordsView"
+        name="checkSEOKeywords"
+        permission="cmf.ModifyPortalContent"
+        />
+    </configure>
 
 
     <!-- MOVED from overrides.zcml :
