@@ -7,7 +7,10 @@ was created to enhance SE visibility of Plone sites.
 .. figure:: http://quintagroup.com/services/plone-development/products/qSEOptimizer/plone-seo.png
 
 .. image:: https://travis-ci.org/quintagroup/quintagroup.seoptimizer.png
-       :target: https://travis-ci.org/quintagroup/quintagroup.seoptimizer
+	:target: https://travis-ci.org/quintagroup/quintagroup.seoptimizer
+
+.. image:: https://coveralls.io/repos/quintagroup/quintagroup.seoptimizer/badge.png
+	:target: https://coveralls.io/r/quintagroup/quintagroup.seoptimizer
 
 quintagroup.seoptimizer allows per document editing of:
 
