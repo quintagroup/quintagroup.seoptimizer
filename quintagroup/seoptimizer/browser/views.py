@@ -51,6 +51,7 @@ class SEOContext(BrowserView):
         seotags = {
             "seo_title": self.getSEOProperty('qSEO_title',
                                              default=self.pcs.object_title()),
+            "seo_h1": self.getSEOProperty('qSEO_h1', default=''),
             "seo_robots": self.getSEOProperty('qSEO_robots', default='ALL'),
             "seo_description": self.getSEOProperty('qSEO_description',
                                                    accessor='Description'),
@@ -69,6 +70,7 @@ class SEOContext(BrowserView):
             "seo_canonical": self.getSEOProperty(CANONICAL_PROPERTY),
             # Add test properties
             "has_seo_title": self.context.hasProperty('qSEO_title'),
+            "has_seo_h1": self.context.hasProperty('qSEO_h1'),
             "has_seo_robots": self.context.hasProperty('qSEO_robots'),
             "has_seo_description":
             self.context.hasProperty('qSEO_description'),

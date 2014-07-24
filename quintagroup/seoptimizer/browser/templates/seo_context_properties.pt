@@ -71,6 +71,30 @@
                    />
           </div>
           <div class="field">
+            <label i18n:translate="label_page_h1_tag" for="seo_h1">
+              Page H1 Tag
+            </label>
+            <div class="formHelp" i18n:translate="help_seo_h1">
+              Text to be present in &lt;H1&gt; tag.
+            </div>
+            <input type="checkbox"
+                   id="seo_h1_override"
+                   name="seo_h1_override"
+                   tal:attributes="checked python:view.test(seo_context['has_seo_h1'], 'on', None);"
+                   />
+            <label i18n:translate="label_override" for="seo_h1_override">
+              Override
+            </label>
+            <br />
+            <input type="text"
+                   id="seo_h1"
+                   name="seo_h1"
+                   size="40"
+                   value=""
+                   tal:attributes="value request/seo_h1 | seo_context/seo_h1;"
+                   />
+          </div>
+          <div class="field">
             <label i18n:translate="label_meta_description_tag" for="seo_description">
               Meta Description Tag
             </label>
