@@ -53,6 +53,9 @@ setup(name='quintagroup.seoptimizer',
           #'Plone >= 4.0a',
           # -*- Extra requirements: -*-
       ],
+      extras_require={
+          'test': ['Products.PloneTestCase'],
+      },
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
