@@ -68,7 +68,7 @@ IMPORTANT! For Plone 3.0.x you should use plone.browserlayer 1.0.rc3. Be sure to
 Notes
 -----
 
-* For Plone 4 versions - use Plone SEO 4.0 release and up http://plone.org/products/plone-seo/releases/4.0. In your buildout.cfg file's egg section set product version::
+* For Plone 4 versions - use Plone SEO 4.0 release and up https://pypi.python.org/pypi/quintagroup.seoptimizer/4.0. In your buildout.cfg file's egg section set product version::
 
    [buildout]
    ....
@@ -76,7 +76,7 @@ Notes
         ...
         quintagroup.seoptimizer >=4.0
 
-* For Plone 3 versions - use the latest Plone SEO 3.x release http://plone.org/products/plone-seo/releases/3.0.5. In your buildout.cfg file's egg section set product version::
+* For Plone 3 versions - use the latest Plone SEO 3.x release https://pypi.python.org/pypi/quintagroup.seoptimizer/3.0.5. In your buildout.cfg file's egg section set product version::
 
    [buildout]
    ....
@@ -85,7 +85,7 @@ Notes
         quintagroup.seoptimizer >3.0,<4.0
 
 
-* For Plone 2.x versions - use Plone SEO 1.7.1  release http://plone.org/products/plone-seo/releases/1.7.1
+* For Plone 2.x versions - use Plone SEO 1.7.1  release https://pypi.python.org/pypi/quintagroup.seoptimizer/1.7.1
 
 
 Links
